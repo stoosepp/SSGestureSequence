@@ -14,6 +14,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
     
+    @IBOutlet weak var toggleButton: UIButton!
+   
+    
     var lastPoint = CGPoint.zero
     var swiped = false
     var currentTouch = 0
@@ -25,7 +28,13 @@ class ViewController: UIViewController {
     var slowDistance = 0.0
     var mediumDistance = 0.0
     var fastDistance = 0.0
+    
+    //For framework CAN SET
+    var overlayView:UIView?
+    var linesHidden:Bool?
+    var captureRect:CGRect?
 
+    @IBOutlet weak var geometryImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -37,7 +46,52 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func updateImage(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            geometryImageView.image = nil
+        case 1:
+            geometryImageView.image = UIImage(named: "WE")
+        case 2:
+            geometryImageView.image = UIImage(named: "NearFar")
+        case 3:
+            geometryImageView.image = UIImage(named: "Far")
+        default:
+            geometryImageView.image = nil
+        }
+    }
     
+    @IBAction func toggleGestures(_ sender: UIButton) {
+        if sender.titleLabel?.text == "Hide Gestures"{
+            sender.setTitle("Show Gestures", for: .normal)
+            mainImageView.isHidden = true
+            tempImageView.isHidden = true
+        }
+        else{
+            sender.setTitle("Hide Gestures", for: .normal)
+            mainImageView.isHidden = false
+            tempImageView.isHidden = false
+        }
+    }
+    
+    @IBAction func resetScreen(_ sender: Any) {
+        for view in tempImageView.subviews{
+            view.removeFromSuperview()
+        }
+        tempImageView.image = nil
+        mainImageView.image = nil
+        currentTouch = 0
+        velocityLabel.text = "Slow: 0%\nMedium: 0%\nFast: 0%\nAvg: 0pts"
+        slowCount = 0.0
+        mediumCount = 0.0
+        fastCount = 0.0
+        
+        slowDistance = 0.0
+        mediumDistance = 0.0
+        fastDistance = 0.0
+    }
+    
+ 
     //MARK: - DRAWING CODE
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         currentTouch += 1
@@ -55,12 +109,22 @@ class ViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         swiped = true
         if touches.count != 0{
+            
             let touch = touches.first! as UITouch
-            let currentPoint = touch.location(in: view)
-
-            let distanceBetween = distance(a: lastPoint, b: currentPoint)
-            drawLineFrom(lastPoint, toPoint: currentPoint, withDistance: Double(distanceBetween))
-            lastPoint = currentPoint
+            
+            //Using Coalesced point.
+            for coalescedTouch in (event?.coalescedTouches(for: touch))!{
+                let coalescedPoint = coalescedTouch.location(in: view)
+                let distanceBetween = distance(a: lastPoint, b: coalescedPoint)
+                drawLineFrom(lastPoint, toPoint: coalescedPoint, withDistance: Double(distanceBetween))
+                lastPoint = coalescedPoint
+            }
+            
+            //Using non-coalesced point
+//            let currentPoint = touch.location(in: view)
+//            let distanceBetween = distance(a: lastPoint, b: currentPoint)
+//            drawLineFrom(lastPoint, toPoint: currentPoint, withDistance: Double(distanceBetween))
+//            lastPoint = currentPoint
             
             
         }
@@ -93,8 +157,7 @@ class ViewController: UIViewController {
     
     func addSequenceCount(atLocation:CGPoint, radius:CGFloat, color:UIColor){
       
-        let circleView = CircleButton(frame: CGRect(x: atLocation.x - radius, y: atLocation.y - radius , width: radius * 2, height: radius * 2))
-        circleView.showRing = true
+        let circleView = CircleView(frame: CGRect(x: atLocation.x - radius, y: atLocation.y - radius , width: radius * 2, height: radius * 2))
         circleView.labelText = "\(currentTouch)"
         circleView.lineWidth = 4.0
         circleView.strokeColor = color
@@ -118,8 +181,7 @@ class ViewController: UIViewController {
         // 3
         context!.setLineCap(CGLineCap.round)
         context!.setLineWidth(5.0)
-        //context!.setStrokeColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)//Gray
-        //context!.setStrokeColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)//Black
+
 
         //Record Velocity
         //Flat Yellow 247,203,87
@@ -183,7 +245,7 @@ class ViewController: UIViewController {
         
         UIGraphicsEndImageContext()
     }
-    
+    /*
     override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
         print("Device was shaken!")
        
@@ -194,7 +256,7 @@ class ViewController: UIViewController {
         mainImageView.image = nil
         currentTouch = 0
         velocityLabel.text = "Slow: 0%\nMedium: 0%\nFast: 0%\nAvg: 0pts"
-       slowCount = 0.0
+        slowCount = 0.0
         mediumCount = 0.0
         fastCount = 0.0
         
@@ -202,6 +264,7 @@ class ViewController: UIViewController {
         mediumDistance = 0.0
         fastDistance = 0.0
     }
+ */
 
 
 }
