@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="ipad9_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TouchSequenceTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController interfaceStyle="light" id="BYZ-38-t0r" customClass="ViewController" customModule="TouchSequenceTest" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -22,95 +18,88 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fWb-vv-r8M">
-                                <rect key="frame" x="20" y="220" width="728" height="582"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="231" translatesAutoresizingMaskIntoConstraints="NO" id="1Za-P9-lVL" userLabel="Top Stack">
+                                <rect key="frame" x="182" y="20" width="445" height="30"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Velocity Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQz-su-aOI">
+                                        <rect key="frame" x="0.0" y="0.0" width="107" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ShL-Pk-k91">
+                                        <rect key="frame" x="338" y="0.0" width="107" height="30"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        <state key="normal" title="Hide Gestures">
+                                            <color key="titleColor" red="0.99049497682696319" green="1" blue="0.99254950117216012" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="toggleGestures:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5ma-ot-H7B"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="582" id="iAX-Hu-KzK"/>
+                                    <constraint firstAttribute="height" constant="30" id="vSL-EX-lT8"/>
                                 </constraints>
-                            </imageView>
+                            </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HAh-v6-CND">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Velocity Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQz-su-aOI">
-                                <rect key="frame" x="20" y="20" width="154" height="103"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="154" id="OSU-5N-VGa"/>
-                                    <constraint firstAttribute="height" constant="103" id="v7m-Nf-rQn"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fWb-vv-r8M">
+                                <rect key="frame" x="20" y="211" width="728" height="603"/>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZzV-5v-taq">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4kA-F7-XQ3">
-                                <rect key="frame" x="586" y="947" width="162" height="57"/>
-                                <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="57" id="4Xg-WF-Hmm"/>
-                                    <constraint firstAttribute="width" constant="162" id="PAT-Rl-edt"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <state key="normal" title="Reset">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="resetScreen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3n6-cz-cyX"/>
-                                </connections>
-                            </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="JUz-o2-91R">
-                                <rect key="frame" x="29" y="961" width="518" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="518" id="dng-a7-3C3"/>
-                                </constraints>
-                                <segments>
-                                    <segment title="No image"/>
-                                    <segment title="Worked Example"/>
-                                    <segment title="NearFar"/>
-                                    <segment title="Far"/>
-                                </segments>
-                                <connections>
-                                    <action selector="updateImage:" destination="BYZ-38-t0r" eventType="valueChanged" id="p2E-J0-NYO"/>
-                                </connections>
-                            </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ShL-Pk-k91">
-                                <rect key="frame" x="633" y="28" width="115" height="47"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="47" id="H8x-LB-Zt4"/>
-                                    <constraint firstAttribute="width" constant="115" id="uJg-d1-9Oh"/>
-                                </constraints>
-                                <state key="normal" title="Hide Gestures">
-                                    <color key="titleColor" red="0.99049497682696319" green="1" blue="0.99254950117216012" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="toggleGestures:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5ma-ot-H7B"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="163" translatesAutoresizingMaskIntoConstraints="NO" id="ouA-cF-nOI" userLabel="Bottom Stack">
+                                <rect key="frame" x="20" y="956" width="728" height="48"/>
+                                <subviews>
+                                    <segmentedControl contentMode="scaleToFill" enabled="NO" highlighted="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="JUz-o2-91R">
+                                        <rect key="frame" x="0.0" y="0.0" width="491" height="49"/>
+                                        <segments>
+                                            <segment title="No image"/>
+                                            <segment title="Worked Example"/>
+                                            <segment title="NearFar"/>
+                                            <segment title="Far"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="updateImage:" destination="BYZ-38-t0r" eventType="valueChanged" id="p2E-J0-NYO"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4kA-F7-XQ3">
+                                        <rect key="frame" x="654" y="0.0" width="74" height="48"/>
+                                        <color key="backgroundColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <state key="normal" title="Reset">
+                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="resetScreen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3n6-cz-cyX"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="HAh-v6-CND" secondAttribute="trailing" constant="-20" id="18Y-aO-OPf"/>
-                            <constraint firstItem="4kA-F7-XQ3" firstAttribute="leading" secondItem="JUz-o2-91R" secondAttribute="trailing" constant="39" id="8nr-CN-2MT"/>
-                            <constraint firstItem="ZzV-5v-taq" firstAttribute="top" secondItem="ShL-Pk-k91" secondAttribute="bottom" constant="-75" id="AKM-O5-GDq"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="4kA-F7-XQ3" secondAttribute="bottom" constant="20" id="Cnu-sL-YJe"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="JUz-o2-91R" secondAttribute="bottom" constant="35" id="Hxf-4w-Gl0"/>
-                            <constraint firstItem="fWb-vv-r8M" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="JFl-Ov-Hvl"/>
-                            <constraint firstAttribute="trailing" secondItem="4kA-F7-XQ3" secondAttribute="trailing" constant="20" id="Jrt-lM-p8c"/>
-                            <constraint firstAttribute="trailing" secondItem="fWb-vv-r8M" secondAttribute="trailing" constant="20" id="Nrs-cL-ZuK"/>
-                            <constraint firstItem="HAh-v6-CND" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="P64-Qj-Uha"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ZzV-5v-taq" secondAttribute="trailing" constant="-20" id="Rtp-dZ-oRe"/>
-                            <constraint firstItem="JUz-o2-91R" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="29" id="VVQ-hY-5Gt"/>
-                            <constraint firstItem="ZzV-5v-taq" firstAttribute="leading" secondItem="XQz-su-aOI" secondAttribute="trailing" constant="-174" id="a5P-E1-MNX"/>
-                            <constraint firstItem="ZzV-5v-taq" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="aIl-D5-DIA"/>
-                            <constraint firstItem="ShL-Pk-k91" firstAttribute="leading" secondItem="ZzV-5v-taq" secondAttribute="trailing" constant="-135" id="hsA-z4-ULg"/>
-                            <constraint firstItem="fWb-vv-r8M" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="200" id="t1M-oM-Nbg"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="HAh-v6-CND" secondAttribute="bottom" id="tXC-Yx-Noa"/>
-                            <constraint firstItem="ZzV-5v-taq" firstAttribute="top" secondItem="XQz-su-aOI" secondAttribute="bottom" constant="-123" id="tx7-vl-EjQ"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ZzV-5v-taq" secondAttribute="bottom" id="uqr-Vt-cvN"/>
-                            <constraint firstItem="ZzV-5v-taq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="vmC-rB-Ebr"/>
-                            <constraint firstItem="HAh-v6-CND" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="yeW-Qt-HTo"/>
+                            <constraint firstAttribute="trailing" secondItem="HAh-v6-CND" secondAttribute="trailing" id="1Dt-wK-xA3"/>
+                            <constraint firstItem="ouA-cF-nOI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="8Os-4O-iHF"/>
+                            <constraint firstItem="ZzV-5v-taq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="BCD-gk-SZV"/>
+                            <constraint firstItem="ZzV-5v-taq" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="BOz-hb-ToG"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="HAh-v6-CND" secondAttribute="bottom" id="JBi-hy-WDv"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="fWb-vv-r8M" secondAttribute="bottom" constant="210" id="LCd-lL-hJL"/>
+                            <constraint firstItem="HAh-v6-CND" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="N3m-4x-SLv"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ouA-cF-nOI" secondAttribute="bottom" constant="20" id="NDJ-T0-8rW"/>
+                            <constraint firstItem="1Za-P9-lVL" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="SGp-cY-NSH"/>
+                            <constraint firstAttribute="trailing" secondItem="fWb-vv-r8M" secondAttribute="trailing" constant="20" id="Tpg-bm-Cwv"/>
+                            <constraint firstAttribute="trailing" secondItem="ouA-cF-nOI" secondAttribute="trailing" constant="20" id="dH7-GD-iiJ"/>
+                            <constraint firstItem="fWb-vv-r8M" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="fXk-nb-gwh"/>
+                            <constraint firstAttribute="trailing" secondItem="ZzV-5v-taq" secondAttribute="trailing" id="g1Y-xn-ZXg"/>
+                            <constraint firstAttribute="trailing" secondItem="1Za-P9-lVL" secondAttribute="trailing" constant="141" id="gHc-XA-D0u"/>
+                            <constraint firstItem="1Za-P9-lVL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="182" id="hIT-vT-GCK"/>
+                            <constraint firstItem="fWb-vv-r8M" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="211" id="ivb-Iw-RBE"/>
+                            <constraint firstItem="HAh-v6-CND" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="sNy-zz-mO7"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ZzV-5v-taq" secondAttribute="bottom" id="v4O-zy-Ie2"/>
                         </constraints>
                     </view>
                     <connections>

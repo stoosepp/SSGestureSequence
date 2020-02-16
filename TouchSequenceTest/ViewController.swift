@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     var overlayView:UIView?
     var linesHidden:Bool?
     var captureRect:CGRect?
+    
 
     @IBOutlet weak var geometryImageView: UIImageView!
     override func viewDidLoad() {
@@ -99,7 +100,7 @@ class ViewController: UIViewController {
         if touches.count != 0{
             let touch = touches.first! as UITouch
             //lastTouch = touch
-            lastPoint = touch.location(in: view)
+            lastPoint = touch.location(in: tempImageView)
             let green = UIColor.init(red: 167/255, green: 197/255, blue: 116/255, alpha: 1.0)
             addSequenceCount(atLocation: lastPoint, radius: 10, color:green)
         }
@@ -125,8 +126,6 @@ class ViewController: UIViewController {
 //            let distanceBetween = distance(a: lastPoint, b: currentPoint)
 //            drawLineFrom(lastPoint, toPoint: currentPoint, withDistance: Double(distanceBetween))
 //            lastPoint = currentPoint
-            
-            
         }
         
     }
@@ -144,6 +143,7 @@ class ViewController: UIViewController {
         mainImageView.image?.draw(in: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height), blendMode: CGBlendMode.normal, alpha: 1.0)
         tempImageView.image?.draw(in: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height), blendMode: CGBlendMode.normal, alpha: 1.0)
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        //This line above is screwing things up 2/15/2020
         UIGraphicsEndImageContext()
         tempImageView.image = nil
      
@@ -160,10 +160,9 @@ class ViewController: UIViewController {
         let circleView = CircleView(frame: CGRect(x: atLocation.x - radius, y: atLocation.y - radius , width: radius * 2, height: radius * 2))
         circleView.labelText = "\(currentTouch)"
         circleView.lineWidth = 4.0
-        circleView.strokeColor = color
+        circleView.theColor = color
         circleView.backgroundColor = UIColor.clear
         tempImageView.insertSubview(circleView, at: 10)
-
     }
     
     
@@ -245,26 +244,7 @@ class ViewController: UIViewController {
         
         UIGraphicsEndImageContext()
     }
-    /*
-    override func motionBegan(_ motion: UIEventSubtype, with event: UIEvent?) {
-        print("Device was shaken!")
-       
-        for view in tempImageView.subviews{
-            view.removeFromSuperview()
-        }
-        tempImageView.image = nil
-        mainImageView.image = nil
-        currentTouch = 0
-        velocityLabel.text = "Slow: 0%\nMedium: 0%\nFast: 0%\nAvg: 0pts"
-        slowCount = 0.0
-        mediumCount = 0.0
-        fastCount = 0.0
-        
-        slowDistance = 0.0
-        mediumDistance = 0.0
-        fastDistance = 0.0
-    }
- */
+
 
 
 }

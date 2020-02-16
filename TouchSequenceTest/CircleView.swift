@@ -23,7 +23,7 @@ class CircleView: UIView {
             setNeedsDisplay()
         }
     }
-    var strokeColor:UIColor = .black{
+    var theColor:UIColor = .black{
         didSet{
             setNeedsDisplay()
         }
@@ -38,32 +38,28 @@ class CircleView: UIView {
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
        
-        backgroundColor = UIColor.clear
+        //backgroundColor = UIColor.clear
  
         titleLabel = UILabel()
         titleLabel.frame = self.bounds
         let adjustedFontSize = self.frame.size.height / 2
         titleLabel.font = titleLabel.font.withSize(adjustedFontSize)
         titleLabel.textAlignment = .center
-        titleLabel.textColor = UIColor.black
+        titleLabel.textColor = UIColor.white
         self.addSubview(titleLabel)
      
        
-        //Set Text and Imag, If they exist.
+        //Set Text and Image, If they exist.
         if labelText != nil{
             titleLabel.text = labelText
         }
 
         
-        // Drawing code
+        // Draw the circle
         let ovalPath = UIBezierPath(ovalIn: CGRect(x: lineWidth/2, y: lineWidth/2, width: self.bounds.size.width-lineWidth, height: self.bounds.size.width-lineWidth))
-        
-        strokeColor.setStroke()
-        ovalPath.lineWidth = lineWidth
-        ovalPath.stroke()
-        titleLabel.textColor = UIColor.black
-        UIColor.white.setFill()
+        theColor.setFill()
         ovalPath.fill()
+
     }
 
 }
