@@ -46,6 +46,8 @@ class CircleView: UIView {
         titleLabel.font = titleLabel.font.withSize(adjustedFontSize)
         titleLabel.textAlignment = .center
         titleLabel.textColor = UIColor.white
+        self.backgroundColor = UIColor.clear
+        self.lineWidth = 4.0
         self.addSubview(titleLabel)
      
        

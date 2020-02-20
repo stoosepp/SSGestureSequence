@@ -7,6 +7,30 @@
 //
 
 import UIKit
+extension UIView {
+     
+     func takeScreenshot() -> UIImage {
+         
+         //begin
+         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+         
+         // draw view in that context.
+         drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+         
+         // get iamge
+         let image = UIGraphicsGetImageFromCurrentImageContext()
+         UIGraphicsEndImageContext()
+         
+         if image != nil {
+             return image!
+         }
+         
+         return UIImage()
+         
+     }
+     
+ }
+
 
 class ViewController: UIViewController {
     
@@ -14,8 +38,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var tempImageView: UIImageView!
     @IBOutlet weak var mainImageView: UIImageView!
     
+    @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var toggleButton: UIButton!
-   
+    @IBOutlet weak var cameraButton: UIButton!
+    @IBOutlet weak var photosButton: UIButton!
+    
     
     var lastPoint = CGPoint.zero
     var swiped = false
@@ -36,11 +63,30 @@ class ViewController: UIViewController {
     
 
     @IBOutlet weak var geometryImageView: UIImageView!
+    
+ 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    
         // Do any additional setup after loading the view, typically from a nib.
         velocityLabel.text = "Slow: 0%\nMedium: 0%\nFast: 0%\nAvg: 0"
+        
+        //Setup buttons
+        toggleButton.layer.cornerRadius = toggleButton.frame.size.height / 4; // this value vary as per your desire
+        toggleButton.clipsToBounds =  true
+        cameraButton.layer.cornerRadius = cameraButton.frame.size.height / 4; // this value vary as per your desire
+        cameraButton.clipsToBounds =  true
+        resetButton.layer.cornerRadius = resetButton.frame.size.height / 4; // this value vary as per your desire
+        resetButton.clipsToBounds =  true
+        photosButton.layer.cornerRadius = photosButton.frame.size.height / 4; // this value vary as per your desire
+        photosButton.clipsToBounds =  true
+        
     }
+    
+//    override var prefersStatusBarHidden: Bool {
+//      return true
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -63,16 +109,18 @@ class ViewController: UIViewController {
     }
     
     @IBAction func toggleGestures(_ sender: UIButton) {
-        if sender.titleLabel?.text == "Hide Gestures"{
-            sender.setTitle("Show Gestures", for: .normal)
-            mainImageView.isHidden = true
-            tempImageView.isHidden = true
-        }
-        else{
-            sender.setTitle("Hide Gestures", for: .normal)
+    
+        if mainImageView.isHidden == true{
+            sender.setImage(UIImage(systemName: "eye.fill"), for:.normal)
             mainImageView.isHidden = false
             tempImageView.isHidden = false
         }
+        else{
+            sender.setImage(UIImage(systemName: "eye.slash.fill"), for:.normal)
+            mainImageView.isHidden = true
+            tempImageView.isHidden = true
+        }
+            
     }
     
     @IBAction func resetScreen(_ sender: Any) {
@@ -91,16 +139,59 @@ class ViewController: UIViewController {
         mediumDistance = 0.0
         fastDistance = 0.0
     }
+    func getTodayString() -> String{
+
+        let date = Date()
+        let calender = Calendar.current
+        let components = calender.dateComponents([.year,.month,.day,.hour,.minute,.second], from: date)
+
+        let year = components.year
+        let month = components.month
+        let day = components.day
+        let hour = components.hour
+        let minute = components.minute
+        let second = components.second
+
+        let today_string = String(year!) + "-" + String(month!) + "-" + String(day!) + " " + String(hour!)  + ":" + String(minute!) + ":" +  String(second!)
+
+        return today_string
+
+    }
     
- 
+    @IBAction func viewPhotos(_ sender: Any) {
+    }
+    @IBAction func takePhoto(_ sender: Any) {
+        let dateString = getTodayString()
+        let screenShot = self.view.takeScreenshot()
+
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        // choose a name for your image
+        let fileName = "\(dateString).jpg"
+        // create the destination file url to save your image
+        let fileURL = documentsDirectory.appendingPathComponent(fileName)
+        // get your UIImage jpeg data representation and check if the destination file url already exists
+        if let data = screenShot.jpegData(compressionQuality:  1.0),
+          !FileManager.default.fileExists(atPath: fileURL.path) {
+            do {
+                // writes the image data to disk
+                try data.write(to: fileURL)
+                print("file saved")
+            } catch {
+                print("error saving file:", error)
+            }
+        }
+        let alert = UIAlertController(title: "Screenshot Taken", message: "View Screenshots in Gallery", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     //MARK: - DRAWING CODE
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         currentTouch += 1
         swiped = false
         if touches.count != 0{
             let touch = touches.first! as UITouch
-            //lastTouch = touch
-            lastPoint = touch.location(in: tempImageView)
+            lastPoint = touch.location(in: self.mainImageView)
             let green = UIColor.init(red: 167/255, green: 197/255, blue: 116/255, alpha: 1.0)
             addSequenceCount(atLocation: lastPoint, radius: 10, color:green)
         }
@@ -110,22 +201,16 @@ class ViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         swiped = true
         if touches.count != 0{
-            
             let touch = touches.first! as UITouch
-            
+            //Line below might not be needed
+            //lastPoint = touch.location(in: self.mainImageView)
             //Using Coalesced point.
             for coalescedTouch in (event?.coalescedTouches(for: touch))!{
-                let coalescedPoint = coalescedTouch.location(in: view)
+                let coalescedPoint = coalescedTouch.location(in: mainImageView)
                 let distanceBetween = distance(a: lastPoint, b: coalescedPoint)
                 drawLineFrom(lastPoint, toPoint: coalescedPoint, withDistance: Double(distanceBetween))
                 lastPoint = coalescedPoint
             }
-            
-            //Using non-coalesced point
-//            let currentPoint = touch.location(in: view)
-//            let distanceBetween = distance(a: lastPoint, b: currentPoint)
-//            drawLineFrom(lastPoint, toPoint: currentPoint, withDistance: Double(distanceBetween))
-//            lastPoint = currentPoint
         }
         
     }
@@ -133,15 +218,20 @@ class ViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             // draw a single point
-            drawLineFrom(lastPoint, toPoint: lastPoint, withDistance: 0.0)
+             drawLineFrom(lastPoint, toPoint: lastPoint, withDistance: 0.0)
         }
+        else
+        {
+            
+        }
+       
         let red = UIColor.init(red: 190/255, green: 75/255, blue: 85/255, alpha: 1.0)
         addSequenceCount(atLocation: lastPoint, radius: 10, color:red)
         
         // Merge tempImageView into mainImageView
         UIGraphicsBeginImageContext(mainImageView.frame.size)
-        mainImageView.image?.draw(in: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height), blendMode: CGBlendMode.normal, alpha: 1.0)
-        tempImageView.image?.draw(in: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height), blendMode: CGBlendMode.normal, alpha: 1.0)
+        mainImageView.image?.draw(in: CGRect(x: 0, y: 0, width: mainImageView.frame.size.width, height: mainImageView.frame.size.height), blendMode: CGBlendMode.normal, alpha: 1.0)
+        tempImageView.image?.draw(in: CGRect(x: 0, y: 0, width: mainImageView.frame.size.width, height: mainImageView.frame.size.height), blendMode: CGBlendMode.normal, alpha: 1.0)
         mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         //This line above is screwing things up 2/15/2020
         UIGraphicsEndImageContext()
@@ -156,12 +246,9 @@ class ViewController: UIViewController {
     }
     
     func addSequenceCount(atLocation:CGPoint, radius:CGFloat, color:UIColor){
-      
         let circleView = CircleView(frame: CGRect(x: atLocation.x - radius, y: atLocation.y - radius , width: radius * 2, height: radius * 2))
         circleView.labelText = "\(currentTouch)"
-        circleView.lineWidth = 4.0
         circleView.theColor = color
-        circleView.backgroundColor = UIColor.clear
         tempImageView.insertSubview(circleView, at: 10)
     }
     
@@ -169,9 +256,9 @@ class ViewController: UIViewController {
     func drawLineFrom(_ fromPoint: CGPoint, toPoint: CGPoint, withDistance:Double) {
         
         // 1
-        UIGraphicsBeginImageContext(view.frame.size)
+        UIGraphicsBeginImageContext(mainImageView.frame.size)
         let context = UIGraphicsGetCurrentContext()
-        tempImageView.image?.draw(in: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
+        tempImageView.image?.draw(in: CGRect(x: 0, y: 0, width: mainImageView.frame.size.width, height: mainImageView.frame.size.height))
         
         // 2
         context!.move(to: CGPoint(x: fromPoint.x, y: fromPoint.y))
@@ -220,7 +307,7 @@ class ViewController: UIViewController {
         let mediumString = String(format: "Medium: %.2f", mediumPercentage * 100)
         let fastString = String(format: "Fast: %.2f", fastPercentage * 100)
         let avgString = String(format: "Avg: %.2f", avgDistance)
-        print("TotalSegments:\(totalSegment)\nSlowSegments:\(slowCount)")
+        //print("TotalSegments:\(totalSegment)\nSlowSegments:\(slowCount)")
         
         velocityLabel.text = "\(slowString)%\n\(mediumString)%\n\(fastString)%\n\(avgString)pts"
         
