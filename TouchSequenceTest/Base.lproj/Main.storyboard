@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Touch Sequence Demo-->
+        <!--SS Touch Capture Demo-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController interfaceStyle="light" id="BYZ-38-t0r" customClass="ViewController" customModule="TouchSequenceTest" customModuleProvider="target" sceneMemberID="viewController">
@@ -201,7 +201,7 @@
                             <constraint firstItem="ZzV-5v-taq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ys2-33-9uI"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Touch Sequence Demo" id="rjc-gf-KOe"/>
+                    <navigationItem key="navigationItem" title="SS Touch Capture Demo" id="rjc-gf-KOe"/>
                     <connections>
                         <outlet property="cameraButton" destination="k4t-Aa-DGL" id="Ldx-sP-ba6"/>
                         <outlet property="geometryImageView" destination="fWb-vv-r8M" id="W04-lc-yQH"/>

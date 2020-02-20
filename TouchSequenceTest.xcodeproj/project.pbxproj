@@ -18,7 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DD89E0C51E27208200965CB7 /* TouchSequenceTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchSequenceTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD89E0C51E27208200965CB7 /* Touch Capture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Touch Capture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD89E0C81E27208200965CB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD89E0CA1E27208200965CB7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DD89E0CD1E27208200965CB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -52,7 +52,7 @@
 		DD89E0C61E27208200965CB7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DD89E0C51E27208200965CB7 /* TouchSequenceTest.app */,
+				DD89E0C51E27208200965CB7 /* Touch Capture.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,7 +90,7 @@
 			);
 			name = TouchSequenceTest;
 			productName = TouchSequenceTest;
-			productReference = DD89E0C51E27208200965CB7 /* TouchSequenceTest.app */;
+			productReference = DD89E0C51E27208200965CB7 /* Touch Capture.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,8 +105,6 @@
 				TargetAttributes = {
 					DD89E0C41E27208200965CB7 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = SKVPMKVP5H;
-						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -290,6 +288,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = SKVPMKVP5H;
 				INFOPLIST_FILE = TouchSequenceTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -297,8 +296,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stoosepp.TouchSequenceTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.monotreme.sstouchcapturedemo;
+				PRODUCT_NAME = "Touch Capture";
+				PROVISIONING_PROFILE_SPECIFIER = "SS Touch Capture Demo Profile";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -307,6 +307,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = SKVPMKVP5H;
 				INFOPLIST_FILE = TouchSequenceTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -314,8 +315,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stoosepp.TouchSequenceTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.monotreme.sstouchcapturedemo;
+				PRODUCT_NAME = "Touch Capture";
+				PROVISIONING_PROFILE_SPECIFIER = "SS Touch Capture Demo Profile";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
