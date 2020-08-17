@@ -16,6 +16,7 @@
 		DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D34A923FE51F70035EABA /* ImageCollectionViewCell.swift */; };
 		DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */; };
 		DDE1406524EB2A0F00C5D86C /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */; };
+		DDE1406824EB477000C5D86C /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDE1406624EB477000C5D86C /* TouchCaptureModel.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		DD8D34A923FE51F70035EABA /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
 		DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		DDE1406724EB477000C5D86C /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				DD89E0CF1E27208200965CB7 /* Assets.xcassets */,
 				DD89E0D11E27208200965CB7 /* LaunchScreen.storyboard */,
 				DD89E0D41E27208200965CB7 /* Info.plist */,
+				DDE1406624EB477000C5D86C /* TouchCaptureModel.xcdatamodeld */,
 			);
 			path = TouchSequenceTest;
 			sourceTree = "<group>";
@@ -149,6 +152,7 @@
 			files = (
 				DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */,
 				DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */,
+				DDE1406824EB477000C5D86C /* TouchCaptureModel.xcdatamodeld in Sources */,
 				DD89E0DB1E2721E500965CB7 /* CircleView.swift in Sources */,
 				DD89E0CB1E27208200965CB7 /* ViewController.swift in Sources */,
 				DDE1406524EB2A0F00C5D86C /* ImageViewController.swift in Sources */,
@@ -350,6 +354,19 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DDE1406624EB477000C5D86C /* TouchCaptureModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DDE1406724EB477000C5D86C /* TouchCaptureModel.xcdatamodel */,
+			);
+			currentVersion = DDE1406724EB477000C5D86C /* TouchCaptureModel.xcdatamodel */;
+			path = TouchCaptureModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = DD89E0BD1E27208200965CB7 /* Project object */;
 }

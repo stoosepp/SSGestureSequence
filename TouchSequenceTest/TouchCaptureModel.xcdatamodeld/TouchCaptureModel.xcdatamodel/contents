@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ExperimentalSession" representedClassName="ExperimentalSession" syncable="YES" codeGenerationType="class">
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="values" optional="YES" attributeType="Transformable"/>
+        <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="sessions" inverseEntity="Participant"/>
+    </entity>
+    <entity name="Participant" representedClassName="Participant" syncable="YES" codeGenerationType="class">
+        <attribute name="participantID" optional="YES" attributeType="String"/>
+        <relationship name="sessions" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExperimentalSession" inverseName="participant" inverseEntity="ExperimentalSession"/>
+    </entity>
+    <entity name="Project" representedClassName="Project" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="participants" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant"/>
+    </entity>
+    <elements>
+        <element name="Project" positionX="-475.671875" positionY="-144.0625" width="128" height="73"/>
+        <element name="ExperimentalSession" positionX="-357.078125" positionY="418.1328125" width="128" height="88"/>
+        <element name="Participant" positionX="-340.53515625" positionY="137.9140625" width="128" height="73"/>
+    </elements>
+</model>
