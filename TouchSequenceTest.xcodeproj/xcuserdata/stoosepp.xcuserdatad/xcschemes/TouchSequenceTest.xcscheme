@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DD89E0C41E27208200965CB7"
-               BuildableName = "TouchSequenceTest.app"
+               BuildableName = "Touch Capture.app"
                BlueprintName = "TouchSequenceTest"
                ReferencedContainer = "container:TouchSequenceTest.xcodeproj">
             </BuildableReference>
@@ -31,7 +31,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DD89E0C41E27208200965CB7"
-            BuildableName = "TouchSequenceTest.app"
+            BuildableName = "Touch Capture.app"
             BlueprintName = "TouchSequenceTest"
             ReferencedContainer = "container:TouchSequenceTest.xcodeproj">
          </BuildableReference>
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DD89E0C41E27208200965CB7"
-            BuildableName = "TouchSequenceTest.app"
+            BuildableName = "Touch Capture.app"
             BlueprintName = "TouchSequenceTest"
             ReferencedContainer = "container:TouchSequenceTest.xcodeproj">
          </BuildableReference>
@@ -71,7 +71,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DD89E0C41E27208200965CB7"
-            BuildableName = "TouchSequenceTest.app"
+            BuildableName = "Touch Capture.app"
             BlueprintName = "TouchSequenceTest"
             ReferencedContainer = "container:TouchSequenceTest.xcodeproj">
          </BuildableReference>

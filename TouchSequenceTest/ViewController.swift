@@ -159,6 +159,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func viewPhotos(_ sender: Any) {
+        
     }
     @IBAction func takePhoto(_ sender: Any) {
         let dateString = getTodayString()

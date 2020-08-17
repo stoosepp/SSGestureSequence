@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Pbc-rE-ZQX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Pbc-rE-ZQX">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,7 +10,7 @@
         <!--SS Touch Capture Demo-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController interfaceStyle="light" id="BYZ-38-t0r" customClass="ViewController" customModule="TouchSequenceTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController interfaceStyle="light" id="BYZ-38-t0r" customClass="ViewController" customModule="Touch_Capture" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -220,7 +220,7 @@
         <!--Image Collection View Controller-->
         <scene sceneID="opi-Ph-gEf">
             <objects>
-                <collectionViewController id="YJf-fa-BGn" customClass="ImageCollectionViewController" customModule="TouchSequenceTest" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="YJf-fa-BGn" customClass="ImageCollectionViewController" customModule="Touch_Capture" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RNr-gm-p2B">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -232,14 +232,14 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCell" id="sWh-eA-RrQ" userLabel="Custom Cell" customClass="ImageCollectionViewCell" customModule="TouchSequenceTest" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageCell" id="sWh-eA-RrQ" userLabel="Custom Cell" customClass="ImageCollectionViewCell" customModule="Touch_Capture" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="FOQ-36-Rlf">
                                     <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CEM-s1-TFe">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CEM-s1-TFe">
                                             <rect key="frame" x="8" y="11" width="238" height="227"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
@@ -248,6 +248,7 @@
                                 <size key="customSize" width="250" height="250"/>
                                 <connections>
                                     <outlet property="cellImage" destination="CEM-s1-TFe" id="CYb-Sf-tgR"/>
+                                    <segue destination="MGl-vM-LfA" kind="showDetail" id="v73-h8-bWh"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -264,6 +265,51 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HeM-CU-O0V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1590.625" y="139.453125"/>
+        </scene>
+        <!--Images-->
+        <scene sceneID="go1-aL-fVK">
+            <objects>
+                <viewController title="Images" id="MGl-vM-LfA" customClass="ImageViewController" customModule="Touch_Capture" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vyb-kY-eOU"/>
+                        <viewControllerLayoutGuide type="bottom" id="T3I-TC-xxq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PG1-uH-hXl">
+                        <rect key="frame" x="0.0" y="0.0" width="712" height="984"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="o33-Dg-MRP">
+                                <rect key="frame" x="20" y="23" width="672" height="858"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="858" id="cVu-ji-oAj"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iau-qm-eYN">
+                                <rect key="frame" x="20" y="889" width="672" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="o33-Dg-MRP" firstAttribute="leading" secondItem="PG1-uH-hXl" secondAttribute="leading" constant="20" id="8ps-Sh-e8H"/>
+                            <constraint firstAttribute="trailing" secondItem="o33-Dg-MRP" secondAttribute="trailing" constant="20" id="Rqh-E3-QMF"/>
+                            <constraint firstItem="o33-Dg-MRP" firstAttribute="top" secondItem="vyb-kY-eOU" secondAttribute="bottom" constant="23" id="djY-2b-70s"/>
+                            <constraint firstItem="o33-Dg-MRP" firstAttribute="trailing" secondItem="Iau-qm-eYN" secondAttribute="trailing" id="hw1-7s-lF3"/>
+                            <constraint firstItem="Iau-qm-eYN" firstAttribute="top" secondItem="o33-Dg-MRP" secondAttribute="bottom" constant="8" id="u3F-v3-oaj"/>
+                            <constraint firstItem="o33-Dg-MRP" firstAttribute="leading" secondItem="Iau-qm-eYN" secondAttribute="leading" id="whb-zg-XDH"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="slA-U3-DfQ"/>
+                    <connections>
+                        <outlet property="imageLabel" destination="Iau-qm-eYN" id="LZx-At-noi"/>
+                        <outlet property="imageView" destination="o33-Dg-MRP" id="1ef-7P-91Y"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4bt-hs-ksI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2367.96875" y="139.453125"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Qws-8B-X84">
@@ -285,9 +331,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.clockwise" catalog="system" width="56" height="64"/>
-        <image name="camera.fill" catalog="system" width="64" height="48"/>
-        <image name="eye.fill" catalog="system" width="64" height="38"/>
-        <image name="photo.fill.on.rectangle.fill" catalog="system" width="64" height="48"/>
+        <image name="arrow.clockwise" catalog="system" width="115" height="128"/>
+        <image name="camera.fill" catalog="system" width="128" height="96"/>
+        <image name="eye.fill" catalog="system" width="128" height="78"/>
+        <image name="photo.fill.on.rectangle.fill" catalog="system" width="128" height="98"/>
     </resources>
 </document>

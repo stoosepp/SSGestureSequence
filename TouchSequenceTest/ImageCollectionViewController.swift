@@ -80,15 +80,21 @@ class ImageCollectionViewController: UICollectionViewController {
               print("There are \(screenShots.count) files in the directory.")
     }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
+        let imageViewer = segue.destination as! ImageViewController;
+        let index = self.collectionView.indexPathsForSelectedItems![0].row;
+        NSLog("Selected Image at Index\(index)");
+        imageViewer.selectedImage = screenShots[index];
+        imageViewer.screenShotsCount = screenShots.count;
+        imageViewer.currentIndex = index + 1;
     }
-    */
+    
 
     // MARK: UICollectionViewDataSource
 
