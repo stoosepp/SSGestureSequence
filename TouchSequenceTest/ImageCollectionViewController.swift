@@ -11,7 +11,7 @@ import UIKit
 private let reuseIdentifier = "ImageCell"
 // MARK: - Collection View Flow Layout Delegate
 
-private let itemsPerRow: CGFloat = 3
+/*private let itemsPerRow: CGFloat = 3
 private let sectionInsets = UIEdgeInsets(top: 50.0,
 left: 20.0,
 bottom: 50.0,
@@ -42,7 +42,7 @@ extension UICollectionViewController : UICollectionViewDelegateFlowLayout {
                       minimumLineSpacingForSectionAt section: Int) -> CGFloat {
     return sectionInsets.left
   }
-}
+}*/
 class ImageCollectionViewController: UICollectionViewController {
     
     var screenShots = Array<UIImage>()
@@ -90,9 +90,10 @@ class ImageCollectionViewController: UICollectionViewController {
         let imageViewer = segue.destination as! ImageViewController;
         let index = self.collectionView.indexPathsForSelectedItems![0].row;
         NSLog("Selected Image at Index\(index)");
-        imageViewer.selectedImage = screenShots[index];
-        imageViewer.screenShotsCount = screenShots.count;
-        imageViewer.currentIndex = index + 1;
+        //imageViewer.selectedImage = screenShots[index];
+        //imageViewer.screenShotsCount = screenShots.count;
+        imageViewer.screenShots = screenShots;
+        imageViewer.currentIndex = index;
     }
     
 
@@ -115,8 +116,9 @@ class ImageCollectionViewController: UICollectionViewController {
         // Configure the cell
         cell.backgroundColor = .clear
         let screenshot = screenShots[indexPath.row]
-            let widthInPixels = screenshot.size.width * screenshot.scale
-            let heightInPixels = screenshot.size.height * screenshot.scale
+            //let widthInPixels = screenshot.size.width * screenshot.scale
+            //let heightInPixels = screenshot.size.height * screenshot.scale
+        
         //print("This image is \(widthInPixels) x \(heightInPixels)")
         cell.cellImage.image = screenshot
         return cell
