@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD343A4125153FBA0031BD88 /* DemoFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD343A4025153FBA0031BD88 /* DemoFactory.swift */; };
 		DD89E0C91E27208200965CB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD89E0C81E27208200965CB7 /* AppDelegate.swift */; };
 		DD89E0CB1E27208200965CB7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD89E0CA1E27208200965CB7 /* ViewController.swift */; };
 		DD89E0CE1E27208200965CB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD89E0CC1E27208200965CB7 /* Main.storyboard */; };
@@ -16,10 +17,29 @@
 		DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D34A923FE51F70035EABA /* ImageCollectionViewCell.swift */; };
 		DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */; };
 		DDE1406524EB2A0F00C5D86C /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */; };
-		DDE1406824EB477000C5D86C /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDE1406624EB477000C5D86C /* TouchCaptureModel.xcdatamodeld */; };
+		DDF7CCE825154646009FFBDE /* ExperimentalSession+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCDA25154646009FFBDE /* ExperimentalSession+CoreDataClass.swift */; };
+		DDF7CCE925154646009FFBDE /* ExperimentalSession+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCDB25154646009FFBDE /* ExperimentalSession+CoreDataProperties.swift */; };
+		DDF7CCEA25154646009FFBDE /* Touch+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCDC25154646009FFBDE /* Touch+CoreDataClass.swift */; };
+		DDF7CCEB25154646009FFBDE /* Touch+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCDD25154646009FFBDE /* Touch+CoreDataProperties.swift */; };
+		DDF7CCEC25154646009FFBDE /* Participant+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCDE25154646009FFBDE /* Participant+CoreDataClass.swift */; };
+		DDF7CCED25154646009FFBDE /* Participant+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCDF25154646009FFBDE /* Participant+CoreDataProperties.swift */; };
+		DDF7CCEE25154647009FFBDE /* Artefact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE025154646009FFBDE /* Artefact+CoreDataClass.swift */; };
+		DDF7CCEF25154647009FFBDE /* Artefact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE125154646009FFBDE /* Artefact+CoreDataProperties.swift */; };
+		DDF7CCF025154647009FFBDE /* Project+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE225154646009FFBDE /* Project+CoreDataClass.swift */; };
+		DDF7CCF125154647009FFBDE /* Project+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE325154646009FFBDE /* Project+CoreDataProperties.swift */; };
+		DDF7CCF225154647009FFBDE /* ArtefactProperties+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE425154646009FFBDE /* ArtefactProperties+CoreDataClass.swift */; };
+		DDF7CCF325154647009FFBDE /* ArtefactProperties+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE525154646009FFBDE /* ArtefactProperties+CoreDataProperties.swift */; };
+		DDF7CCF425154647009FFBDE /* DataCollectionInstance+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE625154646009FFBDE /* DataCollectionInstance+CoreDataClass.swift */; };
+		DDF7CCF525154647009FFBDE /* DataCollectionInstance+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCE725154646009FFBDE /* DataCollectionInstance+CoreDataProperties.swift */; };
+		DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */; };
+		DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFC25154C7B009FFBDE /* Extensions.swift */; };
+		DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFD25154C7B009FFBDE /* Helpers.swift */; };
+		DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */; };
+		DDF7CD0525154F1C009FFBDE /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CD0425154F1B009FFBDE /* DrawingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD343A4025153FBA0031BD88 /* DemoFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoFactory.swift; sourceTree = "<group>"; };
 		DD89E0C51E27208200965CB7 /* Touch Capture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Touch Capture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD89E0C81E27208200965CB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD89E0CA1E27208200965CB7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -32,6 +52,25 @@
 		DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
 		DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		DDE1406724EB477000C5D86C /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
+		DDF7CCDA25154646009FFBDE /* ExperimentalSession+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExperimentalSession+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCDB25154646009FFBDE /* ExperimentalSession+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExperimentalSession+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCDC25154646009FFBDE /* Touch+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Touch+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCDD25154646009FFBDE /* Touch+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Touch+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCDE25154646009FFBDE /* Participant+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCDF25154646009FFBDE /* Participant+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCE025154646009FFBDE /* Artefact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artefact+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCE125154646009FFBDE /* Artefact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artefact+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCE225154646009FFBDE /* Project+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCE325154646009FFBDE /* Project+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Project+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCE425154646009FFBDE /* ArtefactProperties+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtefactProperties+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCE525154646009FFBDE /* ArtefactProperties+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtefactProperties+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCE625154646009FFBDE /* DataCollectionInstance+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataCollectionInstance+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDF7CCE725154646009FFBDE /* DataCollectionInstance+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataCollectionInstance+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageChooser.swift; sourceTree = "<group>"; };
+		DDF7CCFC25154C7B009FFBDE /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		DDF7CCFD25154C7B009FFBDE /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovableImageView.swift; sourceTree = "<group>"; };
+		DDF7CD0425154F1B009FFBDE /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DrawingView.swift; path = TouchSequenceTest/Views/DrawingView.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +84,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD343A4325153FC70031BD88 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DD89E0DA1E2721E500965CB7 /* CircleView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DD343A4425153FDD0031BD88 /* VCs */ = {
+			isa = PBXGroup;
+			children = (
+				DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */,
+				DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */,
+				DD89E0CA1E27208200965CB7 /* ViewController.swift */,
+				DDF7CD0425154F1B009FFBDE /* DrawingView.swift */,
+			);
+			path = VCs;
+			sourceTree = "<group>";
+		};
+		DD343A4525153FF40031BD88 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				DD8D34A923FE51F70035EABA /* ImageCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		DD343A462515402B0031BD88 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DDF7CCDA25154646009FFBDE /* ExperimentalSession+CoreDataClass.swift */,
+				DDF7CCDB25154646009FFBDE /* ExperimentalSession+CoreDataProperties.swift */,
+				DDF7CCDC25154646009FFBDE /* Touch+CoreDataClass.swift */,
+				DDF7CCDD25154646009FFBDE /* Touch+CoreDataProperties.swift */,
+				DDF7CCDE25154646009FFBDE /* Participant+CoreDataClass.swift */,
+				DDF7CCDF25154646009FFBDE /* Participant+CoreDataProperties.swift */,
+				DDF7CCE025154646009FFBDE /* Artefact+CoreDataClass.swift */,
+				DDF7CCE125154646009FFBDE /* Artefact+CoreDataProperties.swift */,
+				DDF7CCE225154646009FFBDE /* Project+CoreDataClass.swift */,
+				DDF7CCE325154646009FFBDE /* Project+CoreDataProperties.swift */,
+				DDF7CCE425154646009FFBDE /* ArtefactProperties+CoreDataClass.swift */,
+				DDF7CCE525154646009FFBDE /* ArtefactProperties+CoreDataProperties.swift */,
+				DDF7CCE625154646009FFBDE /* DataCollectionInstance+CoreDataClass.swift */,
+				DDF7CCE725154646009FFBDE /* DataCollectionInstance+CoreDataProperties.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		DD89E0BC1E27208200965CB7 = {
 			isa = PBXGroup;
 			children = (
@@ -52,6 +139,8 @@
 				DD89E0C61E27208200965CB7 /* Products */,
 			);
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 1;
 		};
 		DD89E0C61E27208200965CB7 /* Products */ = {
 			isa = PBXGroup;
@@ -64,12 +153,16 @@
 		DD89E0C71E27208200965CB7 /* TouchSequenceTest */ = {
 			isa = PBXGroup;
 			children = (
+				DD343A462515402B0031BD88 /* Models */,
+				DD343A4525153FF40031BD88 /* Cells */,
+				DD343A4425153FDD0031BD88 /* VCs */,
+				DD343A4325153FC70031BD88 /* Views */,
+				DDF7CCFC25154C7B009FFBDE /* Extensions.swift */,
+				DDF7CCFD25154C7B009FFBDE /* Helpers.swift */,
+				DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */,
+				DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */,
 				DD89E0C81E27208200965CB7 /* AppDelegate.swift */,
-				DD89E0CA1E27208200965CB7 /* ViewController.swift */,
-				DD89E0DA1E2721E500965CB7 /* CircleView.swift */,
-				DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */,
-				DD8D34A923FE51F70035EABA /* ImageCollectionViewCell.swift */,
-				DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */,
+				DD343A4025153FBA0031BD88 /* DemoFactory.swift */,
 				DD89E0CC1E27208200965CB7 /* Main.storyboard */,
 				DD89E0CF1E27208200965CB7 /* Assets.xcassets */,
 				DD89E0D11E27208200965CB7 /* LaunchScreen.storyboard */,
@@ -106,7 +199,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = StooSepp;
 				TargetAttributes = {
 					DD89E0C41E27208200965CB7 = {
@@ -115,7 +208,7 @@
 				};
 			};
 			buildConfigurationList = DD89E0C01E27208200965CB7 /* Build configuration list for PBXProject "TouchSequenceTest" */;
-			compatibilityVersion = "Xcode 11.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -150,13 +243,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
+				DDF7CCF525154647009FFBDE /* DataCollectionInstance+CoreDataProperties.swift in Sources */,
+				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
+				DDF7CCF325154647009FFBDE /* ArtefactProperties+CoreDataProperties.swift in Sources */,
 				DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */,
+				DDF7CD0525154F1C009FFBDE /* DrawingView.swift in Sources */,
+				DDF7CCEA25154646009FFBDE /* Touch+CoreDataClass.swift in Sources */,
+				DDF7CCEC25154646009FFBDE /* Participant+CoreDataClass.swift in Sources */,
+				DDF7CCEF25154647009FFBDE /* Artefact+CoreDataProperties.swift in Sources */,
+				DDF7CCF425154647009FFBDE /* DataCollectionInstance+CoreDataClass.swift in Sources */,
+				DDF7CCED25154646009FFBDE /* Participant+CoreDataProperties.swift in Sources */,
+				DD343A4125153FBA0031BD88 /* DemoFactory.swift in Sources */,
+				DDF7CCE925154646009FFBDE /* ExperimentalSession+CoreDataProperties.swift in Sources */,
 				DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */,
-				DDE1406824EB477000C5D86C /* TouchCaptureModel.xcdatamodeld in Sources */,
+				DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */,
 				DD89E0DB1E2721E500965CB7 /* CircleView.swift in Sources */,
+				DDF7CCE825154646009FFBDE /* ExperimentalSession+CoreDataClass.swift in Sources */,
 				DD89E0CB1E27208200965CB7 /* ViewController.swift in Sources */,
 				DDE1406524EB2A0F00C5D86C /* ImageViewController.swift in Sources */,
 				DD89E0C91E27208200965CB7 /* AppDelegate.swift in Sources */,
+				DDF7CCF225154647009FFBDE /* ArtefactProperties+CoreDataClass.swift in Sources */,
+				DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */,
+				DDF7CCEE25154647009FFBDE /* Artefact+CoreDataClass.swift in Sources */,
+				DDF7CCF025154647009FFBDE /* Project+CoreDataClass.swift in Sources */,
+				DDF7CCF125154647009FFBDE /* Project+CoreDataProperties.swift in Sources */,
+				DDF7CCEB25154646009FFBDE /* Touch+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +318,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -230,7 +343,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -264,6 +377,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -282,7 +396,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -300,7 +414,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SKVPMKVP5H;
 				INFOPLIST_FILE = TouchSequenceTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,7 +434,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SKVPMKVP5H;
 				INFOPLIST_FILE = TouchSequenceTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

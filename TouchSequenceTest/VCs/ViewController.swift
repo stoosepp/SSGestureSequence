@@ -62,7 +62,7 @@ class ViewController: UIViewController {
     var captureRect:CGRect?
     
 
-    @IBOutlet weak var geometryImageView: UIImageView!
+    @IBOutlet weak var chosenImageView: UIImageView!
     
  
     
@@ -81,6 +81,8 @@ class ViewController: UIViewController {
         resetButton.clipsToBounds =  true
         photosButton.layer.cornerRadius = photosButton.frame.size.height / 4; // this value vary as per your desire
         photosButton.clipsToBounds =  true
+		
+		DemoFactory().fetchData()
         
     }
     
@@ -91,21 +93,6 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    @IBAction func updateImage(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            geometryImageView.image = nil
-        case 1:
-            geometryImageView.image = UIImage(named: "WE")
-        case 2:
-            geometryImageView.image = UIImage(named: "NearFar")
-        case 3:
-            geometryImageView.image = UIImage(named: "Far")
-        default:
-            geometryImageView.image = nil
-        }
     }
     
     @IBAction func toggleGestures(_ sender: UIButton) {
@@ -139,8 +126,8 @@ class ViewController: UIViewController {
         mediumDistance = 0.0
         fastDistance = 0.0
     }
+	
     func getTodayString() -> String{
-
         let date = Date()
         let calender = Calendar.current
         let components = calender.dateComponents([.year,.month,.day,.hour,.minute,.second], from: date)
@@ -158,9 +145,7 @@ class ViewController: UIViewController {
 
     }
     
-    @IBAction func viewPhotos(_ sender: Any) {
-        
-    }
+   
     @IBAction func takePhoto(_ sender: Any) {
         let dateString = getTodayString()
         let screenShot = self.view.takeScreenshot()
