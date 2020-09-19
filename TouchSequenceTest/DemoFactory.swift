@@ -31,16 +31,18 @@ class DemoFactory: NSObject {
 		newProject.details = "This study is all about exploring how kids learn geometry on an iPad"
 		newProject.dateCreated = Date()
 		
-		do {
-			try self.context.save()
-		} catch  {
-			print("There was an error")
-		}
+		
 		let newSession = ExperimentalSession(context: context)
 		newSession.portrait = true
 		newSession.details = "This session is all about blah blah blah"
 		//Set relationships
 		newSession.project = newProject
+		
+		do {
+			try self.context.save()
+		} catch  {
+			print("There was an error")
+		}
 		
 	
     }

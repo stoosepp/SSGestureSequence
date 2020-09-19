@@ -35,7 +35,8 @@
 		DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFC25154C7B009FFBDE /* Extensions.swift */; };
 		DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFD25154C7B009FFBDE /* Helpers.swift */; };
 		DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */; };
-		DDF7CD0525154F1C009FFBDE /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CD0425154F1B009FFBDE /* DrawingView.swift */; };
+		DDF7CD0525154F1C009FFBDE /* TransparencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CD0425154F1B009FFBDE /* TransparencyView.swift */; };
+		DDF7CD092515526F009FFBDE /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CD082515526F009FFBDE /* RoundedButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,7 +71,8 @@
 		DDF7CCFC25154C7B009FFBDE /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		DDF7CCFD25154C7B009FFBDE /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovableImageView.swift; sourceTree = "<group>"; };
-		DDF7CD0425154F1B009FFBDE /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DrawingView.swift; path = TouchSequenceTest/Views/DrawingView.swift; sourceTree = SOURCE_ROOT; };
+		DDF7CD0425154F1B009FFBDE /* TransparencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TransparencyView.swift; path = TouchSequenceTest/Views/TransparencyView.swift; sourceTree = SOURCE_ROOT; };
+		DDF7CD082515526F009FFBDE /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +89,10 @@
 		DD343A4325153FC70031BD88 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDF7CD0425154F1B009FFBDE /* TransparencyView.swift */,
+				DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */,
 				DD89E0DA1E2721E500965CB7 /* CircleView.swift */,
+				DDF7CD082515526F009FFBDE /* RoundedButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -98,7 +103,6 @@
 				DDE1406424EB2A0F00C5D86C /* ImageViewController.swift */,
 				DD8D34AB23FE521D0035EABA /* ImageCollectionViewController.swift */,
 				DD89E0CA1E27208200965CB7 /* ViewController.swift */,
-				DDF7CD0425154F1B009FFBDE /* DrawingView.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -157,10 +161,8 @@
 				DD343A4525153FF40031BD88 /* Cells */,
 				DD343A4425153FDD0031BD88 /* VCs */,
 				DD343A4325153FC70031BD88 /* Views */,
-				DDF7CCFC25154C7B009FFBDE /* Extensions.swift */,
-				DDF7CCFD25154C7B009FFBDE /* Helpers.swift */,
+				DDE4A6E225165C1100931828 /* Helpers */,
 				DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */,
-				DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */,
 				DD89E0C81E27208200965CB7 /* AppDelegate.swift */,
 				DD343A4025153FBA0031BD88 /* DemoFactory.swift */,
 				DD89E0CC1E27208200965CB7 /* Main.storyboard */,
@@ -170,6 +172,15 @@
 				DDE1406624EB477000C5D86C /* TouchCaptureModel.xcdatamodeld */,
 			);
 			path = TouchSequenceTest;
+			sourceTree = "<group>";
+		};
+		DDE4A6E225165C1100931828 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DDF7CCFC25154C7B009FFBDE /* Extensions.swift */,
+				DDF7CCFD25154C7B009FFBDE /* Helpers.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,7 +259,7 @@
 				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
 				DDF7CCF325154647009FFBDE /* ArtefactProperties+CoreDataProperties.swift in Sources */,
 				DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */,
-				DDF7CD0525154F1C009FFBDE /* DrawingView.swift in Sources */,
+				DDF7CD0525154F1C009FFBDE /* TransparencyView.swift in Sources */,
 				DDF7CCEA25154646009FFBDE /* Touch+CoreDataClass.swift in Sources */,
 				DDF7CCEC25154646009FFBDE /* Participant+CoreDataClass.swift in Sources */,
 				DDF7CCEF25154647009FFBDE /* Artefact+CoreDataProperties.swift in Sources */,
@@ -256,6 +267,7 @@
 				DDF7CCED25154646009FFBDE /* Participant+CoreDataProperties.swift in Sources */,
 				DD343A4125153FBA0031BD88 /* DemoFactory.swift in Sources */,
 				DDF7CCE925154646009FFBDE /* ExperimentalSession+CoreDataProperties.swift in Sources */,
+				DDF7CD092515526F009FFBDE /* RoundedButton.swift in Sources */,
 				DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */,
 				DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */,
 				DD89E0DB1E2721E500965CB7 /* CircleView.swift in Sources */,
