@@ -1,8 +1,8 @@
 //
-//  Project+CoreDataProperties.swift
+//  Study+CoreDataProperties.swift
 //  TouchSequenceTest
 //
-//  Created by Stoo on 18/9/20.
+//  Created by Stoo on 21/9/20.
 //  Copyright © 2020 StooSepp. All rights reserved.
 //
 //
@@ -11,10 +11,10 @@ import Foundation
 import CoreData
 
 
-extension Project {
+extension Study {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Project> {
-        return NSFetchRequest<Project>(entityName: "Project")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Study> {
+        return NSFetchRequest<Study>(entityName: "Study")
     }
 
     @NSManaged public var dateCreated: Date?
@@ -25,7 +25,7 @@ extension Project {
 }
 
 // MARK: Generated accessors for expSessions
-extension Project {
+extension Study {
 
     @objc(addExpSessionsObject:)
     @NSManaged public func addToExpSessions(_ value: ExperimentalSession)
@@ -41,6 +41,6 @@ extension Project {
 
 }
 
-extension Project : Identifiable {
+extension Study : Identifiable {
 
 }

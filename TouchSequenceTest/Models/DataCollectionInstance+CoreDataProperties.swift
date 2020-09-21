@@ -2,7 +2,7 @@
 //  DataCollectionInstance+CoreDataProperties.swift
 //  TouchSequenceTest
 //
-//  Created by Stoo on 18/9/20.
+//  Created by Stoo on 21/9/20.
 //  Copyright © 2020 StooSepp. All rights reserved.
 //
 //
@@ -20,9 +20,9 @@ extension DataCollectionInstance {
     @NSManaged public var endDate: Date?
     @NSManaged public var notes: String?
     @NSManaged public var startDate: Date?
+    @NSManaged public var session: ExperimentalSession?
     @NSManaged public var participant: Participant?
     @NSManaged public var touches: NSSet?
-    @NSManaged public var expermientalSession: ExperimentalSession?
 
 }
 

@@ -27,7 +27,7 @@ import UIKit
 	}
 	@IBInspectable var labelOffset:CGFloat = 0{
 		didSet{
-			self.centerVertically(padding:labelOffset)
+			self.centerImageAndButton(labelOffset, imageOnTop: false)
 		}
 	}
 	
@@ -36,36 +36,16 @@ import UIKit
 
 extension RoundedButton {
 	
-	func centerVertically(padding: CGFloat = 6.0) {
-		guard
-			let imageViewSize = self.imageView?.frame.size,
-			let titleLabelSize = self.titleLabel?.frame.size else {
-			return
+	func centerImageAndButton(_ gap: CGFloat, imageOnTop: Bool) {
+
+		  guard let imageView = self.currentImage,
+		  let titleLabel = self.titleLabel?.text else { return }
+
+		  let sign: CGFloat = imageOnTop ? 1 : -1
+		self.titleEdgeInsets = UIEdgeInsets(top: (imageView.size.height + gap) * sign, left: -imageView.size.width, bottom: 0, right: 0);
+
+		let titleSize = titleLabel.size(withAttributes:[NSAttributedString.Key.font: self.titleLabel!.font!])
+		self.imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + gap) * sign, left: 0, bottom: 0, right: -titleSize.width)
 		}
-		
-		let totalHeight = imageViewSize.height + titleLabelSize.height + padding
-		let totalWidth = imageViewSize.width + titleLabelSize.width
-		
-		self.imageEdgeInsets = UIEdgeInsets(
-			top: (totalHeight - imageViewSize.height - titleLabelSize.height - padding),
-			left:0,
-			bottom: 0.0,
-			right: -(imageViewSize.width-titleLabelSize.width)
-		)
-		
-		self.titleEdgeInsets = UIEdgeInsets(
-			top: 0.0,
-			left:-imageViewSize.width,
-		   bottom: totalHeight,
-		   right: 0.0
-		)
-		
-		self.contentEdgeInsets = UIEdgeInsets(
-			top: titleLabelSize.height,
-			left: 0.0,
-			bottom: 0,
-			right: 0.0
-		)
-	}
 	
 }

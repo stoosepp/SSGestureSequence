@@ -90,8 +90,6 @@ class ImageCollectionViewController: UICollectionViewController {
         let imageViewer = segue.destination as! ImageViewController;
         let index = self.collectionView.indexPathsForSelectedItems![0].row;
         NSLog("Selected Image at Index\(index)");
-        //imageViewer.selectedImage = screenShots[index];
-        //imageViewer.screenShotsCount = screenShots.count;
         imageViewer.screenShots = screenShots;
         imageViewer.currentIndex = index;
     }

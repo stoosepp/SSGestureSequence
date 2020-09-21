@@ -2,7 +2,7 @@
 //  ExperimentalSession+CoreDataProperties.swift
 //  TouchSequenceTest
 //
-//  Created by Stoo on 18/9/20.
+//  Created by Stoo on 21/9/20.
 //  Copyright © 2020 StooSepp. All rights reserved.
 //
 //
@@ -17,12 +17,13 @@ extension ExperimentalSession {
         return NSFetchRequest<ExperimentalSession>(entityName: "ExperimentalSession")
     }
 
+    @NSManaged public var artefactSequence: NSObject?
     @NSManaged public var details: String?
     @NSManaged public var portrait: Bool
-    @NSManaged public var artefactSequence: NSObject?
     @NSManaged public var artefactProperties: NSSet?
     @NSManaged public var dataCollections: NSSet?
-    @NSManaged public var project: Project?
+    @NSManaged public var study: Study?
+    @NSManaged public var screenCap: NSSet?
 
 }
 
@@ -57,6 +58,23 @@ extension ExperimentalSession {
 
     @objc(removeDataCollections:)
     @NSManaged public func removeFromDataCollections(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for screenCap
+extension ExperimentalSession {
+
+    @objc(addScreenCapObject:)
+    @NSManaged public func addToScreenCap(_ value: ScreenCapture)
+
+    @objc(removeScreenCapObject:)
+    @NSManaged public func removeFromScreenCap(_ value: ScreenCapture)
+
+    @objc(addScreenCap:)
+    @NSManaged public func addToScreenCap(_ values: NSSet)
+
+    @objc(removeScreenCap:)
+    @NSManaged public func removeFromScreenCap(_ values: NSSet)
 
 }
 

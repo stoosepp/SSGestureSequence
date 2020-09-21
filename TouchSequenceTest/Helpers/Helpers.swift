@@ -42,6 +42,5 @@ open class Helpers:NSObject{
 
         return today_string
     }
-    
    
 }

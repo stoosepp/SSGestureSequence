@@ -1,5 +1,5 @@
 //
-//  DataCollectionInstance+CoreDataClass.swift
+//  ScreenCapture+CoreDataClass.swift
 //  TouchSequenceTest
 //
 //  Created by Stoo on 21/9/20.
@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(DataCollectionInstance)
-public class DataCollectionInstance: NSManagedObject {
+@objc(ScreenCapture)
+public class ScreenCapture: NSManagedObject {
 
 }

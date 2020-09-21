@@ -22,8 +22,8 @@
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="expermientalSession" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExperimentalSession" inverseName="dataCollections" inverseEntity="ExperimentalSession"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="dataCollection" inverseEntity="Participant"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExperimentalSession" inverseName="dataCollections" inverseEntity="ExperimentalSession"/>
         <relationship name="touches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Touch" inverseName="dataCollectionInstance" inverseEntity="Touch"/>
     </entity>
     <entity name="ExperimentalSession" representedClassName="ExperimentalSession" syncable="YES" codeGenerationType="class">
@@ -31,20 +31,26 @@
         <attribute name="details" optional="YES" attributeType="String"/>
         <attribute name="portrait" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="artefactProperties" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ArtefactProperties" inverseName="expertimentalSession" inverseEntity="ArtefactProperties"/>
-        <relationship name="dataCollections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DataCollectionInstance" inverseName="expermientalSession" inverseEntity="DataCollectionInstance"/>
-        <relationship name="project" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="expSessions" inverseEntity="Project"/>
+        <relationship name="dataCollections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DataCollectionInstance" inverseName="session" inverseEntity="DataCollectionInstance"/>
+        <relationship name="screenCap" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ScreenCapture" inverseName="session" inverseEntity="ScreenCapture"/>
+        <relationship name="study" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Study" inverseName="expSessions" inverseEntity="Study"/>
     </entity>
     <entity name="Participant" representedClassName="Participant" syncable="YES" codeGenerationType="class">
         <attribute name="participantID" optional="YES" attributeType="String"/>
         <relationship name="dataCollection" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DataCollectionInstance" inverseName="participant" inverseEntity="DataCollectionInstance"/>
     </entity>
-    <entity name="Project" representedClassName="Project" syncable="YES" codeGenerationType="class">
+    <entity name="ScreenCapture" representedClassName="ScreenCapture" syncable="YES" codeGenerationType="class">
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExperimentalSession" inverseName="screenCap" inverseEntity="ExperimentalSession"/>
+    </entity>
+    <entity name="Study" representedClassName="Study" syncable="YES" codeGenerationType="class">
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="details" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="expSessions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExperimentalSession" inverseName="project" inverseEntity="ExperimentalSession"/>
+        <relationship name="expSessions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExperimentalSession" inverseName="study" inverseEntity="ExperimentalSession"/>
     </entity>
-    <entity name="Touch" representedClassName="Touch" syncable="YES" codeGenerationType="class">
+    <entity name="Touch" representedClassName=".Touch" syncable="YES" codeGenerationType="class">
         <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="touchType" optional="YES" attributeType="String"/>
         <attribute name="xLocation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -55,9 +61,10 @@
         <element name="Artefact" positionX="-33.7861328125" positionY="-94.52450561523438" width="128" height="119"/>
         <element name="ArtefactProperties" positionX="-220.962158203125" positionY="-121.1251220703125" width="128" height="149"/>
         <element name="DataCollectionInstance" positionX="-460.0684204101562" positionY="61.8409423828125" width="177.9116821289062" height="119"/>
-        <element name="ExperimentalSession" positionX="-447.0442504882812" positionY="-109.6052856445312" width="128" height="119"/>
+        <element name="ExperimentalSession" positionX="-447.0442504882812" positionY="-109.6052856445312" width="128" height="134"/>
         <element name="Participant" positionX="-159.9637451171875" positionY="128.4750366210938" width="128" height="73"/>
-        <element name="Project" positionX="-479.2728881835938" positionY="-241.7791137695312" width="139.785400390625" height="89"/>
+        <element name="Study" positionX="-479.2728881835938" positionY="-241.7791137695312" width="139.785400390625" height="89"/>
         <element name="Touch" positionX="-443.5431518554688" positionY="261.0677795410156" width="128" height="104"/>
+        <element name="ScreenCapture" positionX="-279" positionY="-90" width="128" height="74"/>
     </elements>
 </model>

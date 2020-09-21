@@ -27,6 +27,8 @@ class ImageViewController: UIViewController {
         if currentIndex == 0{
             prevButton.isHidden = true;
         }
+		
+		
     }
     
     @IBAction func tappedNextPrevButton(_ sender: UIButton) {
