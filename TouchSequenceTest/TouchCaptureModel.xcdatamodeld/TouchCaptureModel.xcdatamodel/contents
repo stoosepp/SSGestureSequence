@@ -27,7 +27,7 @@
         <relationship name="touches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Touch" inverseName="dataCollectionInstance" inverseEntity="Touch"/>
     </entity>
     <entity name="ExperimentalSession" representedClassName="ExperimentalSession" syncable="YES" codeGenerationType="class">
-        <attribute name="artefactSequence" optional="YES" attributeType="Transformable" valueTransformerName="NSOrderedSetToDataTransofrmer"/>
+        <attribute name="artefactSequence" optional="YES" attributeType="Transformable" valueTransformerName="NSOrderedSetToDataTransformer"/>
         <attribute name="details" optional="YES" attributeType="String"/>
         <attribute name="portrait" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="artefactProperties" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ArtefactProperties" inverseName="expertimentalSession" inverseEntity="ArtefactProperties"/>
@@ -51,8 +51,9 @@
         <relationship name="expSessions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ExperimentalSession" inverseName="study" inverseEntity="ExperimentalSession"/>
     </entity>
     <entity name="Touch" representedClassName=".Touch" syncable="YES" codeGenerationType="class">
+        <attribute name="phase" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="touchType" optional="YES" attributeType="String"/>
+        <attribute name="touchType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="xLocation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="yLocation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="dataCollectionInstance" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DataCollectionInstance" inverseName="touches" inverseEntity="DataCollectionInstance"/>
@@ -63,8 +64,8 @@
         <element name="DataCollectionInstance" positionX="-460.0684204101562" positionY="61.8409423828125" width="177.9116821289062" height="119"/>
         <element name="ExperimentalSession" positionX="-447.0442504882812" positionY="-109.6052856445312" width="128" height="134"/>
         <element name="Participant" positionX="-159.9637451171875" positionY="128.4750366210938" width="128" height="73"/>
-        <element name="Study" positionX="-479.2728881835938" positionY="-241.7791137695312" width="139.785400390625" height="89"/>
-        <element name="Touch" positionX="-443.5431518554688" positionY="261.0677795410156" width="128" height="104"/>
         <element name="ScreenCapture" positionX="-279" positionY="-90" width="128" height="74"/>
+        <element name="Study" positionX="-479.2728881835938" positionY="-241.7791137695312" width="139.785400390625" height="89"/>
+        <element name="Touch" positionX="-443.5431518554688" positionY="261.0677795410156" width="128" height="119"/>
     </elements>
 </model>

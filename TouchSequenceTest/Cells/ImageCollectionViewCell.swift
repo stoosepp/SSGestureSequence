@@ -10,4 +10,16 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cellImage: UIImageView!
+	
+	//var imageURL:URL?
+	
+	
+	/*
+override func draw(_ rect: CGRect) {
+		print("ImageCollectionViewCell: URL is \(imageURL!)")
+		let data = try? Data(contentsOf: imageURL!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+		cellImage.image = UIImage(data: data!)!
+	}
+*/
+	
 }

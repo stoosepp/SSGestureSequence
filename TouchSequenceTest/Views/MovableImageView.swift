@@ -10,6 +10,11 @@ import UIKit
 
 class MovableImageView: UIImageView, UIGestureRecognizerDelegate {
  
+	func viewWillLayoutSubviews() {
+		layoutMargins = .zero
+		layoutMarginsDidChange()
+	}
+	
       func enableZoom() {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(startZooming(sender:)))
         isUserInteractionEnabled = true

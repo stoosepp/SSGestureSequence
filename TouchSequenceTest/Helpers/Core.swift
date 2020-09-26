@@ -28,6 +28,45 @@ public class Core {
 	func setDidUpgrade(value:Bool){
 		UserDefaults.standard.setValue(value, forKey: "didUpgrade")
 	}
+	
+	func setConstraintPins(view:UIView, parentview:UIView, asLeading:CGFloat,trailing:CGFloat,top:CGFloat,bottom:CGFloat){
+		view.translatesAutoresizingMaskIntoConstraints = false
+		let margins = parentview.layoutMarginsGuide
+
+		view.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: asLeading).isActive = true
+		view.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -trailing).isActive = true
+		view.topAnchor.constraint(equalTo: margins.topAnchor, constant: top).isActive = true
+		view.bottomAnchor.constraint(equalTo: margins.bottomAnchor, constant: -bottom).isActive = true
+	}
+	
+	func fetchFileURLS() -> [URL]{
+		var URLs = [URL]()
+		let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+
+			   do {
+				   // Get the directory contents urls (including subfolders urls)
+				let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: [.contentModificationDateKey])
+				
+			
+				   // if you want to filter the directory contents you can do like this:
+				   let jpgFiles = directoryContents.filter{ $0.pathExtension == "jpg" }
+				
+				//Sort the Files
+				let sortedURLS = jpgFiles.map { url in
+							(url, (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate ?? Date.distantPast)
+						}
+						.sorted(by: { $0.1 > $1.1 })
+				
+				  for file in sortedURLS{
+					print("URL is \(file.0)")
+					let URLofFile = file.0
+					URLs.append(URLofFile)
+				  }
+			   } catch {
+				   print(error)
+			   }
+			 return URLs
+	}
 }
 
 

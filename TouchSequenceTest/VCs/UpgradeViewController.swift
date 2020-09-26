@@ -8,11 +8,19 @@
 
 import UIKit
 
+protocol UpgradeViewDelegate{
+	func setupApp(didUpgrade:Bool)
+}
+
 class UpgradeViewController: UIViewController {
+	
+	var upgradeDelegate: ViewController!
 	
 	@IBAction func upgradeToPro(_ sender:Any){
 		
 		Core.shared.setDidUpgrade(value: true)
+		upgradeDelegate.setupApp(didUpgrade: true)
+		dismiss(animated: true, completion: nil)
 		print("Upgraded to Pro")
 	}
 	

@@ -8,13 +8,18 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate {
+	
+	
 
-
+	//Views
 	@IBOutlet weak var chosenImageView: MovableImageView!
-	@IBOutlet weak var importPhotoButton: UIButton!
 	@IBOutlet weak var transparencyView: TouchCaptureView!//TransparencyView!
-	//@IBOutlet weak var resetButton: UIBarButtonItem!
+	@IBOutlet weak var playbackView: TouchPlayerView!//TransparencyView!
+	
+	
+	//Buttons
+	@IBOutlet weak var importPhotoButton: UIButton!
 	@IBOutlet weak var toggleButton: UIBarButtonItem!
 	@IBOutlet weak var cameraButton: UIBarButtonItem!
 	@IBOutlet weak var photosButton: UIBarButtonItem!
@@ -22,70 +27,97 @@ class ViewController: UIViewController {
 	@IBOutlet weak var startDrawingButton: UIBarButtonItem!
 	@IBOutlet weak var lockRotationButton: UIBarButtonItem!
 	@IBOutlet weak var playButton: UIBarButtonItem!
-	var isDrawing:Bool = false
 	
 	var imagePicker: ImagePicker!
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view, typically from a nib.
+		// Do any additional setup after loading the view, typically from a nib.
 
 		transparencyView.isHidden = true
-	
-		self.imagePicker = ImagePicker(presentationController: self, delegate: self)
-		chosenImageView.enableZoom()
-		chosenImageView.enablePan()
-		chosenImageView.enableRotate()
-		
-		
-		//resetButton.isEnabled = true
+		transparencyView.isUserInteractionEnabled = false
 		toggleButton.isEnabled = false
 		cameraButton.isEnabled = false
-		photosButton.isEnabled = false
 		lockRotationButton.isEnabled = false
-		playButton.isEnabled = false
+	
+		self.imagePicker = ImagePicker(presentationController: self, delegate: self)
+		
+		//Hide player to start
+		playButton.isHidden(true)
+		playbackView.isHidden = true
+		playbackView.playerDelgate = self
+		
+		//Deal with Pro stuf
+		Core.shared.setDidUpgrade(value: false)
+		setupApp(didUpgrade: true)
 		
     }
-	
-	func setupIfPro(){
-		if Core.shared.didUpgrade() == true
+
+
+	func setupApp(didUpgrade:Bool){
+		//Edit this if testing pro features
+		if didUpgrade == true
 		{
-			//Show Buttons relevant to Pro users
-			playButton.isHidden(true)
+			playButton.isHidden(false)
+			playButton.isEnabled = false
+			self.title = "Touch Capture Pro"
+		}
+		else{
+			
 		}
 	}
 	
-	@IBAction func startDrawing(){
+	@IBAction func toggleDrawing(_ sender: UIBarButtonItem){
+		if sender.title == "Start Capture"{
+			updateItems(forDrawing: true)
+		}
+		else if sender.title == "Stop Capture"{
+			updateItems(forDrawing: false)
+		}
+		else if sender.title == "Reset View"{
+			//Reset View
+			resetDrawing()
+		}
+	}
 	
-		if isDrawing == false {
+	func updateItems(forDrawing:Bool){
+		
+		if forDrawing == true{
 			if chosenImageView.image == nil{
 				chosenImageView.isHidden = true
 				importPhotoButton.isHidden = true
 			}
-			isDrawing = true
 			transparencyView.isHidden = false
-			startDrawingButton.title = "Finish"
 			toggleButton.isEnabled = true
+			cameraButton.isEnabled = false
+			photosButton.isEnabled = false
+			transparencyView.isUserInteractionEnabled = true
+			chosenImageView.isUserInteractionEnabled = false
+			self.navigationController?.navigationBar.isHidden = true
+			startDrawingButton.title = "Stop Capture"
 			
 		}
 		else{
-			isDrawing = false
-			//resetButton.isEnabled = false
-			cameraButton.isEnabled = true
+			toggleButton.isEnabled = false
 			photosButton.isEnabled = true
+			cameraButton.isEnabled = true
+			startDrawingButton.title = "Reset View"
 			playButton.isEnabled = true
-			startDrawingButton.title = "Start Capture"
+			self.navigationController?.navigationBar.isHidden = false
 		}
-		self.navigationController?.navigationBar.isHidden = true
-		
+
+
 	}
 	
-	@IBAction func lockRotation(_ sender: UIButton) {
-	  
-		if sender.titleLabel?.text == "Lock"{
-			sender.setTitle("Unlock", for: .normal)
-			sender.setImage(UIImage(systemName: "lock.rotation.open"), for:.normal)
+	@IBAction func lockRotation(_ sender: UIBarButtonItem) {
+		if sender.tintColor == .red{
+			print("Unlocking Rotation")
+			sender.tintColor = .green
+			chosenImageView.enableRotate()
+		}
+		else {
+			print("Locking Rotation")
+			sender.tintColor = .red
 			let rotateRecognizer = chosenImageView.gestureRecognizers?[2]
 			chosenImageView.removeGestureRecognizer(rotateRecognizer!)
 		
@@ -97,16 +129,40 @@ class ViewController: UIViewController {
 			chosenImageView.transform = finalTransform
 
 		}
-		else if sender.titleLabel?.text == "Unlock" {
-			sender.setTitle("Lock", for: .normal)
-			chosenImageView.enableRotate()
-		}
 				  
 	}
+	
+	func resetDrawing(){
+		if chosenImageView.image != nil{
+			chosenImageView.removeFromSuperview()
+			let newImageView = MovableImageView()
+			newImageView.frame = self.view.frame
+			newImageView.contentMode = .scaleAspectFit
+			self.view.addSubview(newImageView)
+			self.view.sendSubviewToBack(newImageView)
+			chosenImageView = newImageView
+			importPhotoButton.isHidden = false
+			
+			
+		}
+		
+		startDrawingButton.title = "Start Capture"
+		importPhotoButton.isHidden = false
+		transparencyView.savedTouches.removeAll()
+		transparencyView.setNeedsDisplay()
+		
+		//Playback stuff
+		playButton.image = (UIImage(systemName: "play.fill"))
+		playbackView.timer?.invalidate()
+		playbackView.isHidden = true
+		playbackView.isPaused = true
+		playbackView.timeElapsed = 0
+		playButton.isEnabled = false
+		playbackView.savedTouches.removeAll()
+		
+	}
     
-//    override var prefersStatusBarHidden: Bool {
-//      return true
-//    }
+	
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -115,14 +171,17 @@ class ViewController: UIViewController {
     
     @IBAction func toggleGestures(_ sender: UIBarButtonItem) {
     
-		if sender.title == "Show"{//transparencyView.mainImageView.isEnabled == true{
+		if sender.image == UIImage(systemName: "eye.fill"){//transparencyView.mainImageView.isEnabled == true{
             sender.image = UIImage(systemName: "eye.slash.fill")
-			sender.title = "Hide"
+			transparencyView.lineColor = .clear
+			transparencyView.setNeedsDisplay()
+			
 			
         }
         else{
 			sender.image =  UIImage(systemName: "eye.fill")
-			sender.title = "Show"
+			transparencyView.lineColor = .black
+			transparencyView.setNeedsDisplay()
         }
             
     }
@@ -132,7 +191,14 @@ class ViewController: UIViewController {
 		  self.imagePicker.present(from: sender)
 		
 	  }
-    
+	
+
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "showUpgradeToPro"{
+			let upgradeVC = segue.destination as! UpgradeViewController
+			upgradeVC.upgradeDelegate = self
+		}
+	}
 
 
     @IBAction func takePhoto(_ sender: Any) {
@@ -160,26 +226,28 @@ class ViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
 	
+	
 	@IBAction func playPauseButtonPushed(_ sender:UIBarButtonItem){
-		
-		if transparencyView.isPaused == true{
+		if sender.image == UIImage(systemName: "play.fill"){
 			sender.image = UIImage(systemName: "pause.fill")
-			//if transparencyView.timer == nil && transparencyView.savedTouches.count != 0{
-				transparencyView.playPause()
-			/*}
-			else{
-				let alert = UIAlertController(title: "No Touches Recorded", message: "No Touches present. Draw something first, then hit play", preferredStyle: .alert)
-				alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-				self.present(alert, animated: true, completion: nil)
-			}*/
-			
+			if playbackView.savedTouches.count == 0{
+				playbackView.savedTouches = transparencyView.savedTouches
+				playbackView.isHidden = false
+				transparencyView.isHidden = true
+			}
+			playbackView.playPause()
 		}
 		else{
-			
 			sender.image = (UIImage(systemName: "play.fill"))
-			transparencyView.timer?.invalidate()
+			playbackView.playPause()
 		}
-		
+	}
+	//MARK: Delegate Stuff
+	//TouchPlayerDelegate Funcs
+	func updateViews(isPlaying: Bool) {
+		if isPlaying == false{
+			playButton.image = UIImage(systemName: "play.fill")
+		}
 	}
 	
 	//MARK: Animate Buttons
@@ -212,9 +280,13 @@ extension ViewController: ImagePickerDelegate {
 		self.chosenImageView.image = image
 		print("Image Chosen")
 		importPhotoButton.isHidden = true
-		startDrawingButton.isEnabled = false
-		lockRotationButton.isEnabled = false
+		startDrawingButton.isEnabled = true
+		lockRotationButton.isEnabled = true
+		chosenImageView.isHidden = false
 		chosenImageView.removeAllConstraints()
+		chosenImageView.enableZoom()
+		chosenImageView.enablePan()
+		chosenImageView.enableRotate()
 	}
 }
 
