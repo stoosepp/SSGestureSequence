@@ -83,18 +83,18 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleAspectFit" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fWb-vv-r8M" customClass="MovableImageView" customModule="Touch_Capture" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                             </imageView>
-                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CWJ-mx-EJD" customClass="TouchCaptureView" customModule="Touch_Capture" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CWJ-mx-EJD" customClass="MultiTouchCaptureView" customModule="Touch_Capture" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4gz-JP-gcu" customClass="TouchPlayerView" customModule="Touch_Capture" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="521" translatesAutoresizingMaskIntoConstraints="NO" id="P0s-v6-H1K">
                                         <rect key="frame" x="20" y="70" width="728" height="41"/>
@@ -125,14 +125,14 @@
                                 </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v3P-cT-qS4">
-                                <rect key="frame" x="337" y="497" width="94" height="30"/>
+                                <rect key="frame" x="337" y="472" width="94" height="30"/>
                                 <state key="normal" title="Add an Image"/>
                                 <connections>
                                     <action selector="chooseImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tei-Za-JOD"/>
                                 </connections>
                             </button>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Us-Zl-D5T">
-                                <rect key="frame" x="0.0" y="974" width="768" height="50"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Us-Zl-D5T">
+                                <rect key="frame" x="0.0" y="924" width="768" height="50"/>
                                 <items>
                                     <barButtonItem title="Gallery" image="lock.rotation" catalog="system" style="plain" id="5JJ-kg-6wj">
                                         <color key="tintColor" systemColor="systemGreenColor"/>
@@ -192,7 +192,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Touch Capture" id="rjc-gf-KOe">
-                        <barButtonItem key="leftBarButtonItem" image="line.horizontal.3" catalog="system" id="jkw-eD-yFf"/>
+                        <barButtonItem key="leftBarButtonItem" image="sidebar.left" catalog="system" id="jkw-eD-yFf"/>
                         <barButtonItem key="rightBarButtonItem" image="info.circle" catalog="system" id="P8h-ad-wkI">
                             <connections>
                                 <segue destination="d8q-mQ-DMm" kind="popoverPresentation" identifier="showUpgradeToPro" popoverAnchorBarButtonItem="P8h-ad-wkI" id="QuZ-47-6UA">
@@ -223,7 +223,7 @@
             <objects>
                 <collectionViewController id="YJf-fa-BGn" customClass="ImageCollectionViewController" customModule="Touch_Capture" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RNr-gm-p2B">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" sectionInsetReference="layoutMargins" id="O01-wZ-MIx">
@@ -275,7 +275,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Pbc-rE-ZQX" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="RJo-Df-9Bt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="RJo-Df-9Bt">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -297,11 +297,11 @@
                         <viewControllerLayoutGuide type="bottom" id="g7W-go-lWR"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="U7c-Qa-8A3">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vhr-gt-lfB">
-                                <rect key="frame" x="20" y="70" width="728" height="934"/>
+                                <rect key="frame" x="20" y="20" width="728" height="934"/>
                                 <subviews>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LJ5-rp-MaZ">
                                         <rect key="frame" x="0.0" y="0.0" width="728" height="866.5"/>
@@ -369,10 +369,10 @@
         <image name="camera" catalog="system" width="128" height="94"/>
         <image name="eye.fill" catalog="system" width="128" height="78"/>
         <image name="info.circle" catalog="system" width="128" height="121"/>
-        <image name="line.horizontal.3" catalog="system" width="128" height="64"/>
         <image name="lock.rotation" catalog="system" width="128" height="110"/>
         <image name="photo.on.rectangle" catalog="system" width="128" height="96"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
+        <image name="sidebar.left" catalog="system" width="128" height="93"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

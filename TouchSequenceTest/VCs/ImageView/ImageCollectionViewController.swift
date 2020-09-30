@@ -59,7 +59,7 @@ class ImageCollectionViewController: UICollectionViewController {
 		let imageFile = self.screenShotURLs[indexPath.item]
 		print("Cell at Index \(indexPath.item) has a file at \(imageFile)")
 		let data = try? Data(contentsOf: imageFile)
-		print("Cell data is \(data)")
+		print("Cell data is \(String(describing: data))")
 		cell!.cellImage.image = UIImage(data: data!)!
 		return cell!
 	

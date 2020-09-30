@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		DD2C3D9625169161006DED65 /* TouchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2C3D9525169161006DED65 /* TouchCaptureView.swift */; };
 		DD2C3D9A25169DCD006DED65 /* TouchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2C3D9925169DCD006DED65 /* TouchTest.swift */; };
+		DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */; };
+		DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */; };
 		DD4BF6FD2518F31F005DA322 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BF6FC2518F31F005DA322 /* Core.swift */; };
 		DD4BF7002518F6CE005DA322 /* UpgradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */; };
 		DD63DCDF2519378200B04D5F /* TouchPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */; };
@@ -36,6 +38,8 @@
 /* Begin PBXFileReference section */
 		DD2C3D9525169161006DED65 /* TouchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchCaptureView.swift; sourceTree = "<group>"; };
 		DD2C3D9925169DCD006DED65 /* TouchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchTest.swift; sourceTree = "<group>"; };
+		DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchCaptureView.swift; sourceTree = "<group>"; };
+		DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchPlayerView.swift; sourceTree = "<group>"; };
 		DD4BF6FC2518F31F005DA322 /* Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
 		DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeViewController.swift; sourceTree = "<group>"; };
 		DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchPlayerView.swift; sourceTree = "<group>"; };
@@ -78,7 +82,9 @@
 			children = (
 				DDF7CD0425154F1B009FFBDE /* TransparencyView.swift */,
 				DD2C3D9525169161006DED65 /* TouchCaptureView.swift */,
+				DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */,
 				DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */,
+				DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */,
 				DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */,
 				DD89E0DA1E2721E500965CB7 /* CircleView.swift */,
 				DDF7CD082515526F009FFBDE /* RoundedButton.swift */,
@@ -242,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */,
 				DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */,
 				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
 				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
@@ -253,6 +260,7 @@
 				DDF7CD0525154F1C009FFBDE /* TransparencyView.swift in Sources */,
 				DD63DCDF2519378200B04D5F /* TouchPlayerView.swift in Sources */,
 				DD4BF6FD2518F31F005DA322 /* Core.swift in Sources */,
+				DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */,
 				DDF7CD092515526F009FFBDE /* RoundedButton.swift in Sources */,
 				DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */,
 				DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */,
