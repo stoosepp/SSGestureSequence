@@ -93,7 +93,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4gz-JP-gcu" customClass="TouchPlayerView" customModule="Touch_Capture" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4gz-JP-gcu" customClass="MultiTouchPlayerView" customModule="Touch_Capture" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="974"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="521" translatesAutoresizingMaskIntoConstraints="NO" id="P0s-v6-H1K">
@@ -140,6 +140,7 @@
                                             <action selector="lockRotation:" destination="BYZ-38-t0r" id="DVm-Xm-DJ4"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="r8P-Qv-0dG"/>
                                     <barButtonItem title="Gallery" image="play.fill" catalog="system" style="plain" id="SfA-c9-Iv6">
                                         <connections>
                                             <action selector="playPauseButtonPushed:" destination="BYZ-38-t0r" id="367-ny-9n1"/>
@@ -157,11 +158,13 @@
                                             <action selector="toggleGestures:" destination="BYZ-38-t0r" id="Y4p-R2-CzK"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="keK-eT-Z2D"/>
                                     <barButtonItem title="Gallery" image="camera" catalog="system" style="plain" id="ZSZ-Gy-nUX">
                                         <connections>
                                             <action selector="takePhoto:" destination="BYZ-38-t0r" id="vh1-J8-UND"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="30" style="plain" systemItem="fixedSpace" id="DHI-y4-Mvp"/>
                                     <barButtonItem title="Gallery" image="photo.on.rectangle" catalog="system" style="plain" id="hwV-uj-5aQ">
                                         <connections>
                                             <segue destination="YJf-fa-BGn" kind="show" id="pS9-m8-FEO"/>
@@ -203,6 +206,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cameraButton" destination="ZSZ-Gy-nUX" id="zHP-1i-c6X"/>
+                        <outlet property="captureView" destination="CWJ-mx-EJD" id="dKm-OD-LdG"/>
                         <outlet property="chosenImageView" destination="fWb-vv-r8M" id="kEh-jq-1YC"/>
                         <outlet property="importPhotoButton" destination="v3P-cT-qS4" id="dZs-mD-6R1"/>
                         <outlet property="lockRotationButton" destination="5JJ-kg-6wj" id="3si-er-eoc"/>
@@ -211,7 +215,6 @@
                         <outlet property="playbackView" destination="4gz-JP-gcu" id="0Is-OX-dNW"/>
                         <outlet property="startDrawingButton" destination="3mm-l8-Mt1" id="rZt-fP-fuH"/>
                         <outlet property="toggleButton" destination="2rf-fQ-3KU" id="P2y-vt-fO1"/>
-                        <outlet property="transparencyView" destination="CWJ-mx-EJD" id="CW7-IS-8KO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

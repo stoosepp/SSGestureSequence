@@ -10,12 +10,10 @@ import UIKit
 
 class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate {
 	
-	
-
 	//Views
 	@IBOutlet weak var chosenImageView: MovableImageView!
-	@IBOutlet weak var transparencyView: TouchCaptureView!//TransparencyView!
-	@IBOutlet weak var playbackView: TouchPlayerView!//TransparencyView!
+	@IBOutlet weak var captureView: MultiTouchCaptureView!//captureView!
+	@IBOutlet weak var playbackView: MultiTouchPlayerView!//captureView!
 	
 	
 	//Buttons
@@ -34,8 +32,8 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
         super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 
-		transparencyView.isHidden = true
-		transparencyView.isUserInteractionEnabled = false
+		captureView.isHidden = true
+		captureView.isUserInteractionEnabled = false
 		toggleButton.isEnabled = false
 		cameraButton.isEnabled = false
 		lockRotationButton.isEnabled = false
@@ -87,11 +85,11 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 				chosenImageView.isHidden = true
 				importPhotoButton.isHidden = true
 			}
-			transparencyView.isHidden = false
+			captureView.isHidden = false
 			toggleButton.isEnabled = true
 			cameraButton.isEnabled = false
 			photosButton.isEnabled = false
-			transparencyView.isUserInteractionEnabled = true
+			captureView.isUserInteractionEnabled = true
 			chosenImageView.isUserInteractionEnabled = false
 			self.navigationController?.navigationBar.isHidden = true
 			startDrawingButton.title = "Stop Capture"
@@ -148,8 +146,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 		
 		startDrawingButton.title = "Start Capture"
 		importPhotoButton.isHidden = false
-		transparencyView.savedTouches.removeAll()
-		transparencyView.setNeedsDisplay()
+		captureView.resetView()
 		
 		//Playback stuff
 		playButton.image = (UIImage(systemName: "play.fill"))
@@ -171,17 +168,19 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
     
     @IBAction func toggleGestures(_ sender: UIBarButtonItem) {
     
-		if sender.image == UIImage(systemName: "eye.fill"){//transparencyView.mainImageView.isEnabled == true{
+		if sender.image == UIImage(systemName: "eye.fill"){
             sender.image = UIImage(systemName: "eye.slash.fill")
-			transparencyView.lineColor = .clear
-			transparencyView.setNeedsDisplay()
+			captureView.pencilLineColor = .clear
+			captureView.fingerLineColor = .clear
+			captureView.setNeedsDisplay()
 			
 			
         }
         else{
 			sender.image =  UIImage(systemName: "eye.fill")
-			transparencyView.lineColor = .black
-			transparencyView.setNeedsDisplay()
+			captureView.pencilLineColor = .blue
+			captureView.fingerLineColor = .black
+			captureView.setNeedsDisplay()
         }
             
     }
@@ -231,9 +230,11 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 		if sender.image == UIImage(systemName: "play.fill"){
 			sender.image = UIImage(systemName: "pause.fill")
 			if playbackView.savedTouches.count == 0{
-				playbackView.savedTouches = transparencyView.savedTouches
+				playbackView.savedTouches = captureView.savedTouches
+				print("There are \(captureView.savedTouches.count) touches to pass along")
 				playbackView.isHidden = false
-				transparencyView.isHidden = true
+				captureView.isHidden = true
+				playbackView.setupPlayerView()
 			}
 			playbackView.playPause()
 		}

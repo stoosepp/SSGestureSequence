@@ -38,4 +38,10 @@ public class TouchHandler{
 		return newTouch
 	}
 	
+	func location(fromTouch:Touch) -> CGPoint{
+		let x = fromTouch.xLocation
+		let y = fromTouch.yLocation
+		return CGPoint(x: CGFloat(x), y: CGFloat(y))
+	}
+	
 }

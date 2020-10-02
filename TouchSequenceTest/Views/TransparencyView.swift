@@ -64,7 +64,6 @@ class TransparencyView: UIView {
 			let green = UIColor.init(red: 167/255, green: 197/255, blue: 116/255, alpha: 1.0)
 			addSequenceCount(atLocation: lastPoint, radius: 10, color:green)
 		}
-		
 	}
 	
 	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {

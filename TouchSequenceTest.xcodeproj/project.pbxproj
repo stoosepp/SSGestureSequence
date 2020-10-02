@@ -82,8 +82,8 @@
 			children = (
 				DDF7CD0425154F1B009FFBDE /* TransparencyView.swift */,
 				DD2C3D9525169161006DED65 /* TouchCaptureView.swift */,
-				DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */,
 				DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */,
+				DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */,
 				DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */,
 				DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */,
 				DD89E0DA1E2721E500965CB7 /* CircleView.swift */,

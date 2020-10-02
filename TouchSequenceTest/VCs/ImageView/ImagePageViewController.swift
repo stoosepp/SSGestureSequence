@@ -26,18 +26,14 @@ class ImagePageViewController: UIPageViewController, UIPageViewControllerDelegat
 		self.delegate = self
 		self.dataSource = self
 		screenShotURLs = Core.shared.fetchFileURLS()
-		for (index,screenShot) in screenShotURLs.enumerated(){
-			
+		screenShotURLs.forEach { (screenShot) in
 			let newVC = UIViewController()
 			let newimageView = UIImageView()
 			newimageView.contentMode = .scaleAspectFit
 			let imageFile = screenShot.absoluteURL
 			let data = try? Data(contentsOf: imageFile)
-			
-			
 			newimageView.image = UIImage(data: data!)!
 			newVC.view.addSubview(newimageView)
-			
 			Core.shared.setConstraintPins(view: newimageView, parentview: newVC.view, asLeading: 5, trailing: 5, top: 5, bottom: 5)
 			imageControllers.append(newVC)
 		}
