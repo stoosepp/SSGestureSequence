@@ -8,40 +8,44 @@
 
 import UIKit
 
+protocol MultiTouchPlayerViewDelegate {
+	func updateSlider(valueAsPercentage:Float)
+	func updateViews(isPlaying:Bool)
+}
+
+
 class MultiTouchPlayerView: UIView {
 
 	//Drawing Params
 	var strokeWidth: CGFloat = 5.0
 	var fingerLineColor: UIColor = .black
 	var pencilLineColor: UIColor = .blue
-	var currentRect:CGRect?
-
-	//Timer Stuff
-	var timer: Timer?
-	var timeElapsed:TimeInterval = 0
-	var playerDelgate:ViewController?
-	var isPaused:Bool = true
-	var startTime:Date?
-	var endTime:Date?
 	
 	//Arrays and Models
 	var savedTouches = [[Touch?]?]()
-	
 	var fromPoint:CGPoint?
 	var toPoint:CGPoint?
 	var pointsToDraw = [(CGPoint,CGPoint,Bool)]()
 	
-	@IBOutlet var timeIntervalLabel:UILabel?
 
+	//Timer Stuff
+	var timer = Timer()
+	var timeElapsed:TimeInterval = 0
+	var startTime:Date?
+	var endTime:Date?
+	@IBOutlet var timeIntervalLabel:UILabel?
+	
+	var playerDelegate:ViewController?
+	
+	
 	//MARK: Drawing Code
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 		//resetView()
 		backgroundColor = .clear
 		contentMode = UIView.ContentMode.redraw
-		
-		
 	}
+	
 	func setupPlayerView(){
 		//Get Start and End Date
 		var tempStart = [Date]()
@@ -89,26 +93,31 @@ class MultiTouchPlayerView: UIView {
 		var pointsforBoxes = [CGPoint]()
 		indexes.forEach { (index) in
 			let thisTouchArray = savedTouches[index.0]
-			let thisTouch = thisTouchArray![index.1]
-			let lastTouch = thisTouchArray![index.1-1]
-			//print("This touch is a Pencil: \(String(describing: thisTouch?.isPencil))")
-			if index.1 > 0{
-				fromPoint = TouchHandler.shared.location(fromTouch: thisTouch!)
-				toPoint = TouchHandler.shared.location(fromTouch: lastTouch!)
-				pointsforBoxes.append(fromPoint!)
-				pointsforBoxes.append(toPoint!)
-				if thisTouch?.isPencil == true{
-					pointsToDraw.append((fromPoint!,toPoint!, true))
-				}
-				else{
-					
-					pointsToDraw.append((fromPoint!,toPoint!, false))
-				}
+			let thisTouch = thisTouchArray![index.1]!
+			var lastTouch:Touch?
+			if index.1 == 0 || thisTouch.touchType == UITouch.Phase.began.rawValue{
+				lastTouch = thisTouch
 			}
+			else{
+				lastTouch = thisTouchArray![index.1-1]
+			}
+	
+			fromPoint = TouchHandler.shared.location(fromTouch: thisTouch)
+			toPoint = TouchHandler.shared.location(fromTouch: lastTouch!)
+			pointsforBoxes.append(fromPoint!)
+			pointsforBoxes.append(toPoint!)
+			if thisTouch.isPencil == true{
+				pointsToDraw.append((fromPoint!,toPoint!, true))
+			}
+			else{
+				
+				pointsToDraw.append((fromPoint!,toPoint!, false))
+			}
+			
 		}
 	
 		let rect = getRect(fromPoints: pointsforBoxes)
-		currentRect = rect
+		//currentRect = rect
 		print("Rect is \(rect) and there are \(pointsToDraw.count) points to draw")
 		self.setNeedsDisplay(rect)
 	}
@@ -125,52 +134,38 @@ class MultiTouchPlayerView: UIView {
 		
 	}
 	
-	func prepareLinesToDraw(){
+	public func prepareLinesToDraw(isScrubbing:Bool){
 		
 		print(timeElapsed)
 		let currentTime = startTime! + timeElapsed
-		var pointsforBoxes = [CGPoint]()
-		savedTouches.forEach { (touchArray) in
-			for (index,thisTouch) in touchArray!.enumerated(){
-				if index > 0 && (thisTouch!.timeStamp?.isBetween(currentTime, and: currentTime + 0.05) == true){
-					//FIXME: Don't draw here - just add the select items and draw them elsewhere, just like you did in the captures touchesMoved: function
-					let lastTouch = touchArray![index-1]
-					toPoint = TouchHandler.shared.location(fromTouch: lastTouch!)
-					if thisTouch!.touchType != UITouch.Phase.began.rawValue{
-						fromPoint = TouchHandler.shared.location(fromTouch: thisTouch!)
-					}
-					else{
-						fromPoint = toPoint
-					}
-					
-					pointsforBoxes.append(fromPoint!)
-					pointsforBoxes.append(toPoint!)
-					if thisTouch?.isPencil == true{
-						pointsToDraw.append((fromPoint!,toPoint!, true))
-					}
-					else{
-						pointsToDraw.append((fromPoint!,toPoint!, false))
-					}
-					
-
+		//var pointsforBoxes = [CGPoint]()
+		var indexes = [(Int,Int)]()
+		for (fingerIndex,touchArray) in savedTouches.enumerated(){
+			for (touchIndex,thisTouch) in touchArray!.enumerated(){
+				
+				if isScrubbing == false && (thisTouch!.timeStamp?.isBetween(currentTime, and: currentTime + 0.05) == true){
+					indexes.append((fingerIndex, touchIndex))
+					//break
+				}
+				else if isScrubbing == true && (thisTouch!.timeStamp?.isBetween(currentTime, and: startTime!) == true){
+					indexes.append((fingerIndex, touchIndex))
 				}
 			}
 		}
-		let rect = getRect(fromPoints: pointsforBoxes)
-		currentRect = rect
-		print("Rect is \(rect) and there are \(pointsToDraw.count) points to draw")
-		self.setNeedsDisplay(rect)
+		if isScrubbing == true {
+			setNeedsDisplay()
+		}
+		processTouches(indexes: indexes)
 	}
 	
 	func fireEvent(){
 		let currentTime = startTime! + timeElapsed
 		if currentTime < endTime!{
-			prepareLinesToDraw()
+			prepareLinesToDraw(isScrubbing:false)
 		}
 		else{
-			timer?.invalidate()
-			playerDelgate!.updateViews(isPlaying:false)
-			isPaused = true
+			timer.invalidate()
+			playerDelegate!.updateViews(isPlaying:false)
 			timeElapsed = 0
 		}
 	}
@@ -184,14 +179,17 @@ class MultiTouchPlayerView: UIView {
 		
 		//Show in playback scrubber
 		
+		let totalTimeInterval = endTime?.timeIntervalSince(startTime!)
+		let sliderPercentage = timeElapsed/totalTimeInterval!
+		playerDelegate?.updateSlider(valueAsPercentage: Float(sliderPercentage))
 		
 		//Do the thing to draw the line
 		fireEvent()
 		
 	}
 	
-	func playPause(){
-		if isPaused{
+	func tapButton(isPlaying:Bool){
+		if isPlaying == true{
 			if timeElapsed == 0{
 				print("Playing after time exhausted")
 				toPoint = CGPoint.zero
@@ -201,12 +199,10 @@ class MultiTouchPlayerView: UIView {
 			}
 			let newTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
 			RunLoop.current.add(newTimer, forMode: .common)
-			timer?.tolerance = 0.1
+			timer.tolerance = 0.1
 			self.timer = newTimer
-			isPaused = false
 		} else {
-			timer!.invalidate()
-			isPaused = true
+			timer.invalidate()
 		}
 	}
 	

@@ -8,7 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate {
+class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegate, MultiTouchPlayerViewDelegate {
+	
+	
 	
 	//Views
 	@IBOutlet weak var chosenImageView: MovableImageView!
@@ -18,32 +20,45 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 	
 	//Buttons
 	@IBOutlet weak var importPhotoButton: UIButton!
-	@IBOutlet weak var toggleButton: UIBarButtonItem!
-	@IBOutlet weak var cameraButton: UIBarButtonItem!
-	@IBOutlet weak var photosButton: UIBarButtonItem!
+	@IBOutlet weak var toggleButton: UIButton!
+	@IBOutlet weak var cameraButton: UIButton!
+	@IBOutlet weak var photosButton: UIButton!
 	
-	@IBOutlet weak var startDrawingButton: UIBarButtonItem!
-	@IBOutlet weak var lockRotationButton: UIBarButtonItem!
-	@IBOutlet weak var playButton: UIBarButtonItem!
+	@IBOutlet weak var lockRotationButton: UIButton!
+	@IBOutlet weak var playButton: UIButton!
 	
+	@IBOutlet weak var recordButton: RecordButton!
+	
+	@IBOutlet weak var slider: UISlider!
 	var imagePicker: ImagePicker!
+	
+	//MARK: VIEW LIFECYCLE
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		recordButton.delegate = self
+	}
+
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
-
+		self.navigationController?.toolbar.clipsToBounds = true;
+		
 		captureView.isHidden = true
 		captureView.isUserInteractionEnabled = false
-		toggleButton.isEnabled = false
-		cameraButton.isEnabled = false
-		lockRotationButton.isEnabled = false
+		cameraButton.isHidden = true
+		lockRotationButton.isHidden = true
+		slider.alpha = 0
+		
+		lockRotationButton.isHidden = true
 	
 		self.imagePicker = ImagePicker(presentationController: self, delegate: self)
 		
 		//Hide player to start
-		playButton.isHidden(true)
+		playButton.isHidden = true
 		playbackView.isHidden = true
-		playbackView.playerDelgate = self
+		playbackView.playerDelegate = self
 		
 		//Deal with Pro stuf
 		Core.shared.setDidUpgrade(value: false)
@@ -56,8 +71,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 		//Edit this if testing pro features
 		if didUpgrade == true
 		{
-			playButton.isHidden(false)
-			playButton.isEnabled = false
+			playButton.isHidden = true
 			self.title = "Touch Capture Pro"
 		}
 		else{
@@ -65,47 +79,132 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 		}
 	}
 	
-	@IBAction func toggleDrawing(_ sender: UIBarButtonItem){
-		if sender.title == "Start Capture"{
-			updateItems(forDrawing: true)
-		}
-		else if sender.title == "Stop Capture"{
-			updateItems(forDrawing: false)
-		}
-		else if sender.title == "Reset View"{
-			//Reset View
-			resetDrawing()
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "showUpgradeToPro"{
+			let upgradeVC = segue.destination as! UpgradeViewController
+			upgradeVC.upgradeDelegate = self
 		}
 	}
 	
-	func updateItems(forDrawing:Bool){
-		
-		if forDrawing == true{
-			if chosenImageView.image == nil{
-				chosenImageView.isHidden = true
-				importPhotoButton.isHidden = true
+	override func didReceiveMemoryWarning() {
+		super.didReceiveMemoryWarning()
+		// Dispose of any resources that can be recreated.
+	}
+	
+	//MARK: RECORD AND PLAYBACK
+
+	func tapButton(isRecording: Bool) {
+
+			if isRecording {
+				print("Start recording")
+				if chosenImageView.image == nil{
+					chosenImageView.isHidden = true
+					importPhotoButton.isHidden = true
+				}
+				captureView.isHidden = false
+				
+				captureView.isUserInteractionEnabled = true
+				chosenImageView.isUserInteractionEnabled = false
+				cameraButton.isHidden = true
+				photosButton.isHidden = true
+				self.navigationController?.navigationBar.isHidden = true
+			} else {
+				print("Stop recording")
+				toggleButton.setImage((UIImage(systemName: "eye")), for: .normal)
+				playButton.isHidden = false
+				slider.alpha = 1
+				slider.value = 1
+				cameraButton.isHidden = false
+				photosButton.isHidden = false
+				
+				captureView.isUserInteractionEnabled = false
+				self.navigationController?.navigationBar.isHidden = false
+				if playbackView.savedTouches.count == 0{
+					playbackView.savedTouches = captureView.savedTouches
+					print("There are \(captureView.savedTouches.count) touches to pass along")
+					playbackView.isHidden = false
+					captureView.isHidden = true
+					playbackView.setupPlayerView()//This gets the endTime and Start Time
+					sliderDragged(slider)
+				}
+				
+				
+				
 			}
-			captureView.isHidden = false
-			toggleButton.isEnabled = true
-			cameraButton.isEnabled = false
-			photosButton.isEnabled = false
-			captureView.isUserInteractionEnabled = true
-			chosenImageView.isUserInteractionEnabled = false
-			self.navigationController?.navigationBar.isHidden = true
-			startDrawingButton.title = "Stop Capture"
-			
+		}
+	
+	@IBAction func playPauseButtonPushed(_ sender:UIButton){
+		if sender.image(for: .normal) == UIImage(systemName: "play.fill"){
+			sender.setImage((UIImage(systemName: "pause.fill")), for: .normal)
+		
+			playbackView.tapButton(isPlaying:true)
 		}
 		else{
-			toggleButton.isEnabled = false
-			photosButton.isEnabled = true
-			cameraButton.isEnabled = true
-			startDrawingButton.title = "Reset View"
-			playButton.isEnabled = true
-			self.navigationController?.navigationBar.isHidden = false
+			sender.setImage((UIImage(systemName: "play.fill")), for: .normal)
+			playbackView.tapButton(isPlaying:false)
 		}
-
-
 	}
+	
+	
+	
+	
+	@IBAction func sliderDragged(_ sender: UISlider) {
+		print("sliderDragged to \(sender.value)")//this is a percentage
+		//Stop the timer and set the button to play again
+		if playbackView.timer.isValid == true{
+			playbackView.timer.invalidate()
+			playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+			
+		}
+		print("Start:\(playbackView.startTime!)")
+		print("End:\(String(describing: playbackView.endTime))")
+	
+		playbackView.pointsToDraw.removeAll()
+		//get the redraw thing going
+		//setTime Elapsed
+		let totalTimeInterval = Float((playbackView.endTime?.timeIntervalSince(playbackView.startTime!))!)
+		playbackView.timeElapsed = TimeInterval(totalTimeInterval*sender.value)
+		playbackView.timeIntervalLabel!.text = String(format: "Timer: %.2f", playbackView.timeElapsed)
+		playbackView.prepareLinesToDraw(isScrubbing:true)
+		
+	}
+	
+	//MARK: NEW RECORDING (RESET)
+	@IBAction func newRecording(){
+		if chosenImageView.image != nil{
+			chosenImageView.removeFromSuperview()
+			let newImageView = MovableImageView()
+			newImageView.frame = self.view.frame
+			newImageView.contentMode = .scaleAspectFit
+			self.view.addSubview(newImageView)
+			self.view.sendSubviewToBack(newImageView)
+			chosenImageView = newImageView
+			importPhotoButton.isHidden = false
+			
+		}
+		importPhotoButton.isHidden = false
+		captureView.resetView()
+		slider.alpha = 0
+		//Playback stuff
+		playButton.setImage((UIImage(systemName: "play.fill")), for: .normal)
+		playbackView.timer.invalidate()
+		playbackView.isHidden = true
+		playbackView.timeElapsed = 0
+		playButton.isHidden = true
+		playbackView.savedTouches.removeAll()
+		
+	}
+	
+	
+	
+	//MARK: IMAGE IMPORT
+	
+	@IBAction func chooseImage(_ sender: UIButton) {
+		  //resetTransforms(forView: imageView, transformType: "all", value: 0)
+		  self.imagePicker.present(from: sender)
+		
+	  }
+	
 	
 	@IBAction func lockRotation(_ sender: UIBarButtonItem) {
 		if sender.tintColor == .red{
@@ -130,46 +229,10 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 				  
 	}
 	
-	func resetDrawing(){
-		if chosenImageView.image != nil{
-			chosenImageView.removeFromSuperview()
-			let newImageView = MovableImageView()
-			newImageView.frame = self.view.frame
-			newImageView.contentMode = .scaleAspectFit
-			self.view.addSubview(newImageView)
-			self.view.sendSubviewToBack(newImageView)
-			chosenImageView = newImageView
-			importPhotoButton.isHidden = false
-			
-			
-		}
-		
-		startDrawingButton.title = "Start Capture"
-		importPhotoButton.isHidden = false
-		captureView.resetView()
-		
-		//Playback stuff
-		playButton.image = (UIImage(systemName: "play.fill"))
-		playbackView.timer?.invalidate()
-		playbackView.isHidden = true
-		playbackView.isPaused = true
-		playbackView.timeElapsed = 0
-		playButton.isEnabled = false
-		playbackView.savedTouches.removeAll()
-		
-	}
-    
-	
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    @IBAction func toggleGestures(_ sender: UIBarButtonItem) {
-    
-		if sender.image == UIImage(systemName: "eye.fill"){
-            sender.image = UIImage(systemName: "eye.slash.fill")
+	//MARK: TOGGLE STUFF
+    @IBAction func toggleGestures(_ sender: UIButton) {
+		if sender.image(for: .normal) == UIImage(systemName: "eye"){
+			sender.setImage((UIImage(systemName: "eye.slash")), for: .normal)
 			captureView.pencilLineColor = .clear
 			captureView.fingerLineColor = .clear
 			captureView.setNeedsDisplay()
@@ -177,7 +240,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 			
         }
         else{
-			sender.image =  UIImage(systemName: "eye.fill")
+			sender.setImage((UIImage(systemName: "eye")), for: .normal)
 			captureView.pencilLineColor = .blue
 			captureView.fingerLineColor = .black
 			captureView.setNeedsDisplay()
@@ -185,21 +248,6 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
             
     }
 	
-	@IBAction func chooseImage(_ sender: UIButton) {
-		  //resetTransforms(forView: imageView, transformType: "all", value: 0)
-		  self.imagePicker.present(from: sender)
-		
-	  }
-	
-
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.identifier == "showUpgradeToPro"{
-			let upgradeVC = segue.destination as! UpgradeViewController
-			upgradeVC.upgradeDelegate = self
-		}
-	}
-
-
     @IBAction func takePhoto(_ sender: Any) {
 		let dateString = Helpers().getTodayString()
         let screenShot = self.view.takeScreenshot()
@@ -226,29 +274,20 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
     }
 	
 	
-	@IBAction func playPauseButtonPushed(_ sender:UIBarButtonItem){
-		if sender.image == UIImage(systemName: "play.fill"){
-			sender.image = UIImage(systemName: "pause.fill")
-			if playbackView.savedTouches.count == 0{
-				playbackView.savedTouches = captureView.savedTouches
-				print("There are \(captureView.savedTouches.count) touches to pass along")
-				playbackView.isHidden = false
-				captureView.isHidden = true
-				playbackView.setupPlayerView()
-			}
-			playbackView.playPause()
-		}
-		else{
-			sender.image = (UIImage(systemName: "play.fill"))
-			playbackView.playPause()
-		}
-	}
+
 	//MARK: Delegate Stuff
 	//TouchPlayerDelegate Funcs
 	func updateViews(isPlaying: Bool) {
 		if isPlaying == false{
-			playButton.image = UIImage(systemName: "play.fill")
+			playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
 		}
+	}
+	
+	func updateSlider(valueAsPercentage: Float) {
+		let sliderMax = slider.maximumValue
+		let currentValue = valueAsPercentage * sliderMax
+		print("Slider updated to \(currentValue)")
+		slider.value = currentValue
 	}
 	
 	//MARK: Animate Buttons
@@ -264,11 +303,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, TouchPlayerDelegate
 				}
 			}
 		}
-		
 	}
-	
-
-	
 }
 
 public protocol ImagePickerDelegate: class {
@@ -280,9 +315,10 @@ extension ViewController: ImagePickerDelegate {
 	func didSelect(image: UIImage?) {
 		self.chosenImageView.image = image
 		print("Image Chosen")
+		lockRotationButton.isHidden = false
 		importPhotoButton.isHidden = true
-		startDrawingButton.isEnabled = true
-		lockRotationButton.isEnabled = true
+		recordButton.isHidden = false
+		lockRotationButton.isHidden = false
 		chosenImageView.isHidden = false
 		chosenImageView.removeAllConstraints()
 		chosenImageView.enableZoom()

@@ -70,6 +70,7 @@ extension Date {
 	}
 }
 
+/*
 extension UIBarButtonItem{
 	func isHidden(_ value:Bool)
 	{
@@ -81,7 +82,7 @@ extension UIBarButtonItem{
 			isEnabled = true
 			tintColor = .blue
 		}
-		
 	}
 }
+*/
 

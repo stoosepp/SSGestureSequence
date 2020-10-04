@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class TouchCaptureView: UIView {
 	
 	var savedTouches = [Touch]()

@@ -8,27 +8,27 @@
 
 import UIKit
 
-class MultiTouchCaptureView: UIView {
 
+
+class MultiTouchCaptureView: UIView {
 	
 	//Drawing Params
 	var strokeWidth: CGFloat = 5.0
 	var fingerLineColor: UIColor = .black
 	var pencilLineColor: UIColor = .blue
-	var currentRect:CGRect?
 	
-	
-	//Testing Multitouch
-	var fingers = [UITouch?](repeating: nil, count:6)
-	var isPencil:Bool?
+	//Arrays and Models
 	var savedTouches = [[Touch?]?]()
 	var fromPoint:CGPoint?
 	var toPoint:CGPoint?
-	
 	var pointsToDraw = [(CGPoint,CGPoint,Bool)]()
+	
+	
+	//Multitouch
+	var fingers = [UITouch?](repeating: nil, count:6)
+	
 
-	//var mainImageView:UIImageView?
-	//var tempImageView:UIImageView?
+	
 	
 	//MARK: Drawing Code
 	required init?(coder: NSCoder) {
@@ -42,7 +42,7 @@ class MultiTouchCaptureView: UIView {
 	func resetView(){
 		toPoint = CGPoint.zero
 		fromPoint = CGPoint.zero
-		currentRect = CGRect.zero
+		//currentRect = CGRect.zero
 		if savedTouches.count != 0{
 			savedTouches.removeAll()
 			pointsToDraw.removeAll()
@@ -92,25 +92,28 @@ class MultiTouchCaptureView: UIView {
 		indexes.forEach { (index) in
 			let thisTouchArray = savedTouches[index.0]
 			let thisTouch = thisTouchArray![index.1]
-			let lastTouch = thisTouchArray![index.1-1]
-			//print("This touch is a Pencil: \(String(describing: thisTouch?.isPencil))")
-			if index.1 > 0{
-				fromPoint = TouchHandler.shared.location(fromTouch: thisTouch!)
-				toPoint = TouchHandler.shared.location(fromTouch: lastTouch!)
-				pointsforBoxes.append(fromPoint!)
-				pointsforBoxes.append(toPoint!)
-				if thisTouch?.isPencil == true{
-					pointsToDraw.append((fromPoint!,toPoint!, true))
-				}
-				else{
-					
-					pointsToDraw.append((fromPoint!,toPoint!, false))
-				}
+			var lastTouch:Touch?
+			if index.1 == 0 || thisTouch!.touchType == UITouch.Phase.began.rawValue{
+				lastTouch = thisTouch
+			}
+			else{
+				lastTouch = thisTouchArray![index.1-1]
+			}
+	
+			fromPoint = TouchHandler.shared.location(fromTouch: thisTouch!)
+			toPoint = TouchHandler.shared.location(fromTouch: lastTouch!)
+			pointsforBoxes.append(fromPoint!)
+			pointsforBoxes.append(toPoint!)
+			if thisTouch!.isPencil == true{
+				pointsToDraw.append((fromPoint!,toPoint!, true))
+			}
+			else{
+				pointsToDraw.append((fromPoint!,toPoint!, false))
 			}
 		}
 	
 		let rect = getRect(fromPoints: pointsforBoxes)
-		currentRect = rect
+		//currentRect = rect
 		print("Rect is \(rect) and there are \(pointsToDraw.count) points to draw")
 		self.setNeedsDisplay(rect)
 	}
@@ -132,7 +135,7 @@ class MultiTouchCaptureView: UIView {
 
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		super.touchesBegan(touches, with: event)
-		
+		var indexes = [(Int,Int)]()
 		for touch in touches{
 			//let point = touch.location(in: self)
 			for (index,finger)  in fingers.enumerated() {
@@ -142,10 +145,13 @@ class MultiTouchCaptureView: UIView {
 					let pencilBool = getPencil(inTouch: touch)
 					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					savedTouches[index]?.append(convertedTouch)
+					let newIndex = savedTouches[index]!.count - 1
+					indexes.append((index,newIndex))
 					break
 				}
 			}
 		}
+		processTouches(indexes: indexes)
 	}
 
 	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
