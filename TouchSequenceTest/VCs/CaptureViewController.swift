@@ -76,7 +76,7 @@ class CaptureViewController: UIViewController, UpgradeViewDelegate, RecordButton
 		
 		//Deal with Pro stuf
 		Core.shared.setDidUpgrade(value: false)
-		setupApp(didUpgrade: false)
+		setupApp(didUpgrade: true)
     }
 
 
