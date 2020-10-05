@@ -8,9 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegate, MultiTouchPlayerViewDelegate {
-	
-	
+class CaptureViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegate, MultiTouchPlayerViewDelegate {
 	
 	//Views
 	@IBOutlet weak var chosenImageView: MovableImageView!
@@ -18,7 +16,8 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 	@IBOutlet weak var playbackView: MultiTouchPlayerView!//captureView!
 	
 	
-	//Buttons
+	//Buttons for Everyone
+	@IBOutlet weak var startingStackView: UIStackView!
 	@IBOutlet weak var importPhotoButton: UIButton!
 	@IBOutlet weak var toggleButton: UIButton!
 	@IBOutlet weak var cameraButton: UIButton!
@@ -30,12 +29,22 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 	@IBOutlet weak var recordButton: RecordButton!
 	
 	@IBOutlet weak var slider: UISlider!
+	
+	//Buttons for Pro
+	@IBOutlet weak var splitViewButton: UIButton!
+	
 	var imagePicker: ImagePicker!
 	
 	//MARK: VIEW LIFECYCLE
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.navigationController?.navigationBar.isHidden = true
+		self.splitViewController?.preferredDisplayMode = UISplitViewController.DisplayMode.secondaryOnly
+	}
+	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		
 		recordButton.delegate = self
 	}
 
@@ -45,13 +54,18 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 		// Do any additional setup after loading the view, typically from a nib.
 		self.navigationController?.toolbar.clipsToBounds = true;
 		
-		captureView.isHidden = true
-		captureView.isUserInteractionEnabled = false
+		//Buttons
+		recordButton.isHidden = true
+		toggleButton.isHidden = true
 		cameraButton.isHidden = true
 		lockRotationButton.isHidden = true
+		lockRotationButton.isHidden = true
+		
+		//Views
+		captureView.isHidden = true
+		captureView.isUserInteractionEnabled = false
 		slider.alpha = 0
 		
-		lockRotationButton.isHidden = true
 	
 		self.imagePicker = ImagePicker(presentationController: self, delegate: self)
 		
@@ -62,8 +76,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 		
 		//Deal with Pro stuf
 		Core.shared.setDidUpgrade(value: false)
-		setupApp(didUpgrade: true)
-		
+		setupApp(didUpgrade: false)
     }
 
 
@@ -71,11 +84,12 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 		//Edit this if testing pro features
 		if didUpgrade == true
 		{
-			playButton.isHidden = true
+			splitViewButton.isHidden = false
+			
 			self.title = "Touch Capture Pro"
 		}
 		else{
-			
+			splitViewButton.isHidden = true
 		}
 	}
 	
@@ -84,6 +98,20 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 			let upgradeVC = segue.destination as! UpgradeViewController
 			upgradeVC.upgradeDelegate = self
 		}
+		if segue.identifier == "showPlaybackSettingsSegue"{
+			let settingsVC = segue.destination.children[0] as! PlaybackSettingsTableViewController
+			settingsVC.delegate = playbackView
+		}
+		
+	}
+	
+	@IBAction func toggleMaster(){
+		//show master
+		UIView.animate(withDuration: 0.5) {
+			self.splitViewController?.preferredDisplayMode = UISplitViewController.DisplayMode.automatic
+		}
+		
+		
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -92,6 +120,11 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 	}
 	
 	//MARK: RECORD AND PLAYBACK
+	@IBAction func newRecording(_ sender:UIButton){
+		recordButton.isHidden = false
+		toggleButton.isHidden = false
+		startingStackView.isHidden = true
+	}
 
 	func tapButton(isRecording: Bool) {
 
@@ -99,7 +132,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 				print("Start recording")
 				if chosenImageView.image == nil{
 					chosenImageView.isHidden = true
-					importPhotoButton.isHidden = true
+					//importPhotoButton.isHidden = true
 				}
 				captureView.isHidden = false
 				
@@ -107,7 +140,6 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 				chosenImageView.isUserInteractionEnabled = false
 				cameraButton.isHidden = true
 				photosButton.isHidden = true
-				self.navigationController?.navigationBar.isHidden = true
 			} else {
 				print("Stop recording")
 				toggleButton.setImage((UIImage(systemName: "eye")), for: .normal)
@@ -118,7 +150,6 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 				photosButton.isHidden = false
 				
 				captureView.isUserInteractionEnabled = false
-				self.navigationController?.navigationBar.isHidden = false
 				if playbackView.savedTouches.count == 0{
 					playbackView.savedTouches = captureView.savedTouches
 					print("There are \(captureView.savedTouches.count) touches to pass along")
@@ -179,10 +210,12 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 			self.view.addSubview(newImageView)
 			self.view.sendSubviewToBack(newImageView)
 			chosenImageView = newImageView
-			importPhotoButton.isHidden = false
+			startingStackView.isHidden = false
+			//importPhotoButton.isHidden = false
 			
 		}
-		importPhotoButton.isHidden = false
+		
+		//importPhotoButton.isHidden = false
 		captureView.resetView()
 		slider.alpha = 0
 		//Playback stuff
@@ -206,15 +239,15 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 	  }
 	
 	
-	@IBAction func lockRotation(_ sender: UIBarButtonItem) {
-		if sender.tintColor == .red{
+	@IBAction func toggleRotation(_ sender: UIButton) {
+		if chosenImageView.gestureRecognizers!.count == 2{
 			print("Unlocking Rotation")
-			sender.tintColor = .green
+			sender.backgroundColor = .systemGreen
 			chosenImageView.enableRotate()
 		}
 		else {
 			print("Locking Rotation")
-			sender.tintColor = .red
+			sender.backgroundColor = .systemRed
 			let rotateRecognizer = chosenImageView.gestureRecognizers?[2]
 			chosenImageView.removeGestureRecognizer(rotateRecognizer!)
 		
@@ -224,9 +257,7 @@ class ViewController: UIViewController, UpgradeViewDelegate, RecordButtonDelegat
 			//chosenImageView.transform = CGAffineTransform(translationX: 0, y: 0)
 			let finalTransform = rotationTransform.concatenating(scaleTransform)
 			chosenImageView.transform = finalTransform
-
 		}
-				  
 	}
 	
 	//MARK: TOGGLE STUFF
@@ -310,20 +341,26 @@ public protocol ImagePickerDelegate: class {
 	func didSelect(image: UIImage?)
 }
 
-extension ViewController: ImagePickerDelegate {
+extension CaptureViewController: ImagePickerDelegate {
 
 	func didSelect(image: UIImage?) {
-		self.chosenImageView.image = image
-		print("Image Chosen")
-		lockRotationButton.isHidden = false
-		importPhotoButton.isHidden = true
-		recordButton.isHidden = false
-		lockRotationButton.isHidden = false
-		chosenImageView.isHidden = false
-		chosenImageView.removeAllConstraints()
-		chosenImageView.enableZoom()
-		chosenImageView.enablePan()
-		chosenImageView.enableRotate()
+		//Buttons
+		if image != nil{
+			startingStackView.isHidden = true
+			self.chosenImageView.image = image
+			print("Image Chosen")
+			lockRotationButton.isHidden = false
+			//importPhotoButton.isHidden = true
+			recordButton.isHidden = false
+			toggleButton.isHidden = false
+			lockRotationButton.isHidden = false
+			chosenImageView.isHidden = false
+			chosenImageView.removeAllConstraints()
+			chosenImageView.enableZoom()
+			chosenImageView.enablePan()
+		}
+		
 	}
 }
+
 

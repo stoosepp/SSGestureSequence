@@ -21,7 +21,7 @@ import UIKit
     
 	@IBInspectable var radius:Int = 1{
 		didSet{
-			layer.cornerRadius = frame.size.height / 4; // this value vary as per your desire
+			layer.cornerRadius = CGFloat(radius) // this value vary as per your desire
 			clipsToBounds =  true
 		}
 	}
@@ -31,6 +31,17 @@ import UIKit
 		}
 	}
 	
+	@IBInspectable var strokeColor:CGColor = UIColor.clear.cgColor{
+		didSet{
+			self.layer.borderColor = strokeColor
+		}
+	}
+	
+	@IBInspectable var borderWidth:CGFloat = 0{
+		didSet{
+			self.layer.borderWidth = borderWidth
+		}
+	}
 	
 }
 

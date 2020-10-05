@@ -14,7 +14,7 @@ protocol UpgradeViewDelegate{
 
 class UpgradeViewController: UIViewController {
 	
-	var upgradeDelegate: ViewController!
+	var upgradeDelegate: CaptureViewController!
 	
 	@IBAction func upgradeToPro(_ sender:Any){
 		

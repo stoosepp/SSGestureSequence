@@ -18,7 +18,7 @@ class TouchPlayerView: TouchCaptureView {
 	var isPaused:Bool = true
 	var timer: Timer?
 	var timeElapsed:TimeInterval = 0
-	var playerDelgate:ViewController?
+	var playerDelgate:CaptureViewController?
 	
 	@IBOutlet var timeIntervalLabel:UILabel?
 

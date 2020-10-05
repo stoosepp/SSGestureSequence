@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20A5374i" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20A5384c" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Artefact" representedClassName="Artefact" syncable="YES" codeGenerationType="class">
         <attribute name="artifact" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="rotation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -21,6 +21,7 @@
     <entity name="DataCollectionInstance" representedClassName="DataCollectionInstance" syncable="YES" codeGenerationType="class">
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="showTimer" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="dataCollection" inverseEntity="Participant"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExperimentalSession" inverseName="dataCollections" inverseEntity="ExperimentalSession"/>
@@ -61,13 +62,13 @@
         <relationship name="dataCollectionInstance" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DataCollectionInstance" inverseName="touches" inverseEntity="DataCollectionInstance"/>
     </entity>
     <elements>
-        <element name="Artefact" positionX="-33.7861328125" positionY="-94.52450561523438" width="128" height="119"/>
-        <element name="ArtefactProperties" positionX="-220.962158203125" positionY="-121.1251220703125" width="128" height="149"/>
-        <element name="DataCollectionInstance" positionX="-460.0684204101562" positionY="61.8409423828125" width="177.9116821289062" height="119"/>
-        <element name="ExperimentalSession" positionX="-447.0442504882812" positionY="-109.6052856445312" width="128" height="134"/>
+        <element name="Artefact" positionX="20.5384521484375" positionY="-105.48046875" width="128" height="119"/>
+        <element name="ArtefactProperties" positionX="-178.8255615234375" positionY="-150.1876831054688" width="128" height="149"/>
+        <element name="DataCollectionInstance" positionX="-460.0684204101562" positionY="61.8409423828125" width="177.9116821289062" height="148"/>
+        <element name="ExperimentalSession" positionX="-524.7479858398438" positionY="-100.3984985351562" width="128" height="134"/>
         <element name="Participant" positionX="-159.9637451171875" positionY="128.4750366210938" width="128" height="73"/>
-        <element name="ScreenCapture" positionX="-279" positionY="-90" width="128" height="74"/>
-        <element name="Study" positionX="-479.2728881835938" positionY="-241.7791137695312" width="139.785400390625" height="89"/>
+        <element name="ScreenCapture" positionX="-343.0984497070312" positionY="-99.48236083984375" width="128" height="74"/>
+        <element name="Study" positionX="-387.2643432617188" positionY="-246.0009460449219" width="139.785400390625" height="89"/>
         <element name="Touch" positionX="-443.5431518554688" positionY="261.0677795410156" width="128" height="149"/>
     </elements>
 </model>

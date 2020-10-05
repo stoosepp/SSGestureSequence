@@ -14,6 +14,12 @@ private let reuseIdentifier = "ImageCell"
 class ImageCollectionViewController: UICollectionViewController {
     
 	var screenShotURLs = Array<URL>()
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		self.navigationController?.navigationBar.isHidden = false
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 

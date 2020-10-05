@@ -15,9 +15,10 @@
 		DD4BF7002518F6CE005DA322 /* UpgradeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */; };
 		DD63DCDF2519378200B04D5F /* TouchPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */; };
 		DD75C58525293C4A005B640E /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD75C58425293C4A005B640E /* RecordButton.swift */; };
+		DD75C58A25297588005B640E /* TouchCoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD75C58925297588005B640E /* TouchCoreView.swift */; };
 		DD78B970251B97F500D01C6D /* ImagePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78B96F251B97F500D01C6D /* ImagePageViewController.swift */; };
 		DD89E0C91E27208200965CB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD89E0C81E27208200965CB7 /* AppDelegate.swift */; };
-		DD89E0CB1E27208200965CB7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD89E0CA1E27208200965CB7 /* ViewController.swift */; };
+		DD89E0CB1E27208200965CB7 /* CaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */; };
 		DD89E0CE1E27208200965CB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD89E0CC1E27208200965CB7 /* Main.storyboard */; };
 		DD89E0D01E27208200965CB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD89E0CF1E27208200965CB7 /* Assets.xcassets */; };
 		DD89E0D31E27208200965CB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD89E0D11E27208200965CB7 /* LaunchScreen.storyboard */; };
@@ -27,6 +28,7 @@
 		DDA216D1251921C9008F794B /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA216D0251921C9008F794B /* CoreDataHelper.swift */; };
 		DDACB8C6251BE97700E0C33C /* ImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */; };
 		DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDBD4159251982FC00F1103B /* TouchCaptureModel.xcdatamodeld */; };
+		DDD87303252A6886003E4645 /* PlaybackSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */; };
 		DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */; };
 		DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFC25154C7B009FFBDE /* Extensions.swift */; };
 		DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFD25154C7B009FFBDE /* Helpers.swift */; };
@@ -45,10 +47,11 @@
 		DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeViewController.swift; sourceTree = "<group>"; };
 		DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchPlayerView.swift; sourceTree = "<group>"; };
 		DD75C58425293C4A005B640E /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
+		DD75C58925297588005B640E /* TouchCoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchCoreView.swift; sourceTree = "<group>"; };
 		DD78B96F251B97F500D01C6D /* ImagePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePageViewController.swift; sourceTree = "<group>"; };
 		DD89E0C51E27208200965CB7 /* Touch Capture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Touch Capture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD89E0C81E27208200965CB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DD89E0CA1E27208200965CB7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureViewController.swift; sourceTree = "<group>"; };
 		DD89E0CD1E27208200965CB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DD89E0CF1E27208200965CB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD89E0D21E27208200965CB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -59,6 +62,7 @@
 		DDA216D0251921C9008F794B /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerViewController.swift; sourceTree = "<group>"; };
 		DDBD415A251982FC00F1103B /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
+		DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackSettingsTableViewController.swift; sourceTree = "<group>"; };
 		DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageChooser.swift; sourceTree = "<group>"; };
 		DDF7CCFC25154C7B009FFBDE /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		DDF7CCFD25154C7B009FFBDE /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 		DD343A4325153FC70031BD88 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD75C58925297588005B640E /* TouchCoreView.swift */,
 				DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */,
 				DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */,
 				DDF7CCFE25154C7C009FFBDE /* MovableImageView.swift */,
@@ -96,8 +101,9 @@
 			isa = PBXGroup;
 			children = (
 				DDACB8C8251BE9AC00E0C33C /* View Images */,
-				DD89E0CA1E27208200965CB7 /* ViewController.swift */,
+				DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */,
 				DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */,
+				DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -262,6 +268,7 @@
 				DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */,
 				DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */,
 				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
+				DDD87303252A6886003E4645 /* PlaybackSettingsTableViewController.swift in Sources */,
 				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
 				DD2C3D9A25169DCD006DED65 /* TouchTest.swift in Sources */,
 				DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */,
@@ -270,6 +277,7 @@
 				DD75C58525293C4A005B640E /* RecordButton.swift in Sources */,
 				DD78B970251B97F500D01C6D /* ImagePageViewController.swift in Sources */,
 				DDF7CD0525154F1C009FFBDE /* TransparencyView.swift in Sources */,
+				DD75C58A25297588005B640E /* TouchCoreView.swift in Sources */,
 				DD63DCDF2519378200B04D5F /* TouchPlayerView.swift in Sources */,
 				DD4BF6FD2518F31F005DA322 /* Core.swift in Sources */,
 				DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */,
@@ -277,7 +285,7 @@
 				DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */,
 				DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */,
 				DD89E0DB1E2721E500965CB7 /* CircleView.swift in Sources */,
-				DD89E0CB1E27208200965CB7 /* ViewController.swift in Sources */,
+				DD89E0CB1E27208200965CB7 /* CaptureViewController.swift in Sources */,
 				DDFA821325197854009762FA /* TouchHandler.swift in Sources */,
 				DD89E0C91E27208200965CB7 /* AppDelegate.swift in Sources */,
 				DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */,
@@ -423,7 +431,7 @@
 		DD89E0D81E27208200965CB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconSet;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SKVPMKVP5H;
@@ -444,7 +452,7 @@
 		DD89E0D91E27208200965CB7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconSet;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SKVPMKVP5H;
