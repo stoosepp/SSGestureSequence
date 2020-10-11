@@ -51,6 +51,7 @@ open class ImagePicker: NSObject {
         if let action = self.action(for: .photoLibrary, title: "Photo library") {
             alertController.addAction(action)
         }
+		
 
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 

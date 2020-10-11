@@ -49,7 +49,10 @@ class MultiTouchCaptureView: TouchCoreView {
 					fingers[index] = touch
 					let pencilBool = getPencil(inTouch: touch)
 					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
-					savedTouches[index]?.append(convertedTouch)
+					savedTouches[index]!.append(convertedTouch)
+					dataSet!.addToTouches(convertedTouch)
+					CoreDataHelper.shared.save(dataSet!)
+					CoreDataHelper.shared.save(convertedTouch)
 					let newIndex = savedTouches[index]!.count - 1
 					indexes.append((index,newIndex))
 					break
@@ -70,6 +73,9 @@ class MultiTouchCaptureView: TouchCoreView {
 					//Deal with Touches
 					let pencilBool = getPencil(inTouch: touch)
 					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					dataSet!.addToTouches(convertedTouch)
+					CoreDataHelper.shared.save(dataSet!)
+					CoreDataHelper.shared.save(convertedTouch)
 					savedTouches[index]!.append(convertedTouch)
 					let newIndex = savedTouches[index]!.count - 1
 					indexes.append((index,newIndex))
@@ -86,6 +92,13 @@ class MultiTouchCaptureView: TouchCoreView {
 			for (index,finger) in fingers.enumerated() {
 				if let finger = finger, finger == touch {
 					fingers[index] = nil
+					//self.fingers[index] = touch
+					//Deal with Touches
+					let pencilBool = getPencil(inTouch: touch)
+					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					dataSet!.addToTouches(convertedTouch)
+					CoreDataHelper.shared.save(dataSet!)
+					CoreDataHelper.shared.save(convertedTouch)
 					break
 				}
 			}

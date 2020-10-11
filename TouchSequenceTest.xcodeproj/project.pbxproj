@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DD2C3D9625169161006DED65 /* TouchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2C3D9525169161006DED65 /* TouchCaptureView.swift */; };
 		DD2C3D9A25169DCD006DED65 /* TouchTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2C3D9925169DCD006DED65 /* TouchTest.swift */; };
+		DD48CA37252BE5A000C03E41 /* CaptureSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD48CA36252BE5A000C03E41 /* CaptureSettingsTableViewController.swift */; };
 		DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */; };
 		DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */; };
 		DD4BF6FD2518F31F005DA322 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BF6FC2518F31F005DA322 /* Core.swift */; };
@@ -29,6 +30,9 @@
 		DDACB8C6251BE97700E0C33C /* ImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */; };
 		DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDBD4159251982FC00F1103B /* TouchCaptureModel.xcdatamodeld */; };
 		DDD87303252A6886003E4645 /* PlaybackSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */; };
+		DDD87306252BAD99003E4645 /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD87305252BAD99003E4645 /* PlaybackViewController.swift */; };
+		DDE22FAD252D187E00C635C9 /* ExpSessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE22FAC252D187E00C635C9 /* ExpSessionsTableViewController.swift */; };
+		DDE22FB0252D21A200C635C9 /* DataCollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE22FAF252D21A200C635C9 /* DataCollectionTableViewController.swift */; };
 		DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */; };
 		DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFC25154C7B009FFBDE /* Extensions.swift */; };
 		DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7CCFD25154C7B009FFBDE /* Helpers.swift */; };
@@ -41,6 +45,7 @@
 /* Begin PBXFileReference section */
 		DD2C3D9525169161006DED65 /* TouchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchCaptureView.swift; sourceTree = "<group>"; };
 		DD2C3D9925169DCD006DED65 /* TouchTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchTest.swift; sourceTree = "<group>"; };
+		DD48CA36252BE5A000C03E41 /* CaptureSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureSettingsTableViewController.swift; sourceTree = "<group>"; };
 		DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchCaptureView.swift; sourceTree = "<group>"; };
 		DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchPlayerView.swift; sourceTree = "<group>"; };
 		DD4BF6FC2518F31F005DA322 /* Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
@@ -63,6 +68,9 @@
 		DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerViewController.swift; sourceTree = "<group>"; };
 		DDBD415A251982FC00F1103B /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
 		DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackSettingsTableViewController.swift; sourceTree = "<group>"; };
+		DDD87305252BAD99003E4645 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
+		DDE22FAC252D187E00C635C9 /* ExpSessionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpSessionsTableViewController.swift; sourceTree = "<group>"; };
+		DDE22FAF252D21A200C635C9 /* DataCollectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCollectionTableViewController.swift; sourceTree = "<group>"; };
 		DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageChooser.swift; sourceTree = "<group>"; };
 		DDF7CCFC25154C7B009FFBDE /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		DDF7CCFD25154C7B009FFBDE /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
@@ -101,9 +109,9 @@
 			isa = PBXGroup;
 			children = (
 				DDACB8C8251BE9AC00E0C33C /* View Images */,
-				DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */,
-				DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */,
-				DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */,
+				DDE22F86252D030800C635C9 /* Capture and Playback */,
+				DDE22FAC252D187E00C635C9 /* ExpSessionsTableViewController.swift */,
+				DDE22FAF252D21A200C635C9 /* DataCollectionTableViewController.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -116,17 +124,10 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		DD343A462515402B0031BD88 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				DD2C3D9925169DCD006DED65 /* TouchTest.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		DD75C58725295EE8005B640E /* Archived */ = {
 			isa = PBXGroup;
 			children = (
+				DD2C3D9925169DCD006DED65 /* TouchTest.swift */,
 				DDF7CD0425154F1B009FFBDE /* TransparencyView.swift */,
 				DD2C3D9525169161006DED65 /* TouchCaptureView.swift */,
 				DD63DCDE2519378200B04D5F /* TouchPlayerView.swift */,
@@ -156,7 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				DD75C58725295EE8005B640E /* Archived */,
-				DD343A462515402B0031BD88 /* Models */,
 				DD343A4525153FF40031BD88 /* Cells */,
 				DD343A4425153FDD0031BD88 /* VCs */,
 				DD343A4325153FC70031BD88 /* Views */,
@@ -180,6 +180,18 @@
 				DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */,
 			);
 			path = "View Images";
+			sourceTree = "<group>";
+		};
+		DDE22F86252D030800C635C9 /* Capture and Playback */ = {
+			isa = PBXGroup;
+			children = (
+				DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */,
+				DD48CA36252BE5A000C03E41 /* CaptureSettingsTableViewController.swift */,
+				DDD87305252BAD99003E4645 /* PlaybackViewController.swift */,
+				DDD87302252A6886003E4645 /* PlaybackSettingsTableViewController.swift */,
+				DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */,
+			);
+			path = "Capture and Playback";
 			sourceTree = "<group>";
 		};
 		DDE4A6E225165C1100931828 /* Helpers */ = {
@@ -265,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDD87306252BAD99003E4645 /* PlaybackViewController.swift in Sources */,
 				DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */,
 				DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */,
 				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
@@ -274,6 +287,7 @@
 				DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */,
 				DDA216D1251921C9008F794B /* CoreDataHelper.swift in Sources */,
 				DDACB8C6251BE97700E0C33C /* ImageContainerViewController.swift in Sources */,
+				DDE22FAD252D187E00C635C9 /* ExpSessionsTableViewController.swift in Sources */,
 				DD75C58525293C4A005B640E /* RecordButton.swift in Sources */,
 				DD78B970251B97F500D01C6D /* ImagePageViewController.swift in Sources */,
 				DDF7CD0525154F1C009FFBDE /* TransparencyView.swift in Sources */,
@@ -291,6 +305,8 @@
 				DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */,
 				DD2C3D9625169161006DED65 /* TouchCaptureView.swift in Sources */,
 				DD4BF7002518F6CE005DA322 /* UpgradeViewController.swift in Sources */,
+				DD48CA37252BE5A000C03E41 /* CaptureSettingsTableViewController.swift in Sources */,
+				DDE22FB0252D21A200C635C9 /* DataCollectionTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,6 +29,8 @@ public class Core {
 		UserDefaults.standard.setValue(value, forKey: "didUpgrade")
 	}
 	
+	
+	
 	func setConstraintPins(view:UIView, parentview:UIView, asLeading:CGFloat,trailing:CGFloat,top:CGFloat,bottom:CGFloat){
 		view.translatesAutoresizingMaskIntoConstraints = false
 		let margins = parentview.layoutMarginsGuide

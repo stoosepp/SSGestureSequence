@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ImageDataDelegate {
+protocol ImageDataSetDelegate {
 	func updateView(withIndex: Int, andCount:Int)
 }
 
@@ -31,8 +31,8 @@ class ImagePageViewController: UIPageViewController, UIPageViewControllerDelegat
 			let newimageView = UIImageView()
 			newimageView.contentMode = .scaleAspectFit
 			let imageFile = screenShot.absoluteURL
-			let data = try? Data(contentsOf: imageFile)
-			newimageView.image = UIImage(data: data!)!
+			let imageData = try? Data(contentsOf: imageFile)
+			newimageView.image = UIImage(data: imageData!)!
 			newVC.view.addSubview(newimageView)
 			Core.shared.setConstraintPins(view: newimageView, parentview: newVC.view, asLeading: 5, trailing: 5, top: 5, bottom: 5)
 			imageControllers.append(newVC)

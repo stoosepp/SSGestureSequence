@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+        // Use this method to release shared resources, save user dataSet, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
@@ -39,11 +39,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    // Called when the application is about to terminate. Save dataSet if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     self.saveContext()
     }
-	// MARK: - Core Data stack
+	// MARK: - Core DataSet stack
 
 	lazy var persistentContainer: NSPersistentContainer = {
 		/*
@@ -61,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				/*
 				 Typical reasons for an error here include:
 				 * The parent directory does not exist, cannot be created, or disallows writing.
-				 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+				 * The persistent store is not accessible, due to permissions or dataSet protection when the device is locked.
 				 * The device is out of space.
 				 * The store could not be migrated to the current model version.
 				 Check the error message to determine what the actual problem was.
@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return container
 	}()
 
-	// MARK: - Core Data Saving support
+	// MARK: - Core DataSet Saving support
 
 	func saveContext () {
 		let context = persistentContainer.viewContext

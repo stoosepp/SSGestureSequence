@@ -11,6 +11,9 @@ import UIKit
 protocol PlaybackSettingsDelegate{
 	func updatePencilColor(color:UIColor)
 	func updateFingerColor(color:UIColor)
+	func toggleStartEnd(withValue:Bool)
+	func toggleLineSpeed(withValue:Bool)
+	func updateLinesDrawn(withValue:Int)
 }
 
 struct PlaybackStruct{
@@ -23,30 +26,73 @@ class PlaybackSettingsTableViewController: UITableViewController, UIColorPickerV
 	//Color Buttons
 	@IBOutlet var fingerButton:RoundedButton!
 	@IBOutlet var pencilButton:RoundedButton!
-	
+	@IBOutlet var linesToDrawSegmentedControl:UISegmentedControl!
 	@IBOutlet var speedSwitch:UISwitch!
+	@IBOutlet var startEndSwitch:UISwitch!
+	
 	var delegate:MultiTouchPlayerView?
 	var colorUpdating:String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		self.tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
-
+	
 		fingerButton.backgroundColor = delegate?.fingerLineColor
 		pencilButton.backgroundColor = delegate?.pencilLineColor
+		
+		
+		
+		linesToDrawSegmentedControl.selectedSegmentIndex = delegate!.linesShown
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-		pencilButton.strokeColor = UIColor.white.cgColor
+        
+		
 		fingerButton.strokeColor = UIColor.white.cgColor
+		pencilButton.strokeColor = UIColor.white.cgColor
+		
     }
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 		self.preferredContentSize = tableView.contentSize
 	}
 	
+	
+	@IBAction func toggleLinesDisplayed(_ sender: UISegmentedControl) {
+		//print("Drawing: \(value)")
+		delegate!.updateLinesDrawn(withValue:sender.selectedSegmentIndex)
+		delegate?.setNeedsDisplay()
+	}
+	
+	@IBAction func toggleLineSpeed(_ sender: UISwitch) {
+		//Update Drawing through Delegate
+		delegate?.toggleLineSpeed(withValue: sender.isOn)
+		
+		//Show Colors for line speed
+		tableView.beginUpdates()
+		let indexPath = IndexPath(row: 2, section: 0)
+		let defaultPenColorCell = tableView.cellForRow(at: indexPath)
+		if sender.isOn{
+			defaultPenColorCell?.isUserInteractionEnabled = false
+			defaultPenColorCell?.alpha = 0.5
+			tableView.insertRows(at: [IndexPath(row: 5, section: 0)], with: .fade)
+			tableView.insertRows(at: [IndexPath(row: 6, section: 0)], with: .fade)
+			tableView.insertRows(at: [IndexPath(row: 7, section: 0)], with: .fade)
+		}
+		else{
+			defaultPenColorCell?.isUserInteractionEnabled = true
+			defaultPenColorCell?.alpha = 1
+			tableView.deleteRows(at: [IndexPath(row: 5, section: 0)], with: .fade)
+			tableView.deleteRows(at: [IndexPath(row: 6, section: 0)], with: .fade)
+			tableView.deleteRows(at: [IndexPath(row: 7, section: 0)], with: .fade)
+		}
+		tableView.endUpdates()
+	}
+	
+	@IBAction func toggleStartEnd(_ sender: UISwitch) {
+		
+	}
 	
 	//MARK: Color Picker Stuff
 	@IBAction func colorPressed(_ sender:UIButton){
@@ -67,7 +113,6 @@ class PlaybackSettingsTableViewController: UITableViewController, UIColorPickerV
 		picker.modalPresentationStyle = .currentContext
 		picker.delegate = self
 		picker.selectedColor = withSender.backgroundColor!
-		//self.navigationController?.present(picker, animated: true, completion: nil)
 		present(picker, animated: true, completion: nil)
 	}
 	
@@ -79,34 +124,17 @@ class PlaybackSettingsTableViewController: UITableViewController, UIColorPickerV
 			let color = viewController.selectedColor
 		if colorUpdating == PlaybackStruct.kFingerColor{
 			fingerButton.backgroundColor = color
-			delegate?.fingerLineColor = color
-			delegate?.setNeedsDisplay()
+			delegate?.updateFingerColor(color: color)
 		}
 		else if colorUpdating == PlaybackStruct.kPencilColor{
 			pencilButton.backgroundColor = color
-			delegate?.pencilLineColor = color
-			delegate?.setNeedsDisplay()
+			delegate?.updatePencilColor(color: color)
 		}
+	}
+	
 
-	}
 	
-	@IBAction func toggleLineSpeed(_ sender: UISwitch) {
-		tableView.beginUpdates()
-		if sender.isOn{
-			tableView.insertRows(at: [IndexPath(row: 5, section: 0)], with: .bottom)
-			tableView.insertRows(at: [IndexPath(row: 6, section: 0)], with: .bottom)
-			tableView.insertRows(at: [IndexPath(row: 7, section: 0)], with: .bottom)
-		}
-		else{
-			tableView.deleteRows(at: [IndexPath(row: 5, section: 0)], with: .bottom)
-			tableView.deleteRows(at: [IndexPath(row: 6, section: 0)], with: .bottom)
-			tableView.deleteRows(at: [IndexPath(row: 7, section: 0)], with: .bottom)
-		}
-		
-		tableView.endUpdates()
-	}
-	
-    // MARK: - Table view data source
+    // MARK: - Table view dataSet source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -147,7 +175,7 @@ class PlaybackSettingsTableViewController: UITableViewController, UIColorPickerV
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
+            // Delete the row from the dataSet source
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view

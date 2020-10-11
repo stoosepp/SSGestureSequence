@@ -46,7 +46,7 @@ class ImageCollectionViewController: UICollectionViewController {
     }
 	
 
-    // MARK: UICollectionViewDataSource
+    // MARK: UICollectionViewDataSetSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -64,9 +64,9 @@ class ImageCollectionViewController: UICollectionViewController {
 		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ImageCollectionViewCell 
 		let imageFile = self.screenShotURLs[indexPath.item]
 		print("Cell at Index \(indexPath.item) has a file at \(imageFile)")
-		let data = try? Data(contentsOf: imageFile)
-		print("Cell data is \(String(describing: data))")
-		cell!.cellImage.image = UIImage(data: data!)!
+		let imageData = try? Data(contentsOf: imageFile)
+		//print("Cell dataSet is \(String(describing: imageData))")
+		cell!.cellImage.image = UIImage(data: imageData!)!
 		return cell!
 	
 //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageCollectionViewCell
@@ -74,8 +74,8 @@ class ImageCollectionViewController: UICollectionViewController {
 //        // Configure the cell
 //        cell.backgroundColor = .clear
 ////		let file = screenShotURLs[indexPath.row]
-////		let imageData = try? Data(contentsOf: file) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-////		cell.cellImage.image = UIImage(data: imageData!)!
+////		let imageDataSet = try? DataSet(contentsOf: file) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+////		cell.cellImage.image = UIImage(dataSet: imageDataSet!)!
 //		cell.imageURL = screenShotURLs[indexPath.row]
 //        return cell
 		

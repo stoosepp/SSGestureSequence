@@ -9,6 +9,8 @@
 import UIKit
 
 open class Helpers:NSObject{
+	
+	static let shared = Helpers()
     
     //MARK: Number Conversions
     func deg2rad(_ number: CGFloat) -> CGFloat {
@@ -42,5 +44,28 @@ open class Helpers:NSObject{
 
         return today_string
     }
-   
+	
+	func formatDate(forDate:Date, format:String) -> String{
+		let dateFormatterEurope = DateFormatter()
+		dateFormatterEurope.dateFormat = "dd/MM/yyyy h:mm:a"
+
+		let dateFormatterNorthAmerica = DateFormatter()
+		dateFormatterNorthAmerica.dateFormat = "MM/dd/yyyy h:mm:a"
+
+		var dateString = String()
+		if format == "EU"{
+			dateString = dateFormatterEurope.string(from: forDate)
+		}
+		else if format == "NA"{
+			dateString = dateFormatterNorthAmerica.string(from: forDate)
+		}
+		return dateString
+	}
+	
+	//MARK: Core Graphics
+	func distance(a: CGPoint, b: CGPoint) -> CGFloat {
+			let xDist = a.x - b.x
+			let yDist = a.y - b.y
+			return CGFloat(sqrt((xDist * xDist) + (yDist * yDist)))
+		}
 }

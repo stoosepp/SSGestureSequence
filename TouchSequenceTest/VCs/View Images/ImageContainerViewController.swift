@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageContainerViewController: UIViewController, ImageDataDelegate, UIPageViewControllerDelegate {
+class ImageContainerViewController: UIViewController, ImageDataSetDelegate, UIPageViewControllerDelegate {
 
 
 	var screenShotURLs = Array<URL>()
