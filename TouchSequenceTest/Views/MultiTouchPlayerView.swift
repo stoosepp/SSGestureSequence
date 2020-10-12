@@ -61,11 +61,7 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		return fingerArrays
 	}
 	
-	func addSequenceCount(currentTouch:Int, atLocation:CGPoint, radius:CGFloat, color:UIColor){
-			let circleView = CircleView(frame: CGRect(x: atLocation.x - radius, y: atLocation.y - radius , width: radius * 2, height: radius * 2))
-			circleView.labelText = "\(currentTouch)"
-			circleView.theColor = color
-		}
+	
 
 	//MARK: PROCESS LINES
 	public func prepareLinesToDraw(){
