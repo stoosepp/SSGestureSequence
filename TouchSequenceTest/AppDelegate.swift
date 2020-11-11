@@ -87,6 +87,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 	}
+	//MARK: - Orientation
+	var orientationLock = UIInterfaceOrientationMask.all
+
+	func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+			return self.orientationLock
+	}
 
 }
 

@@ -12,6 +12,7 @@ class MultiTouchCaptureView: TouchCoreView {
 	
 	//Multitouch
 	var fingers = [UITouch?](repeating: nil, count:6)
+	var hideStrokes = true
 	
 	//MARK: Drawing Code
 	required init?(coder: NSCoder) {
@@ -20,6 +21,10 @@ class MultiTouchCaptureView: TouchCoreView {
 	}
 	
 	func resetView(){
+		//check to see if the view should hide lines
+		//let experiment = dataSet?.experiment
+		
+		
 		toPoint = CGPoint.zero
 		fromPoint = CGPoint.zero
 		//currentRect = CGRect.zero
@@ -31,6 +36,9 @@ class MultiTouchCaptureView: TouchCoreView {
 			let newTouchArray = [Touch]()
 			savedTouches.append(newTouchArray)
 		}
+		
+		
+		
 		setNeedsDisplay()
 	}
 	
@@ -48,18 +56,20 @@ class MultiTouchCaptureView: TouchCoreView {
 				if finger == nil {
 					fingers[index] = touch
 					let pencilBool = getPencil(inTouch: touch)
-					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWithFinger(dataSet:dataSet!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					savedTouches[index]!.append(convertedTouch)
 					dataSet!.addToTouches(convertedTouch)
-					CoreDataHelper.shared.save(dataSet!)
-					CoreDataHelper.shared.save(convertedTouch)
-					let newIndex = savedTouches[index]!.count - 1
-					indexes.append((index,newIndex))
+					CoreDataHelper.shared.saveContext()
+					
+					let indexOfLastTouch = savedTouches[index]!.count - 1
+					indexes.append((index,indexOfLastTouch))
 					break
 				}
 			}
 		}
-		processTouches(indexes: indexes)
+		if hideStrokes == false{
+			processTouches(indexes: indexes)
+		}
 	}
 
 	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -72,22 +82,25 @@ class MultiTouchCaptureView: TouchCoreView {
 					self.fingers[index] = touch
 					//Deal with Touches
 					let pencilBool = getPencil(inTouch: touch)
-					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWithFinger(dataSet:dataSet!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					dataSet!.addToTouches(convertedTouch)
-					CoreDataHelper.shared.save(dataSet!)
-					CoreDataHelper.shared.save(convertedTouch)
+					CoreDataHelper.shared.saveContext()
 					savedTouches[index]!.append(convertedTouch)
-					let newIndex = savedTouches[index]!.count - 1
-					indexes.append((index,newIndex))
+					let indexOfLastTouch = savedTouches[index]!.count - 1
+		
+					indexes.append((index,indexOfLastTouch))
 					break
 				}
 			}
 		}
-		processTouches(indexes: indexes)
+		if hideStrokes == false{
+			processTouches(indexes: indexes)
+		}
 	}
 
 	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 		super.touchesEnded(touches, with: event)
+		var indexes = [(Int,Int)]()
 		for touch in touches {
 			for (index,finger) in fingers.enumerated() {
 				if let finger = finger, finger == touch {
@@ -95,14 +108,21 @@ class MultiTouchCaptureView: TouchCoreView {
 					//self.fingers[index] = touch
 					//Deal with Touches
 					let pencilBool = getPencil(inTouch: touch)
-					let convertedTouch = TouchHandler.shared.convertfromUITouchWithFinger(touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWithFinger(dataSet:dataSet!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					dataSet!.addToTouches(convertedTouch)
-					CoreDataHelper.shared.save(dataSet!)
-					CoreDataHelper.shared.save(convertedTouch)
+					CoreDataHelper.shared.saveContext()
+					savedTouches[index]!.append(convertedTouch)
+					
+					let indexOfLastTouch = savedTouches[index]!.count - 1
+					indexes.append((index,indexOfLastTouch))
 					break
 				}
 			}
 		}
+		if hideStrokes == false{
+			processTouches(indexes: indexes)
+		}
+		
 	}
 
 	override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -21,7 +21,7 @@ class TouchCoreView: UIView {
 	var showStartEnd = false
 	var showLineVelocity = false
 	var linesShown = 0//0,Both;1,Fingers;2,Pencil
-	var mostRecentTouch:Int = 1
+	var fingerLineCounts = [0,0,0,0,0,0]
 	
 	//Velocty Stuff
 	var slowCount = 0.0
@@ -35,7 +35,7 @@ class TouchCoreView: UIView {
 	var savedTouches = [[Touch?]?]()
 	var fromPoint:CGPoint?
 	var toPoint:CGPoint?
-	var pointsToDraw = [(CGPoint,CGPoint,Bool)]()
+	var pointsToDraw = [(fromPoint:CGPoint,toPoint:CGPoint,isPencil:Bool,touchType:Int,number:Int)]()
 
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
@@ -48,13 +48,13 @@ class TouchCoreView: UIView {
 		}
 		//Draw Lines
 		pointsToDraw.forEach { (pointSet) in
-			context.move(to: pointSet.0)
-			context.addLine(to: pointSet.1)
-			context.setLineWidth(5.0)
-			
+			context.move(to: pointSet.fromPoint)
+			context.addLine(to: pointSet.toPoint)
+			context.setLineWidth(strokeWidth)
+		
+			//Deal with Finger Stuff
 			let distance = Helpers.shared.distance(a: pointSet.0, b: pointSet.1)
-			
-			if pointSet.2 == false{//If it's a finger
+			if pointSet.isPencil == false{//If it's a finger
 				context.setStrokeColor(fingerLineColor.cgColor)
 				if showLineVelocity == true{
 					context.setStrokeColor(getColorToDraw(withDistance: Double(distance)).cgColor)
@@ -69,12 +69,36 @@ class TouchCoreView: UIView {
 			context.setLineCap(.round)
 			context.strokePath()
 		}
+		if showStartEnd == true{
+			pointsToDraw.forEach { (pointSet2) in
+				//Deal with Start / End stuff
+				if pointSet2.touchType == UITouch.Phase.began.rawValue{
+					let green = UIColor.init(red: 167/255, green: 197/255, blue: 116/255, alpha: 1.0)
+					addNumberToLine(touchNumber: pointSet2.number, atLocation: pointSet2.fromPoint, circleColor:green, textColor: .white)
+				}
+				else if pointSet2.touchType == UITouch.Phase.ended.rawValue{
+					let red = UIColor.init(red: 190/255, green: 75/255, blue: 85/255, alpha: 1.0)
+					addNumberToLine(touchNumber: pointSet2.number, atLocation: pointSet2.toPoint,circleColor:red, textColor: .white)
+				}
+			}
+		}
+		
 	}
 	
-	func addSequenceCount(currentTouch:Int, atLocation:CGPoint, radius:CGFloat, color:UIColor){
-			let circleView = CircleView(frame: CGRect(x: atLocation.x - radius, y: atLocation.y - radius , width: radius * 2, height: radius * 2))
-			circleView.labelText = "\(currentTouch)"
-			circleView.theColor = color
+	func addNumberToLine(touchNumber:Int, atLocation:CGPoint, circleColor:UIColor, textColor:UIColor){
+		
+		let ovalPath = UIBezierPath(ovalIn: CGRect(x: atLocation.x-10, y: atLocation.y-10, width: 20, height: 20))
+		
+		circleColor.setFill()
+		ovalPath.fill()
+		
+			let paragraphStyle = NSMutableParagraphStyle()
+			paragraphStyle.alignment = .center
+		let adjustedFontSize = 20 / 2
+		let attrs = [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: CGFloat(adjustedFontSize))!, NSAttributedString.Key.paragraphStyle: paragraphStyle,NSAttributedString.Key.foregroundColor:textColor]
+
+			let string = String(describing:touchNumber)
+		string.draw(with: CGRect(x: atLocation.x-10, y: atLocation.y-6.5, width: 20, height: 20), options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
 		}
 	
 	//MARK: VELOCITY COLOUR
@@ -96,8 +120,8 @@ class TouchCoreView: UIView {
 			fastCount += 1
 		}
 		
-		let totalSegment = slowCount + mediumCount + fastCount
-		let totalDistance = slowDistance + mediumDistance + fastDistance
+		//let totalSegment = slowCount + mediumCount + fastCount
+		//let totalDistance = slowDistance + mediumDistance + fastDistance
 		
 		let totalCombined = (slowCount * slowDistance) +  (mediumCount * mediumDistance) + (fastCount * fastDistance)
 		var slowPercentage = (slowCount * slowDistance) / totalCombined
@@ -132,36 +156,42 @@ class TouchCoreView: UIView {
 	}
 	
 	//MARK: Touch Processing
-	func processTouches(indexes:[(Int,Int)]){
+	func processTouches(indexes:[(finger:Int,touch:Int)]){
+		//var isStartEnd = false
 		var pointsforBoxes = [CGPoint]()
 		indexes.forEach { (index) in
-			let thisTouchArray = savedTouches[index.0]
-			let thisTouch = thisTouchArray![index.1]!
-			var lastTouch:Touch?
-			if index.1 == 0 || thisTouch.touchType == UITouch.Phase.began.rawValue{
-				lastTouch = thisTouch
+			let thisFingersTouches = savedTouches[index.finger]
+			let thisTouch = thisFingersTouches![index.touch]!
+			
+			var previousTouch:Touch?
+			if thisTouch.touchType == UITouch.Phase.began.rawValue{
+				previousTouch = thisTouch
+				fingerLineCounts[index.finger] += 1
 			}
 			else{
-				lastTouch = thisTouchArray![index.1-1]
+				previousTouch = thisFingersTouches![index.touch-1]
 			}
 	
 			fromPoint = TouchHandler.shared.location(fromTouch: thisTouch)
-			toPoint = TouchHandler.shared.location(fromTouch: lastTouch!)
+			toPoint = TouchHandler.shared.location(fromTouch: previousTouch!)
 			
 			pointsforBoxes.append(fromPoint!)
 			pointsforBoxes.append(toPoint!)
 	
-			if thisTouch.isPencil == true{
-				pointsToDraw.append((fromPoint!,toPoint!, true))
-			}
-			else{
-				pointsToDraw.append((fromPoint!,toPoint!, false))
-			}
+			
+			pointsToDraw.append((fromPoint: fromPoint!, toPoint: toPoint!, isPencil: thisTouch.isPencil, touchType: Int(thisTouch.touchType), number: fingerLineCounts[index.finger]))
+			
 		}
-	
 		let rect = getRect(fromPoints: pointsforBoxes)
-		//print("Rect is \(rect) and there are \(pointsToDraw.count) points to draw")
-		self.setNeedsDisplay(rect)
+		if showStartEnd == true && rect.width < 20{
+			print("Inreasing size of rect for start end")
+			//rect.size = CGSize(width: 20, height: 20)
+			self.setNeedsDisplay()
+		}
+		else{
+			self.setNeedsDisplay(rect)
+		}
+		
 	}
 	
 	func getRect(fromPoints:[CGPoint]) -> CGRect{

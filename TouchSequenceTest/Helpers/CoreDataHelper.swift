@@ -16,7 +16,7 @@ public class CoreDataHelper{
 	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 	
 	//Saving and Deleting
-	func save(_ object:NSManagedObject){
+	func saveContext(){
 		do {
 			try self.context.save()
 		} catch  {
@@ -26,6 +26,7 @@ public class CoreDataHelper{
 	
 	func delete(_ object:NSManagedObject){
 		self.context.delete(object)
+		saveContext()
 	}
 	
 	//Deal with startup NOT PRO USER
@@ -33,29 +34,48 @@ public class CoreDataHelper{
 		let experiment = createExperiment()
 		let dataSet = createDataSet()
 		experiment.addToDataSets(dataSet)
-		save(experiment)
-		save(dataSet)
+		saveContext()
 		print("Startup Basic Completed")
 	}
 	
+	//MARK: - FETCH{
 	
-	//Create Objects
+	
+	
+	//MARK: - CREATE
 	func createExperiment() -> Experiment{
 		let experiment = Experiment(context: context)
-		experiment.title = "Sample"
-		save(experiment)
+		saveContext()
 		return experiment
 	}
 	
 	func createDataSet() -> DataSet{
 		let dataSet = DataSet(context: context)
 		dataSet.startDate = Date()
-		save(dataSet)
+		saveContext()
 		return dataSet
 	}
 	
+	func createScreenShot(_ withImage:UIImage?) -> ScreenShot{
+		let screenShot = ScreenShot(context:context)
+		screenShot.imageData = withImage?.pngData()
+		screenShot.timeStamp = Date()
+		saveContext()
+		return screenShot
+	}
+	
+	func addBlankStimulus(toExperiment:Experiment, withDuration:Float){
+		let stimulus = Stimulus(context: context)
+		stimulus.duration = withDuration
+		stimulus.type = 0
+		let stimulusCount = toExperiment.stimuli?.count
+		stimulus.order = Int16(stimulusCount!)
+		toExperiment.addToStimuli(stimulus)
+		saveContext()
+	}
+	
 	func createStimulus(rotation:Float, scale:CGFloat, xCenter:CGFloat, yCenter:CGFloat, image:UIImage?, url:URL?) -> Stimulus{
-		let stimulus = Stimulus(context: CoreDataHelper.shared.context)
+		let stimulus = Stimulus(context: context)
 		stimulus.rotation = rotation
 		stimulus.scale = Float(scale)
 		stimulus.xCenter = Float(xCenter)
@@ -66,15 +86,39 @@ public class CoreDataHelper{
 		if url != nil{
 			stimulus.url = String(describing: url)
 		}
-		save(stimulus)
+		saveContext()
 		return stimulus
 	}
 	
-	//Add Children
+	func createTouchfromUITouchWithFinger(dataSet:DataSet, touch:UITouch, finger:Int64, isPencil:Bool, inView:UIView) -> Touch{
+		let newTouch = Touch(context: context)
+		newTouch.timeInterval = Date().timeIntervalSince(dataSet.startDate!)
+		newTouch.finger = finger
+		newTouch.isPencil = isPencil
+		let location = touch.location(in: inView)
+		newTouch.xLocation = Float(location.x)
+		newTouch.yLocation = Float(location.y)
+		newTouch.touchType = Int64(Int(touch.phase.rawValue))
+		
+		return newTouch
+	}
+	
+	
+	
+	
+	//MARK: - ADD CHILDREN
 	func addStimulus(stimulus:Stimulus, experiment:Experiment){
 		experiment.addToStimuli(stimulus)
-		save(experiment)
+		saveContext()
 	}
+	
+	func addScreenShot(screenShot:ScreenShot, dataSet:DataSet){
+		dataSet.addToScreenShots(screenShot)
+		saveContext()
+	}
+	
+
+
 	
 
 }

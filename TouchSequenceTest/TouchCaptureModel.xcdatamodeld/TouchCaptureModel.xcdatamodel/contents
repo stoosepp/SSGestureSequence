@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20A5384c" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="20B28" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DataSet" representedClassName="DataSet" syncable="YES" codeGenerationType="class">
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="experiment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Experiment" inverseName="dataSets" inverseEntity="Experiment"/>
         <relationship name="participant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="dataSetCollection" inverseEntity="Participant"/>
-        <relationship name="screenShots" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ScreenCapture" inverseName="dataSet" inverseEntity="ScreenCapture"/>
+        <relationship name="screenShots" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ScreenShot" inverseName="dataSet" inverseEntity="ScreenShot"/>
         <relationship name="touches" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Touch" inverseName="dataSet" inverseEntity="Touch"/>
     </entity>
     <entity name="Experiment" representedClassName="Experiment" syncable="YES" codeGenerationType="class">
         <attribute name="details" optional="YES" attributeType="String"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="isLandscape" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="showTouches" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="stimulusSequence" optional="YES" attributeType="Transformable" valueTransformerName="NSOrderedSetToDataTransformer"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
         <relationship name="dataSets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DataSet" inverseName="experiment" inverseEntity="DataSet"/>
         <relationship name="stimuli" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Stimulus" inverseName="experiment" inverseEntity="Stimulus"/>
         <relationship name="study" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Study" inverseName="expSessions" inverseEntity="Study"/>
@@ -24,41 +24,34 @@
         <attribute name="participantID" optional="YES" attributeType="String"/>
         <relationship name="dataSetCollection" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DataSet" inverseName="participant" inverseEntity="DataSet"/>
     </entity>
-    <entity name="Properties" representedClassName="Properties" syncable="YES" codeGenerationType="class">
-        <attribute name="countdown" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="delay" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="delayType" optional="YES" attributeType="String"/>
-        <attribute name="displayDuration" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="showDuration" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="stimulus" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stimulus" inverseName="properties" inverseEntity="Stimulus"/>
-    </entity>
-    <entity name="ScreenCapture" representedClassName="ScreenCapture" syncable="YES" codeGenerationType="class">
+    <entity name="ScreenShot" representedClassName="ScreenShot" syncable="YES" codeGenerationType="class">
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="dataSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DataSet" inverseName="screenShots" inverseEntity="DataSet"/>
     </entity>
     <entity name="Stimulus" representedClassName="Stimulus" syncable="YES" codeGenerationType="class">
+        <attribute name="duration" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="order" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="rotation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="scale" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="type" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="url" optional="YES" attributeType="String" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="xCenter" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="yCenter" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <relationship name="experiment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Experiment" inverseName="stimuli" inverseEntity="Experiment"/>
-        <relationship name="properties" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Properties" inverseName="stimulus" inverseEntity="Properties"/>
     </entity>
     <entity name="Study" representedClassName="Study" syncable="YES" codeGenerationType="class">
         <attribute name="dateCreated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="details" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="expSessions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Experiment" inverseName="study" inverseEntity="Experiment"/>
     </entity>
     <entity name="Touch" representedClassName="Touch" syncable="YES" codeGenerationType="class">
         <attribute name="finger" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="isPencil" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="phase" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeInterval" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="touchType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="xLocation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="yLocation" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -68,10 +61,9 @@
         <element name="DataSet" positionX="-475.9935302734375" positionY="241.8731994628906" width="128" height="148"/>
         <element name="Experiment" positionX="-493.3760986328125" positionY="19.97399902343756" width="128" height="163"/>
         <element name="Participant" positionX="-309.1378173828125" positionY="-111.7726745605468" width="128" height="88"/>
-        <element name="Properties" positionX="-871.630126953125" positionY="31.72822570800776" width="128" height="148"/>
-        <element name="ScreenCapture" positionX="-253.1514282226562" positionY="256.1951141357422" width="128" height="88"/>
-        <element name="Stimulus" positionX="-678.0625610351562" positionY="22.69934082031247" width="128" height="163"/>
-        <element name="Study" positionX="-490.9459228515626" positionY="-114.5829620361329" width="139.785400390625" height="89"/>
+        <element name="ScreenShot" positionX="-253.1514282226562" positionY="256.1951141357422" width="128" height="88"/>
+        <element name="Stimulus" positionX="-707.9010620117188" positionY="-10.75885009765628" width="128" height="193"/>
+        <element name="Study" positionX="-498.7205810546876" positionY="-111.3552551269532" width="139.785400390625" height="103"/>
         <element name="Touch" positionX="-469.4381103515625" positionY="456.0525817871094" width="128" height="163"/>
     </elements>
 </model>

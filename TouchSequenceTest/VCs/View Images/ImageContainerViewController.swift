@@ -10,8 +10,8 @@ import UIKit
 
 class ImageContainerViewController: UIViewController, ImageDataSetDelegate, UIPageViewControllerDelegate {
 
-
-	var screenShotURLs = Array<URL>()
+	var screenShotArray = [ScreenShot]()
+	//var screenShotURLs = Array<URL>()
 	var currentIndex:Int = 0;
 	@IBOutlet weak var textLabel:UILabel!
 	@IBOutlet weak var pageControl:UIPageControl!
@@ -19,7 +19,7 @@ class ImageContainerViewController: UIViewController, ImageDataSetDelegate, UIPa
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		print("Containerview loaded with \(screenShotURLs.count) items at index \(currentIndex)")
+		print("Containerview loaded with \(screenShotArray.count) items at index \(currentIndex)")
 		
         // Do any additional setup after loading the view
 		//updateViewWithIndex(currentIndex)
@@ -48,7 +48,7 @@ class ImageContainerViewController: UIViewController, ImageDataSetDelegate, UIPa
 		if segue.identifier == "imageContainer" {
 			let imageContainer = segue.destination as! ImagePageViewController
 			imageContainer.containerDelegate = self
-			//imageContainer.screenShotURLs = screenShotURLs
+			imageContainer.screenShotArray = screenShotArray
 			imageContainer.currentIndex = currentIndex
 		}
 		

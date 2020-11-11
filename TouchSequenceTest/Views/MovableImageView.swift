@@ -54,7 +54,7 @@ class MovableImageView: UIImageView, UIGestureRecognizerDelegate {
                     sender.view!.center = CGPoint(x: sender.view!.center.x + translation.x, y: sender.view!.center.y + translation.y)
                     sender.setTranslation(CGPoint.zero, in: superview)
                 }
-            print("Current Center is \(sender.view!.center.x),\(sender.view!.center.y)")
+            //print("Current Center is \(sender.view!.center.x),\(sender.view!.center.y)")
             
         }
         

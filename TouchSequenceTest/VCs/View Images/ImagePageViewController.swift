@@ -15,29 +15,31 @@ protocol ImageDataSetDelegate {
 class ImagePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	
 	var currentIndex:Int = 0;
-	var screenShotURLs = Array<URL>()
+	var screenShotArray = [ScreenShot]()
+	//var screenShotURLs = Array<URL>()
 	var imageControllers = [UIViewController]()
 	var containerDelegate:ImageContainerViewController?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-		print("PageController loaded with \(screenShotURLs.count) items at index \(currentIndex)")
+		print("PageController loaded with \(screenShotArray.count) items at index \(currentIndex)")
         // Do any additional setup after loading the view.
 		self.delegate = self
 		self.dataSource = self
-		screenShotURLs = Core.shared.fetchFileURLS()
-		screenShotURLs.forEach { (screenShot) in
+		//screenShotURLs = Core.shared.fetchFileURLS()
+		screenShotArray.forEach { (screenShot) in
 			let newVC = UIViewController()
 			let newimageView = UIImageView()
 			newimageView.contentMode = .scaleAspectFit
-			let imageFile = screenShot.absoluteURL
-			let imageData = try? Data(contentsOf: imageFile)
-			newimageView.image = UIImage(data: imageData!)!
+			//let imageFile = screenShot.absoluteURL
+			//let imageData = try? Data(contentsOf: imageFile)
+			//newimageView.image = UIImage(data: imageData!)!
+			newimageView.image = UIImage(data: screenShot.imageData!)
 			newVC.view.addSubview(newimageView)
 			Core.shared.setConstraintPins(view: newimageView, parentview: newVC.view, asLeading: 5, trailing: 5, top: 5, bottom: 5)
 			imageControllers.append(newVC)
 		}
-		containerDelegate!.updateView(withIndex: currentIndex, andCount: screenShotURLs.count)
+		containerDelegate!.updateView(withIndex: currentIndex, andCount: screenShotArray.count)
     }
 	
 	
@@ -96,6 +98,6 @@ class ImagePageViewController: UIPageViewController, UIPageViewControllerDelegat
 				break
 			}
 		}
-		containerDelegate!.updateView(withIndex: viewControllerIndex, andCount: screenShotURLs.count)
+		containerDelegate!.updateView(withIndex: viewControllerIndex, andCount: screenShotArray.count)
 	}
 }
