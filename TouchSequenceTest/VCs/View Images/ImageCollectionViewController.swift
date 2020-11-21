@@ -33,7 +33,7 @@ class ImageCollectionViewController: UICollectionViewController {
 
         // Do any additional setup after loading the view.
 		fetchScreenShots(forDataSet: dataSet, showingAll: false)
-		let startDate = Helpers.shared.formatDate(forDate: (dataSet?.startDate)!, format: "EU")
+		let startDate = dataSet?.startDate?.formattedString(withFormat: "EU")
 		self.title = "DataSet: \(startDate)"
 		
     }
@@ -78,7 +78,7 @@ class ImageCollectionViewController: UICollectionViewController {
 		else if sender.title == "This DataSet's Screenshots"{
 			fetchScreenShots(forDataSet:dataSet, showingAll: false)
 			sender.title = "All Screenshots"
-			let startDate = Helpers.shared.formatDate(forDate: (dataSet?.startDate)!, format: "EU")
+			let startDate = dataSet?.startDate?.formattedString(withFormat: "NA")
 			self.title = "DataSet: \(startDate)"
 		}
 		

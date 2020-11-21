@@ -21,36 +21,41 @@ class StimulusTableViewCell: UITableViewCell {
 	
 	//Outlets
 	@IBOutlet weak var durationLabel:UILabel!
-	
+	@IBOutlet weak var stimulusImageView:UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-		/*
+		
+	}
+		
+	override func draw(_ rect: CGRect) {
+		self.backgroundColor = .clear
 		let bgLayer = CALayer()
-		bgLayer.frame = self.layer.bounds.insetBy(dx: 10.0, dy: 10.0)
+		bgLayer.frame = self.bounds.insetBy(dx: 5.0, dy: 5.0)
 		
-		
-		bgLayer.cornerRadius = 15
+		bgLayer.cornerRadius = 5
+		bgLayer.shadowOpacity = 0.3
+		bgLayer.shadowOffset = CGSize(width: 0, height: 3)
+		bgLayer.shadowRadius = 3.0
+		bgLayer.isGeometryFlipped = false
 		// border
 		switch stimulusType {
 		case StimulusTableViewCell.kBlank:
 			bgLayer.backgroundColor = UIColor.lightGray.cgColor
 		case StimulusTableViewCell.kImage:
-			bgLayer.backgroundColor = UIColor.blue.cgColor
-		case StimulusTableViewCell.kVideo:
 			bgLayer.backgroundColor = UIColor.orange.cgColor
+		case StimulusTableViewCell.kVideo:
+			bgLayer.backgroundColor = UIColor.blue.cgColor
 		case StimulusTableViewCell.kWebpage:
 			bgLayer.backgroundColor = UIColor.green.cgColor
 		default:
 			bgLayer.backgroundColor = UIColor.lightGray.cgColor
 		}
-		self.layer.insertSublayer(bgLayer, below: self.layer)
-		
-*/
+		//self.layer.addSublayer(bgLayer)
+		self.layer.insertSublayer(bgLayer, below: contentView.layer)
+	
 	}
-		
-
 	
 	
 

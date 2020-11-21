@@ -80,6 +80,7 @@ public class CoreDataHelper{
 		stimulus.scale = Float(scale)
 		stimulus.xCenter = Float(xCenter)
 		stimulus.yCenter = Float(yCenter)
+		
 		if image != nil{
 			stimulus.imageData = image!.pngData()
 		}

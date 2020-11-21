@@ -77,11 +77,19 @@ class CaptureViewController: UIViewController, RecordButtonDelegate, ImagePicker
 		self.dismiss(animated: true, completion: nil)
 	}
 	@IBAction func donePressed(_ sender:UIButton){
-		if expDetailsDelegate != nil{
-			saveImageTo(thisExperiment: experiment!)
-			expDetailsDelegate!.updateStimuliTable()
+		if displayDuration != 0{
+			if expDetailsDelegate != nil{
+				saveImageTo(thisExperiment: experiment!)
+				expDetailsDelegate!.updateStimuliTable()
+			}
+			self.dismiss(animated: true, completion: nil)
 		}
-		self.dismiss(animated: true, completion: nil)
+		else{
+			let ac = UIAlertController(title: "No Duration", message: "Set a duration for how long this stimulus will appear.", preferredStyle: .alert)
+			ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+			present(ac, animated: true)
+		}
+		
 	}
 	
 	
@@ -317,19 +325,26 @@ class CaptureViewController: UIViewController, RecordButtonDelegate, ImagePicker
 				view.isHidden = true
 			}
 		}
-		let screenshot = self.view.takeScreenshot()
-		thisExperiment.imageData = screenshot.pngData()
+		
 		
 		//Save the image and it's properties to the session for loading later
 		let newStimulus = CoreDataHelper.shared.createStimulus(rotation: radians, scale: thisScale, xCenter: centerX, yCenter: centerY, image:chosenImage , url: nil)
+		newStimulus.type = 1//Set as Image
+		
+		let stimulusCount = thisExperiment.stimuli?.count
+		newStimulus.order = Int16(stimulusCount!)
 	
 		if deviceOrientation().contains("Landscape"){
 			thisExperiment.isLandscape = true
 		}
-		CoreDataHelper.shared.saveContext()
+		newStimulus.duration = Float(displayDuration)
+		//let screenshot = self.view.takeScreenshot()
+		if let theChosenimage = imageView?.image{
+			newStimulus.imageData = theChosenimage.pngData() //screenshot.pngData()
+		}
 		
 		CoreDataHelper.shared.addStimulus(stimulus: newStimulus, experiment: thisExperiment)
-		
+		CoreDataHelper.shared.saveContext()
 		for view in self.view.subviews{
 			if view.isKind(of: UIStackView.self){
 				view.isHidden = false

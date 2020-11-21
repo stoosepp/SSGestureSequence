@@ -41,6 +41,7 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 		expDescriptionTextField.returnKeyType = .done
 		self.isModalInPresentation = true
 		
+		
 		//Editing an Experiment?
 		if experiment != nil{
 			print("Editing\(String(describing: experiment!.title))")
@@ -59,6 +60,18 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 		}
 		stimuliTableView.setEditing(true, animated: true)
     }
+	
+	func overlayBlurredBackgroundView() {
+		 
+		 let blurredBackgroundView = UIVisualEffectView()
+		 
+		 blurredBackgroundView.frame = view.frame
+		 blurredBackgroundView.effect = UIBlurEffect(style: .dark)
+		 
+		 view.addSubview(blurredBackgroundView)
+		view.sendSubviewToBack(blurredBackgroundView)
+		 
+	 }
 	
 	//MARK: - SETUP
 	
@@ -181,12 +194,18 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 		let cell = tableView.dequeueReusableCell(withIdentifier: "stimulusCell", for: indexPath) as! StimulusTableViewCell
         // Configure the cell...
 		let thisStimulus = stimuli[indexPath.row]
+		cell.stimulusType = Int(thisStimulus.type)
 		if thisStimulus.type == 0{
-			cell.backgroundColor = .lightGray
+			//cell.backgroundColor = .lightGray
+			cell.stimulusImageView.isHidden = true
 		}
 		else{
-			cell.backgroundColor = .orange
+			//cell.backgroundColor = .orange
+			if let stimulusImage = UIImage(data: thisStimulus.imageData!){
+				cell.stimulusImageView.image = stimulusImage
+			}
 		}
+		
 		cell.durationLabel.text = "Duration: \(thisStimulus.duration)  |  Order: \(thisStimulus.order)"
 
         return cell
@@ -235,19 +254,17 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 		stimuli.forEach { (stimulus) in
 			if stimulus != movedStimuli{
 				if sourceIndexPath.row < destinationIndexPath.row{//Moved Down
-					if Int(stimulus.order) <= Int(movedStimuli.order){
+					if Int(stimulus.order) <= destinationIndexPath.row && Int(stimulus.order) >= sourceIndexPath.row {
 						stimulus.order -= 1
 					}
 				}
 				else{//Moved Up
-					if Int(stimulus.order) >= destinationIndexPath.row{
+					if Int(stimulus.order) >= destinationIndexPath.row && Int(stimulus.order) <= sourceIndexPath.row {
 						stimulus.order += 1
 					}
 				}
 			}
-			
 		}
-		CoreDataHelper.shared.saveContext()
 		stimuliTableView.reloadData()
 	}
 	//MARK: - DELEGATE STUFF

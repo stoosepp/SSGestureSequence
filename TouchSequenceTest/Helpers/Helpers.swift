@@ -45,22 +45,7 @@ open class Helpers:NSObject{
         return today_string
     }
 	
-	func formatDate(forDate:Date, format:String) -> String{
-		let dateFormatterEurope = DateFormatter()
-		dateFormatterEurope.dateFormat = "dd/MM/yyyy h:mm:a"
 
-		let dateFormatterNorthAmerica = DateFormatter()
-		dateFormatterNorthAmerica.dateFormat = "MM/dd/yyyy h:mm:a"
-
-		var dateString = String()
-		if format == "EU"{
-			dateString = dateFormatterEurope.string(from: forDate)
-		}
-		else if format == "NA"{
-			dateString = dateFormatterNorthAmerica.string(from: forDate)
-		}
-		return dateString
-	}
 	
 	//MARK: Core Graphics
 	func distance(a: CGPoint, b: CGPoint) -> CGFloat {

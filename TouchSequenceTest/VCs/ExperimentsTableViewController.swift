@@ -179,7 +179,7 @@ class ExperimentsTableViewController: UITableViewController {
 		let cell = sender.superview?.superview?.superview as! ExperimentTableViewCell
 		let indexPath = tableView.indexPath(for: cell)
 		let thisExperiment = experiments?[indexPath!.row]
-		print("Tapped on \(thisExperiment!.title)")
+		print("Tapped on \(String(describing: thisExperiment!.title))")
 		self.performSegue(withIdentifier: "addExperimentSegue", sender:thisExperiment )
 		
 	}

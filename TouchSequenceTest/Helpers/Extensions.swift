@@ -240,6 +240,23 @@ extension Date {
 	func isBetween(_ date1: Date, and date2: Date) -> Bool {
 		return (min(date1, date2) ... max(date1, date2)) ~= self
 	}
+	
+	func formattedString(withFormat:String) -> String{
+		let dateFormatterEurope = DateFormatter()
+		dateFormatterEurope.dateFormat = "dd/MM/yyyy h:mm:a"
+
+		let dateFormatterNorthAmerica = DateFormatter()
+		dateFormatterNorthAmerica.dateFormat = "MM/dd/yyyy h:mm:a"
+
+		var dateString = String()
+		if withFormat == "EU"{
+			dateString = dateFormatterEurope.string(from: self)
+		}
+		else if withFormat == "NA"{
+			dateString = dateFormatterNorthAmerica.string(from: self)
+		}
+		return dateString
+	}
 }
 
 extension CGAffineTransform{
