@@ -15,7 +15,15 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 	@IBOutlet weak var stimuliTableView:UITableView!
 	@IBOutlet weak var expTitleTextField:UITextField!
 	@IBOutlet weak var expDescriptionTextField:UITextField!
-	@IBOutlet weak var showLinesSwitch:UISwitch!
+	@IBOutlet weak var orientationLabel:UILabel!
+	
+	//Options
+	@IBOutlet weak var showTimeElapsedSwitch:UISwitch!
+	@IBOutlet weak var showTouchesSwitch:UISwitch!
+	@IBOutlet weak var recordAudioSwitch:UISwitch!
+	@IBOutlet weak var countdownSegControl:UISegmentedControl!
+	
+	@IBOutlet weak var addStimulusStackView:UIStackView!
 	
 	var experiment:Experiment?//Can be set if we're editing an experiment
 	var experimentTitles:[String]?
@@ -33,7 +41,7 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 		stimuliTableView.delegate = self
 		stimuliTableView.dataSource = self
-		
+		stimuliTableView.separatorStyle = .none
 		expTitleTextField.delegate = self
 		expDescriptionTextField.delegate = self
 		expTitleTextField.becomeFirstResponder()
@@ -41,18 +49,37 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 		expDescriptionTextField.returnKeyType = .done
 		self.isModalInPresentation = true
 		
-		
 		//Editing an Experiment?
 		if experiment != nil{
-			print("Editing\(String(describing: experiment!.title))")
+			self.title = "Editing \(String(describing: experiment!.title))"
 			expTitleTextField.text = experiment!.title
 			expDescriptionTextField.text = experiment!.details
-			//Show Touches
-			//Record Audio
-			//Show Timer
-			//3s Countdown
-			fetchStimuliFor(experiment: experiment!)
+			orientationLabel.text = "Orientation: \(experiment!.orientation!)"
 			
+			showTouchesSwitch.isOn = experiment!.showTouches
+			showTimeElapsedSwitch.isOn = experiment!.showTime
+			recordAudioSwitch.isOn = experiment!.recordAudio
+			switch experiment!.countDown  {
+			case 0:
+				countdownSegControl.selectedSegmentIndex = 0
+			case 1:
+				countdownSegControl.selectedSegmentIndex = 1
+			case 2:
+				countdownSegControl.selectedSegmentIndex = 2
+			default:
+				experiment!.countDown = 0
+			}
+			let dataSetCount = experiment!.dataSets?.count
+			if dataSetCount != 0{
+				showTouchesSwitch.isEnabled = false
+				showTimeElapsedSwitch.isEnabled = false
+				recordAudioSwitch.isEnabled = false
+				countdownSegControl.isEnabled = false
+				stimuliTableView.isEditing = false
+				addStimulusStackView.isHidden = true
+			}
+			
+			fetchStimuliFor(experiment: experiment!)
 		}
 		else{
 			//Create new Experiment
@@ -78,14 +105,17 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 	func createTempExperiment(){
 		let newExperiment = Experiment(context: CoreDataHelper.shared.context)
 		experiment = newExperiment
-		
+		print("New Experiment Orientation: \(String(describing: experiment!.orientation))")
 	}
+	
 	func fetchStimuliFor(experiment:Experiment?){
 		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 		do {
 			var fetchRequest:NSFetchRequest<Stimulus>?
 			fetchRequest = Stimulus.fetchRequest()
+			
 			if experiment != nil{
+				print("Exp has \(String(describing: experiment!.stimuli?.count)) stimuli")
 				fetchRequest!.predicate = NSPredicate(format: "%K == %@",#keyPath(Stimulus.experiment), experiment!)
 			}
 			self.stimuli = try context.fetch(fetchRequest!)
@@ -129,12 +159,27 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 	func saveExperiment(existing:Bool){
 		experiment!.title = expTitleTextField.text
 		experiment!.details = expDescriptionTextField.text
-		experiment!.showTouches = showLinesSwitch.isOn
+		
+		let dataSetCount = experiment!.dataSets?.count
+		if dataSetCount == 0{
+			experiment!.showTouches = showTouchesSwitch.isOn
+			experiment!.showTime = showTimeElapsedSwitch.isOn
+			experiment!.recordAudio = recordAudioSwitch.isOn
+			switch countdownSegControl.selectedSegmentIndex {
+			case 0:
+				experiment!.countDown = 0
+			case 1:
+				experiment!.countDown = 1
+			case 2:
+				experiment!.countDown = 2
+			default:
+				experiment!.countDown = 0
+			}
+		}
 		CoreDataHelper.shared.saveContext()
 		if expListDelegate != nil{
 			expListDelegate!.updateExperimentList(withExperiment: experiment!, isEditingExp:existing)
 		}
-		CoreDataHelper.shared.saveContext()
 		self.dismiss(animated: true, completion: nil)
 	}
 	
@@ -160,15 +205,38 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 	//MARK: - NAVIGATION
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "addStimuliSegue"{
+		
 			let captureVC = segue.destination as! CaptureViewController
 			captureVC.experiment = experiment
-			captureVC.isEditing = true
+			captureVC.status = CaptureStatus.kAddingStimuli
 			captureVC.expDetailsDelegate = self
 		}
 		else if segue.identifier == "showBlankTimeSegue"{
 			let timerVC = segue.destination as! TimerSelectViewController
 			timerVC.delegate = self
 		}
+	}
+	override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+		var shouldPerform = false
+		if identifier == "addStimuliSegue"{
+			if (experiment!.orientation == "Landscape" && Helpers.shared.deviceOrientationIsLandscape() == true) || (experiment!.orientation == "Portrait" && Helpers.shared.deviceOrientationIsLandscape() == false) || experiment!.orientation == "Not Set"{
+				shouldPerform =  true
+			}
+			else{
+				var deviceOrientation:String = "Landscape"
+				if Helpers.shared.deviceOrientationIsLandscape() == false{
+					deviceOrientation = "Portrait"
+				}
+				let ac = UIAlertController(title: "Wrong Orientation", message: "This experiment has stimuli that is presented in the \( experiment!.orientation!) orientation, but your device is in \(deviceOrientation). Rotate your device then try again.", preferredStyle: .alert)
+				ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+				present(ac, animated: true)
+				shouldPerform = false
+			}
+		}
+		else if identifier == "showBlankTimeSegue"{
+			shouldPerform = true
+		}
+		return shouldPerform
 	}
 	
     // MARK: - TABLE VIEW STUFF
@@ -195,15 +263,25 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
         // Configure the cell...
 		let thisStimulus = stimuli[indexPath.row]
 		cell.stimulusType = Int(thisStimulus.type)
-		if thisStimulus.type == 0{
-			//cell.backgroundColor = .lightGray
-			cell.stimulusImageView.isHidden = true
-		}
-		else{
-			//cell.backgroundColor = .orange
+		cell.stimulusImageView.isHidden = true
+		
+		switch Int(thisStimulus.type) {
+		case StimulusType.kBlank:
+			cell.stimulusTextLabel.text = "BLANK SCREEN"
+		case StimulusType.kText:
+			cell.stimulusTextLabel.text = thisStimulus.text
+		case StimulusType.kImage:
+			cell.stimulusTextLabel.isHidden = true
+			cell.stimulusImageView.isHidden = false
 			if let stimulusImage = UIImage(data: thisStimulus.imageData!){
 				cell.stimulusImageView.image = stimulusImage
 			}
+		case StimulusType.kVideo:
+			print("Nothing")
+		case StimulusType.kWebView:
+			print("Nothing")
+		default:
+			print("Nothing")
 		}
 		
 		cell.durationLabel.text = "Duration: \(thisStimulus.duration)  |  Order: \(thisStimulus.order)"
@@ -212,6 +290,7 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
     }
     
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		//Calculate relative height based on full duration
 		let thisStimulus = stimuli[indexPath.row]
 		var rowHeight:CGFloat = 50
 		if thisStimulus.type != 0{
@@ -230,6 +309,10 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 			stimuli.remove(at: indexPath.row)
 			stimuliTableView.deleteRows(at: [indexPath], with: .fade)
 			CoreDataHelper.shared.delete(thisStimulus)
+			if stimuli.count == 0{
+				experiment!.orientation = "Not Set"
+				CoreDataHelper.shared.saveContext()
+			}
 		}
 		else if editingStyle == .insert{
 			//Nothing happens
@@ -237,11 +320,24 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 	}
 	
 	func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-		return true
+		let dataSetCount = experiment!.dataSets?.count
+		if dataSetCount == 0{
+			return true
+		}
+		else{
+			return false
+		}
+		
 	}
 	
 	func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-		return true
+		let dataSetCount = experiment!.dataSets?.count
+		if dataSetCount == 0{
+			return true
+		}
+		else{
+			return false
+		}
 	}
 	
 	func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -269,16 +365,17 @@ class ExpDetailsTableViewController: UIViewController, UITableViewDelegate, UITa
 	}
 	//MARK: - DELEGATE STUFF
 	func updateStimuliTable(){
+		orientationLabel.text = "Orientation: \(experiment!.orientation!)"
 		fetchStimuliFor(experiment: experiment!)
 	}
 	
+	//Add Blank Stimulus
 	func updateDuration(withMins: Int, seconds: Int) {
 		print("Duration updated to \(withMins) mins: \(seconds) secs")
 		//Add Stimuli but with Duration
 		let totalDuration = (withMins * 60) + seconds
 		CoreDataHelper.shared.addBlankStimulus(toExperiment: experiment!, withDuration: Float(totalDuration))
 		fetchStimuliFor(experiment: experiment!)
-		
 	}
 	
 	public func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {

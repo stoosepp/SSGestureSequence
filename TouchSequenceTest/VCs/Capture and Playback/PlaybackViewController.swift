@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 	
 	//Views
-	@IBOutlet weak var chosenImageView: MovableImageView!
 	@IBOutlet weak var playbackView: MultiTouchPlayerView!
+	
+	var instructionTextView:UITextView?
+	var imageView:UIImageView?
 	
 	//Buttons
 	@IBOutlet weak var toggleButton: UIButton!
@@ -23,8 +26,11 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 	
 	//DataSet
 	var dataSet:DataSet?
+	var experiment:Experiment?
+	var stimuli:[Stimulus]?
 	var savedTouches = [[Touch?]?]()
 	var currentOrientation:String?
+	var currentIndex = 0
 
 	//MARK: - VIEW LIFECYCLE
 	override func viewWillAppear(_ animated: Bool) {
@@ -32,8 +38,8 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 	}
     override func viewDidLoad() {
         super.viewDidLoad()
+		
 		//print("ImageViewFrame:\(chosenImageView.frame)")
-		print("Dataset:\(String(describing: dataSet))")
 		playbackView.dataSet = dataSet!
 		playbackView.playerDelegate = self
 		
@@ -41,39 +47,130 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		if dataSet?.screenShots?.count != 0{
 			photosButton.isHidden = false
 		}
+		experiment = dataSet?.experiment
 		
-		if let theExperiment = dataSet?.experiment!{
-			if theExperiment.stimuli!.count != 0{
-				setupStimuli(experiment: theExperiment)
+		if experiment!.stimuli!.count != 0{
+			print("There are now \(self.view.subviews.count) subviews")
+			stimuli = fetchStimuli()
+			print("there are \(stimuli!.count) stimuli")
+			for index in 0..<stimuli!.count{
+				setupStimuli(atIndex: index)
 			}
-			if theExperiment.dataSets!.count != 0 || theExperiment.stimuli!.count != 0{
-				//UIView.setAnimationsEnabled(false)
-				if theExperiment.isLandscape == true{
-					print("Setting to Landscape")
-					//if !currentOrientation!.contains("Landscape"){
-						//UIDevice.current.setValue(UIInterfaceOrientation.landscapeLeft.rawValue, forKey: "orientation")
-					//}
-					
-					//AppUtility.lockOrientation(.landscape)
-				}
-				else if theExperiment.isLandscape == false{
-					print("Setting to Portrait")
-					if currentOrientation!.contains("Landscape"){
-						UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
-					}
-					
-					//AppUtility.lockOrientation(.portrait)
-					
-				}
-				//UIView.setAnimationsEnabled(true)
-			}
-			
-			
+			print("There are now \(self.view.subviews.count) subviews")
 		}
 		playbackView.setupPlayerView()
 		
     }
+	
+	override var prefersStatusBarHidden: Bool {
+		return true
+	}
 	//MARK: - SETUP STIMULI
+	
+	func fetchStimuli() -> [Stimulus]{
+		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+		var tempArray = [Stimulus]()
+		do {
+			var fetchRequest:NSFetchRequest<Stimulus>?
+			fetchRequest = Stimulus.fetchRequest()
+			if experiment != nil{
+				fetchRequest!.predicate = NSPredicate(format: "%K == %@",#keyPath(Stimulus.experiment), experiment!)
+			}
+			tempArray = try context.fetch(fetchRequest!)
+			tempArray.sort {
+				$0.order < $1.order
+			}
+		}
+		catch{
+			print("There was an error")
+		}
+		return tempArray
+	}
+	
+	func setupStimuli(atIndex:Int){
+		let thisStimulus = stimuli![atIndex]
+		let thisType = Int(thisStimulus.type)
+		if thisType == StimulusType.kText{
+			setupInstructionView(withText: thisStimulus.text)
+		}
+		else if thisType == StimulusType.kImage{
+			setupImageView(forStimulus:thisStimulus)
+		}
+			//ELSE VIDEO
+			//ELSE WEB VIEW
+	}
+	func setupInstructionView(withText:String?){
+		let textView = UITextView()
+		textView.translatesAutoresizingMaskIntoConstraints = false
+		textView.textColor = UIColor.label
+		textView.font = UIFont(name: "HelveticaNeue-Bold", size: 25)
+		if withText != nil{
+			textView.text = withText
+		}
+		self.view.addSubview(textView)
+		self.view.sendSubviewToBack(textView)
+		
+		//Constraints
+		let margins = self.view.layoutMarginsGuide
+		textView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+		textView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+		textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 50).isActive = true
+		textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -50).isActive = true
+		textView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+		textView.isScrollEnabled = false
+		textView.textAlignment = .center
+		textView.isUserInteractionEnabled = false
+		textView.isHidden = true
+		
+	}
+	func setupImageView(forStimulus:Stimulus){
+//		if imageView != nil{
+//			imageView!.removeFromSuperview()
+//			imageView!.image = nil
+//		}
+		let image = UIImage(data: forStimulus.imageData!)
+		let newImageView = UIImageView()
+		newImageView.image = image
+		newImageView.frame = self.view.frame
+		newImageView.contentMode = UIImageView.ContentMode.scaleAspectFit
+		newImageView.removeAllConstraints()
+		self.view.addSubview(newImageView)
+		self.view.sendSubviewToBack(newImageView)
+		
+		newImageView.center = CGPoint(x: CGFloat(forStimulus.xCenter), y: CGFloat(forStimulus.yCenter))
+		var transform = CGAffineTransform.identity
+		transform = transform.rotated(by:CGFloat(forStimulus.rotation))
+		transform = transform.scaledBy(x:CGFloat(forStimulus.scale),y:CGFloat(forStimulus.scale))
+		newImageView.transform = transform
+		newImageView.isHidden = true
+	
+	}
+	
+	func showStimuli(atIndex:Int){
+		let thisType = Int(stimuli![atIndex].type)
+		print("Showing Stimulus with type \(thisType)")
+		for view in self.view.subviews{
+			
+			if view.isKind(of: UIStackView.self) == false{//} || view.isKind(of: MultiTouchPlayerView.self) == false{
+				view.isHidden = true
+			}
+			if view.isKind(of: MultiTouchPlayerView.self) == true{
+				view.isHidden = false
+			}
+			if thisType == StimulusType.kText && view.isKind(of: UITextView.self) == true{
+				view.isHidden = false
+				print("Currently showing Text Instructions")
+			}
+			else if thisType == StimulusType.kImage && view.isKind(of: UIImageView.self) == true{
+				view.isHidden = false
+				print("Currently showing an Image")
+
+			}
+	
+		}
+	
+	}
+	/*
 	func setupStimuli(experiment: Experiment) {
 		//These two lines are key, otherwise the image doesn't show up correctly
 		chosenImageView.frame = self.view.frame
@@ -93,7 +190,7 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		print("Transform: \(chosenImageView.transform)")
 		print("Scale:\(stimulus.scale) Rotation:\(stimulus.rotation) Center:\(stimulus.xCenter),\(stimulus.yCenter)")
 	}
-
+*/
 	
 	//MARK: - PLAYING AND PAUSING
 	@IBAction func playPauseButtonPushed(_ sender:UIButton){
@@ -119,10 +216,10 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		//setTime Elapsed
 		let totalTimeInterval = Float(playbackView.endTime)
 		playbackView.timeElapsed = TimeInterval(totalTimeInterval*sender.value)
-		playbackView.timeIntervalLabel!.text = String(format: "Timer: %.2f", playbackView.timeElapsed)
+		playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
 		playbackView.isScrubbing = true
 		playbackView.prepareLinesToDraw()
-		
+		updateViews(isPlaying: false)
 	}
 	
 	//MARK: - DELEGATE STUFF
@@ -131,6 +228,33 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		if isPlaying == false{
 			playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
 		}
+		//Show Appropriate Stimulus for duration
+		let thisIndex = getStimuliIndexFrom(duration: playbackView.timeElapsed)
+		if thisIndex != currentIndex{
+			currentIndex = thisIndex
+			showStimuli(atIndex: currentIndex)
+		}
+		
+	}
+	func getStimuliIndexFrom(duration:TimeInterval) -> Int{
+		var finalIndex = 0
+		var thisDuration:Float = 0
+		var nextDuration:Float = 0
+		for index in 0..<stimuli!.count{
+			if index == 0{
+				thisDuration = 0
+				nextDuration = stimuli![index].duration
+			}
+			else{
+				thisDuration = nextDuration
+				nextDuration = stimuli![index].duration + thisDuration
+			}
+			if duration.isBetween(time1: Double(thisDuration), time2: Double(nextDuration)) == true{
+				finalIndex = index
+				break
+			}
+		}
+		return finalIndex
 	}
 	
 	func updateSlider(valueAsPercentage: Float) {
@@ -139,7 +263,9 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		slider.value = currentValue
 	}
 	func updateImageAlpha(withAlpha:CGFloat){
-		chosenImageView.alpha = withAlpha
+		if imageView != nil{
+			imageView!.alpha = withAlpha
+		}
 	}
 	
    
@@ -158,7 +284,7 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		if segue.identifier == "showPlaybackSettingsSegue"{
 			let settingsVC = segue.destination as! PlaybackSettingsViewController
 			settingsVC.delegate = playbackView
-			settingsVC.currentImageAlpha = Float(chosenImageView.alpha)
+			settingsVC.currentImageAlpha = Float(imageView!.alpha)
 		}
 		else if segue.identifier == "showScreenshotsSegue"{
 			let imageCollectionVC = segue.destination as! ImageCollectionViewController
@@ -185,7 +311,7 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		//let dateString = Helpers().getTodayString()
 		let image = self.view.takeScreenshot()
 		let screenShot = CoreDataHelper.shared.createScreenShot(image)
-		CoreDataHelper.shared.addScreenShot(screenShot: screenShot, dataSet: dataSet!)
+		dataSet!.addToScreenShots(screenShot)
 		let alert = UIAlertController(title: "Screenshot Taken", message: "View Screenshots in Gallery", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 		self.present(alert, animated: true, completion: nil)

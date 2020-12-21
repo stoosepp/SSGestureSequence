@@ -8,11 +8,19 @@
 
 import UIKit
 
+protocol MultiTouchCaptureViewDelegate {
+	func completeDataCollection()
+}
+
 class MultiTouchCaptureView: TouchCoreView {
 	
 	//Multitouch
 	var fingers = [UITouch?](repeating: nil, count:6)
-	var hideStrokes = true
+	var experimentDuration:Double = 0.0
+	
+	@IBOutlet var timeIntervalLabel:UILabel?
+	
+	var captureDelegate:CaptureViewController?
 	
 	//MARK: Drawing Code
 	required init?(coder: NSCoder) {
@@ -24,7 +32,7 @@ class MultiTouchCaptureView: TouchCoreView {
 		//check to see if the view should hide lines
 		//let experiment = dataSet?.experiment
 		
-		
+	
 		toPoint = CGPoint.zero
 		fromPoint = CGPoint.zero
 		//currentRect = CGRect.zero
@@ -36,10 +44,24 @@ class MultiTouchCaptureView: TouchCoreView {
 			let newTouchArray = [Touch]()
 			savedTouches.append(newTouchArray)
 		}
-		
-		
-		
 		setNeedsDisplay()
+	}
+	func startTimer(){
+		let newTimer = Timer.scheduledTimer(timeInterval: TimeInterval(frameRate), target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+		RunLoop.current.add(newTimer, forMode: .common)
+		timer.tolerance = 0.1
+		self.timer = newTimer
+		
+	}
+	
+	@objc func updateTimer(){
+		//Show time elapsed in timer
+		timeElapsed += TimeInterval(frameRate)
+		timeIntervalLabel!.text = timeElapsed.stringFromTimeInterval(withFrameRate: frameRate)
+		if timeElapsed > experimentDuration{
+			timer.invalidate()
+			captureDelegate!.completeDataCollection()
+		}
 	}
 	
 
@@ -56,7 +78,7 @@ class MultiTouchCaptureView: TouchCoreView {
 				if finger == nil {
 					fingers[index] = touch
 					let pencilBool = getPencil(inTouch: touch)
-					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWithFinger(dataSet:dataSet!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWith(dataSet:dataSet!, stimulus:currentStimulus!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					savedTouches[index]!.append(convertedTouch)
 					dataSet!.addToTouches(convertedTouch)
 					CoreDataHelper.shared.saveContext()
@@ -67,9 +89,8 @@ class MultiTouchCaptureView: TouchCoreView {
 				}
 			}
 		}
-		if hideStrokes == false{
-			processTouches(indexes: indexes)
-		}
+		processTouches(indexes: indexes)
+		
 	}
 
 	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -82,7 +103,7 @@ class MultiTouchCaptureView: TouchCoreView {
 					self.fingers[index] = touch
 					//Deal with Touches
 					let pencilBool = getPencil(inTouch: touch)
-					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWithFinger(dataSet:dataSet!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWith(dataSet:dataSet!, stimulus:currentStimulus!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					dataSet!.addToTouches(convertedTouch)
 					CoreDataHelper.shared.saveContext()
 					savedTouches[index]!.append(convertedTouch)
@@ -93,9 +114,7 @@ class MultiTouchCaptureView: TouchCoreView {
 				}
 			}
 		}
-		if hideStrokes == false{
-			processTouches(indexes: indexes)
-		}
+		processTouches(indexes: indexes)
 	}
 
 	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -108,7 +127,7 @@ class MultiTouchCaptureView: TouchCoreView {
 					//self.fingers[index] = touch
 					//Deal with Touches
 					let pencilBool = getPencil(inTouch: touch)
-					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWithFinger(dataSet:dataSet!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
+					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWith(dataSet:dataSet!, stimulus:currentStimulus!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					dataSet!.addToTouches(convertedTouch)
 					CoreDataHelper.shared.saveContext()
 					savedTouches[index]!.append(convertedTouch)
@@ -119,9 +138,7 @@ class MultiTouchCaptureView: TouchCoreView {
 				}
 			}
 		}
-		if hideStrokes == false{
-			processTouches(indexes: indexes)
-		}
+		processTouches(indexes: indexes)
 		
 	}
 

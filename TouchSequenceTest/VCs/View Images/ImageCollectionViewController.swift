@@ -34,7 +34,7 @@ class ImageCollectionViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
 		fetchScreenShots(forDataSet: dataSet, showingAll: false)
 		let startDate = dataSet?.startDate?.formattedString(withFormat: "EU")
-		self.title = "DataSet: \(startDate)"
+		self.title = "DataSet: \(String(describing: startDate))"
 		
     }
 	
@@ -52,17 +52,18 @@ class ImageCollectionViewController: UICollectionViewController {
 			}
 			else{
 				var tempArray = [ScreenShot]()
-				if let allDataSets = forDataSet?.experiment?.dataSets{
-					//allDataSets.forEach { (singleSet) in
-					for singleSet in allDataSets{
-						let thisDataSet = singleSet as! DataSet
-						fetchRequest!.predicate = NSPredicate(format: "%K == %@",#keyPath(ScreenShot.dataSet), thisDataSet)
-						let thisSetsScreens = try context.fetch(fetchRequest!)
-						tempArray.append(contentsOf: thisSetsScreens)
-					}
-					screenShotArray = tempArray
+				let thisExperiment  = forDataSet?.experiment
+				let allDataSets = thisExperiment!.dataSets?.allObjects as! [DataSet]
+				//allDataSets.forEach { (singleSet) in
+				for singleSet in allDataSets{
+					let thisDataSet = singleSet
+					fetchRequest!.predicate = NSPredicate(format: "%K == %@",#keyPath(ScreenShot.dataSet), thisDataSet)
+					let thisSetsScreens = try context.fetch(fetchRequest!)
+					tempArray.append(contentsOf: thisSetsScreens)
 				}
-			}
+				screenShotArray = tempArray
+				}
+			
 		}
 		catch{
 			
@@ -79,7 +80,7 @@ class ImageCollectionViewController: UICollectionViewController {
 			fetchScreenShots(forDataSet:dataSet, showingAll: false)
 			sender.title = "All Screenshots"
 			let startDate = dataSet?.startDate?.formattedString(withFormat: "NA")
-			self.title = "DataSet: \(startDate)"
+			self.title = "DataSet: \(String(describing: startDate))"
 		}
 		
 		self.collectionView.reloadData()
@@ -135,16 +136,7 @@ class ImageCollectionViewController: UICollectionViewController {
 //		//print("Cell dataSet is \(String(describing: imageData))")
 		cell!.cellImage.image = UIImage(data: screenAtIndex.imageData!)
 		return cell!
-	
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! ImageCollectionViewCell
-//
-//        // Configure the cell
-//        cell.backgroundColor = .clear
-////		let file = screenShotURLs[indexPath.row]
-////		let imageDataSet = try? DataSet(contentsOf: file) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-////		cell.cellImage.image = UIImage(dataSet: imageDataSet!)!
-//		cell.imageURL = screenShotURLs[indexPath.row]
-//        return cell
+
 		
 	}
 	

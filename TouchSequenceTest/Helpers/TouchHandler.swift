@@ -21,7 +21,7 @@ public class TouchHandler{
 		let location = touch.location(in: inView)
 		newTouch.xLocation = Float(location.x)
 		newTouch.yLocation = Float(location.y)
-		newTouch.touchType = Int64(Int(touch.phase.rawValue))
+		newTouch.touchPhase = Int64(Int(touch.phase.rawValue))
 		
 		return newTouch
 	}

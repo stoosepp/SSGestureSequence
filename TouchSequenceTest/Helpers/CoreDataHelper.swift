@@ -18,7 +18,13 @@ public class CoreDataHelper{
 	//Saving and Deleting
 	func saveContext(){
 		do {
-			try self.context.save()
+			if context.hasChanges == true{
+				try self.context.save()
+				print("COREDATA: Saved")
+			}
+			else{
+				print("COREDATA: No changes, but save called")
+			}
 		} catch  {
 			print(error)
 		}
@@ -26,17 +32,10 @@ public class CoreDataHelper{
 	
 	func delete(_ object:NSManagedObject){
 		self.context.delete(object)
-		saveContext()
+		self.saveContext()
 	}
 	
-	//Deal with startup NOT PRO USER
-	func startupBasic(){
-		let experiment = createExperiment()
-		let dataSet = createDataSet()
-		experiment.addToDataSets(dataSet)
-		saveContext()
-		print("Startup Basic Completed")
-	}
+
 	
 	//MARK: - FETCH{
 	
@@ -71,10 +70,11 @@ public class CoreDataHelper{
 		let stimulusCount = toExperiment.stimuli?.count
 		stimulus.order = Int16(stimulusCount!)
 		toExperiment.addToStimuli(stimulus)
+		stimulus.experiment = toExperiment
 		saveContext()
 	}
 	
-	func createStimulus(rotation:Float, scale:CGFloat, xCenter:CGFloat, yCenter:CGFloat, image:UIImage?, url:URL?) -> Stimulus{
+	/*func createStimulus(rotation:Float, scale:CGFloat, xCenter:CGFloat, yCenter:CGFloat, image:UIImage?, url:URL?) -> Stimulus{
 		let stimulus = Stimulus(context: context)
 		stimulus.rotation = rotation
 		stimulus.scale = Float(scale)
@@ -89,9 +89,9 @@ public class CoreDataHelper{
 		}
 		saveContext()
 		return stimulus
-	}
+	}*/
 	
-	func createTouchfromUITouchWithFinger(dataSet:DataSet, touch:UITouch, finger:Int64, isPencil:Bool, inView:UIView) -> Touch{
+	func createTouchfromUITouchWith(dataSet:DataSet, stimulus:Stimulus, touch:UITouch, finger:Int64, isPencil:Bool, inView:UIView) -> Touch{
 		let newTouch = Touch(context: context)
 		newTouch.timeInterval = Date().timeIntervalSince(dataSet.startDate!)
 		newTouch.finger = finger
@@ -99,27 +99,11 @@ public class CoreDataHelper{
 		let location = touch.location(in: inView)
 		newTouch.xLocation = Float(location.x)
 		newTouch.yLocation = Float(location.y)
-		newTouch.touchType = Int64(Int(touch.phase.rawValue))
-		
+		newTouch.touchPhase = Int64(Int(touch.phase.rawValue))
+		newTouch.dataSet = dataSet
+		newTouch.stimulus = stimulus
 		return newTouch
 	}
 	
 	
-	
-	
-	//MARK: - ADD CHILDREN
-	func addStimulus(stimulus:Stimulus, experiment:Experiment){
-		experiment.addToStimuli(stimulus)
-		saveContext()
-	}
-	
-	func addScreenShot(screenShot:ScreenShot, dataSet:DataSet){
-		dataSet.addToScreenShots(screenShot)
-		saveContext()
-	}
-	
-
-
-	
-
 }

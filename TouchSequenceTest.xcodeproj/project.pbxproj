@@ -31,6 +31,7 @@
 		DDA216D1251921C9008F794B /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA216D0251921C9008F794B /* CoreDataHelper.swift */; };
 		DDACB8C6251BE97700E0C33C /* ImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */; };
 		DDB5E196255CDB4A006A3CEB /* DataSetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */; };
+		DDBA22BA258AAECF00C52149 /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */; };
 		DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDBD4159251982FC00F1103B /* TouchCaptureModel.xcdatamodeld */; };
 		DDD87303252A6886003E4645 /* PlaybackSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD87302252A6886003E4645 /* PlaybackSettingsViewController.swift */; };
 		DDD87306252BAD99003E4645 /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD87305252BAD99003E4645 /* PlaybackViewController.swift */; };
@@ -69,6 +70,7 @@
 		DDA216D0251921C9008F794B /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerViewController.swift; sourceTree = "<group>"; };
 		DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSetsCollectionViewController.swift; sourceTree = "<group>"; };
+		DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		DDBD415A251982FC00F1103B /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
 		DDD87302252A6886003E4645 /* PlaybackSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackSettingsViewController.swift; sourceTree = "<group>"; };
 		DDD87305252BAD99003E4645 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		DD343A4425153FDD0031BD88 /* VCs */ = {
 			isa = PBXGroup;
 			children = (
+				DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */,
 				DD05D8CD25362CF6002DECFA /* Details TVC */,
 				DDACB8C8251BE9AC00E0C33C /* View Images */,
 				DDE22F86252D030800C635C9 /* Capture and Playback */,
@@ -290,6 +293,7 @@
 				DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */,
 				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
 				DDD87303252A6886003E4645 /* PlaybackSettingsViewController.swift in Sources */,
+				DDBA22BA258AAECF00C52149 /* CustomSplitViewController.swift in Sources */,
 				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
 				DD05D8E32537792F002DECFA /* TimePicker.swift in Sources */,
 				DD5A26CB2555A99600EA227C /* DataSetCollectionViewCell.swift in Sources */,

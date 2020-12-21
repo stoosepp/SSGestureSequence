@@ -12,11 +12,11 @@ class TouchCoreView: UIView {
 	
 	//Models
 	var dataSet:DataSet?
-	
-	
+	var currentStimulus:Stimulus?
+
 	//Drawing Params
 	var strokeWidth: CGFloat = 5.0
-	var fingerLineColor: UIColor = .black
+	var fingerLineColor = UIColor(named: "fingerLineColour")!
 	var pencilLineColor: UIColor = .blue
 	var showStartEnd = false
 	var showLineVelocity = false
@@ -31,11 +31,18 @@ class TouchCoreView: UIView {
 	var mediumDistance = 0.0
 	var fastDistance = 0.0
 	
+	//Timer Stuff
+	var timer = Timer()
+	var timeElapsed:TimeInterval = 0
+	var startTime:TimeInterval = 0
+	var endTime:TimeInterval = 0
+	var frameRate:CGFloat = 0.05
+	
 	//Arrays and Models
 	var savedTouches = [[Touch?]?]()
 	var fromPoint:CGPoint?
 	var toPoint:CGPoint?
-	var pointsToDraw = [(fromPoint:CGPoint,toPoint:CGPoint,isPencil:Bool,touchType:Int,number:Int)]()
+	var pointsToDraw = [(fromPoint:CGPoint,toPoint:CGPoint,isPencil:Bool,touchPhase:Int,number:Int)]()
 
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
@@ -72,13 +79,15 @@ class TouchCoreView: UIView {
 		if showStartEnd == true{
 			pointsToDraw.forEach { (pointSet2) in
 				//Deal with Start / End stuff
-				if pointSet2.touchType == UITouch.Phase.began.rawValue{
+				if pointSet2.touchPhase == UITouch.Phase.began.rawValue{
 					let green = UIColor.init(red: 167/255, green: 197/255, blue: 116/255, alpha: 1.0)
 					addNumberToLine(touchNumber: pointSet2.number, atLocation: pointSet2.fromPoint, circleColor:green, textColor: .white)
 				}
-				else if pointSet2.touchType == UITouch.Phase.ended.rawValue{
+				else if pointSet2.touchPhase == UITouch.Phase.ended.rawValue{
 					let red = UIColor.init(red: 190/255, green: 75/255, blue: 85/255, alpha: 1.0)
 					addNumberToLine(touchNumber: pointSet2.number, atLocation: pointSet2.toPoint,circleColor:red, textColor: .white)
+
+		
 				}
 			}
 		}
@@ -88,7 +97,6 @@ class TouchCoreView: UIView {
 	func addNumberToLine(touchNumber:Int, atLocation:CGPoint, circleColor:UIColor, textColor:UIColor){
 		
 		let ovalPath = UIBezierPath(ovalIn: CGRect(x: atLocation.x-10, y: atLocation.y-10, width: 20, height: 20))
-		
 		circleColor.setFill()
 		ovalPath.fill()
 		
@@ -164,7 +172,7 @@ class TouchCoreView: UIView {
 			let thisTouch = thisFingersTouches![index.touch]!
 			
 			var previousTouch:Touch?
-			if thisTouch.touchType == UITouch.Phase.began.rawValue{
+			if thisTouch.touchPhase == UITouch.Phase.began.rawValue{
 				previousTouch = thisTouch
 				fingerLineCounts[index.finger] += 1
 			}
@@ -179,7 +187,7 @@ class TouchCoreView: UIView {
 			pointsforBoxes.append(toPoint!)
 	
 			
-			pointsToDraw.append((fromPoint: fromPoint!, toPoint: toPoint!, isPencil: thisTouch.isPencil, touchType: Int(thisTouch.touchType), number: fingerLineCounts[index.finger]))
+			pointsToDraw.append((fromPoint: fromPoint!, toPoint: toPoint!, isPencil: thisTouch.isPencil, touchPhase: Int(thisTouch.touchPhase), number: fingerLineCounts[index.finger]))
 			
 		}
 		let rect = getRect(fromPoints: pointsforBoxes)

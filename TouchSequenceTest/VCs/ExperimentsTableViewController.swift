@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol ExperimentListDelegate {
-	func setupExperiment(theExperiment:Experiment)
+protocol ExperimentListDelegate{
+	func updateDataSetListWith(thisExperiment:Experiment?)
 }
 
 class ExperimentsTableViewController: UITableViewController {
@@ -22,6 +22,8 @@ class ExperimentsTableViewController: UITableViewController {
 	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 	
 	var captureDelegate:CaptureViewController?
+	
+	var dataSetsDelegate:DataSetsCollectionViewController?
 
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -38,9 +40,12 @@ class ExperimentsTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 		
 		//Set HeaderView
-		
+		dataSetsDelegate = (splitViewController?.viewControllers.last?.children.first as! DataSetsCollectionViewController)
 		
     }
+	func updateExperimentList() {
+		fetchExperiments()
+	}
 	
 	func fetchExperiments(){
 		do {
@@ -48,6 +53,7 @@ class ExperimentsTableViewController: UITableViewController {
 			experiments?.forEach({ (experiment) in
 				experimentTitles.append(experiment.title!)
 			})
+			print("Found \(experiments!.count) experiments")
 			DispatchQueue.main.async {
 				self.tableView.reloadData()
 				//Select First Row when loaded
@@ -60,11 +66,16 @@ class ExperimentsTableViewController: UITableViewController {
 	}
 	
 	func tryToSelectFirst(){
-		if self.experiments?.count != 0{
+		if experiments?.count != 0{
 			let firstIndex = IndexPath(row: 0, section: 0)
 			self.tableView.selectRow(at: firstIndex, animated: true, scrollPosition: UITableView.ScrollPosition.top)
+			//Delegate
+			dataSetsDelegate?.updateDataSetListWith(thisExperiment: experiments![0])
 		}
-		self.performSegue(withIdentifier: "showExpDataSetSegue", sender: self)
+		else{
+			dataSetsDelegate?.updateDataSetListWith(thisExperiment: nil)
+		}
+		
 	}
 
 	// MARK: - Table view dataSet source
@@ -76,7 +87,6 @@ class ExperimentsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-		
 		if experiments!.count == 0 {
 			tableView.setEmptyView(image:"note.text", title: "You don't have any Experiments yet.", message: "Your experiments will be in here.")
 		}
@@ -90,30 +100,14 @@ class ExperimentsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "experimentCell", for: indexPath) as! ExperimentTableViewCell
 		let thisExperiment = experiments![indexPath.row]
-		//print("Title:\(String(describing: thisExperiment.title))")
         // Configure the cell...
 		cell.titleLabel.text = thisExperiment.title
-		var totalDuration:Float = 0.0
-		thisExperiment.stimuli!.forEach { (stimulus) in
-			let thisStimulus = stimulus as! Stimulus
-			totalDuration += thisStimulus.duration
-		}
-		var durationString = ""
-		if totalDuration > 60{
-			let minutes = Int(totalDuration/60)
-			let seconds = Int(totalDuration) - (minutes * 60)
-			durationString = ")\(minutes):\(seconds)"
-		}
-		else{
-			durationString = "0:\(Int(totalDuration))"
-		}
 		
-		var orientationString = "Landscape"
-		if thisExperiment.isLandscape == false{
-			orientationString = "Portrait"
+		var dataSetCount  = 0
+		for _ in thisExperiment.stimuli?.allObjects as! [Stimulus]{
+			dataSetCount += thisExperiment.dataSets!.count
 		}
-	
-		cell.detailsLabel.text = "DataSets: \(thisExperiment.dataSets!.count) | Orientation: \(orientationString)\nDuration:\(durationString)"
+		cell.detailsLabel.text = "DataSets: \(dataSetCount) | Orientation: \(thisExperiment.orientation!)\nDuration:\(thisExperiment.durationString)"
 		
 		if let expImage = thisExperiment.imageData{
 			cell.expImageView!.image = UIImage(data: expImage)
@@ -144,7 +138,11 @@ class ExperimentsTableViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let thisExperiment = experiments![indexPath.row]
+		dataSetsDelegate?.expListDelegate = self
+		dataSetsDelegate?.updateDataSetListWith(thisExperiment: thisExperiment)
+	}
 	
 	//MARK: - DELEGATE METHODS
   
@@ -189,15 +187,7 @@ class ExperimentsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-		if segue.identifier == "showExpDataSetSegue"{
-			let dataSetVC = segue.destination as! DataSetsCollectionViewController
-			dataSetVC.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
-			let indexPath = tableView.indexPathForSelectedRow
-			if indexPath != nil{
-				dataSetVC.experiment = experiments![indexPath!.row]
-			}
-		}
-		else if segue.identifier == "addExperimentSegue"{
+		if segue.identifier == "addExperimentSegue"{
 			let newExpVC = segue.destination as! ExpDetailsTableViewController
 			newExpVC.experimentTitles = experimentTitles
 			newExpVC.expListDelegate = self

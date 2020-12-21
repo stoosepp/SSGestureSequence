@@ -41,13 +41,13 @@ class TimePicker: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
 		let marginX = CGFloat(42)
 		let width = offsetX - marginX
 
-		let hourLabel = UILabel(frame: CGRect(x: marginX, y: offsetY, width: width, height: height))
-		hourLabel.text = "min"
-		self.addSubview(hourLabel)
+		let minLabel = UILabel(frame: CGRect(x: marginX, y: offsetY, width: width, height: height))
+		minLabel.text = "min"
+		self.addSubview(minLabel)
 
-		let minsLabel = UILabel(frame: CGRect(x: marginX + offsetX, y: offsetY, width: width, height: height))
-		minsLabel.text = "sec"
-		self.addSubview(minsLabel)
+		let secLabel = UILabel(frame: CGRect(x: marginX + offsetX, y: offsetY, width: width, height: height))
+		secLabel.text = "sec"
+		self.addSubview(secLabel)
 	}
 
 	func getDate() -> Date{

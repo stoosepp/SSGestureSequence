@@ -227,9 +227,10 @@ extension UIView {
 	
 	func removeBlankView() {
 		//remove subviews
-		if self.subviews.contains(viewWithTag(99)!){
-			viewWithTag(99)?.removeFromSuperview()
+		if let foundView = self.viewWithTag(99) {
+			foundView.removeFromSuperview()
 		}
+		
 	}
 	
 	
@@ -258,6 +259,33 @@ extension Date {
 		return dateString
 	}
 }
+
+extension TimeInterval{
+
+	func stringFromTimeInterval(withFrameRate:CGFloat) -> String {
+
+		var tempString = ""
+	
+		let time = NSInteger(self)
+
+		let ms = Int((self.truncatingRemainder(dividingBy: Double(withFrameRate))) * 1000)
+		let seconds = time % 60
+		let minutes = (time / 60) % 60
+			//let hours = (time / 3600)
+		if withFrameRate >= 1.0{
+			tempString = String(format: "%0.2d:%0.2d",minutes,seconds)
+		}
+		else{
+			tempString = String(format: "%0.2d:%0.2d.%0.2d",minutes,seconds,ms)
+		}
+		return tempString
+	}
+	
+	func isBetween(time1:Double, time2:Double) -> Bool{
+		return time1...time2 ~= self
+	}
+}
+
 
 extension CGAffineTransform{
 	var scale: CGFloat{
@@ -289,3 +317,28 @@ extension UIView {
 	}
 }
 
+extension Experiment{
+	var durationString:String{
+		var tempString = ""
+		//MARK: - CALCULATED PROPERTIES
+		let totalDuration:Double = self.totalDuration
+		if totalDuration > 60{
+			let minutes = Int(totalDuration/60)
+			let seconds = Int(totalDuration) - (minutes * 60)
+			tempString = ")\(minutes):\(seconds)"
+		}
+		else{
+			tempString = "0:\(Int(totalDuration))"
+		}
+		return tempString
+	}
+	
+	var totalDuration:Double{
+		var tempDuration:Double = 0.0
+		self.stimuli!.forEach { (stimulus) in
+			let thisStimulus = stimulus as! Stimulus
+			tempDuration += Double(thisStimulus.duration)
+		}
+		return tempDuration
+	}
+}

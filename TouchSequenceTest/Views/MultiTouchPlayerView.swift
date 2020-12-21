@@ -19,11 +19,7 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 	
 	//Timer STuff
 	var hasLinesOfType:(fingers:Bool, pencil:Bool) = (fingers:false, pencil:false)
-	var timer = Timer()
-	var timeElapsed:TimeInterval = 0
-	var startTime:TimeInterval = 0
-	var endTime:TimeInterval = 0
-	var frameRate:CGFloat = 0.05
+	
 	@IBOutlet var timeIntervalLabel:UILabel?
 	
 	var playerDelegate:PlaybackViewController?
@@ -85,9 +81,10 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		
 		print("Showing All. Here we go...")
 		//Get all datasets and draw them.
-		var touchArray = [[[Touch]]]()
-		var tempEndDate = 0.0
-		if let allDataSets = self.dataSet?.experiment?.dataSets{
+		//FIXME: All touches in provess
+		let touchArray = [[[Touch]]]()
+		/*var tempEndDate = 0.0
+		if let allDataSets = self.dataSet?.experiment?.stimuli.dataSets{
 			allDataSets.forEach({ (singleDataSet) in
 				let thisDataSet = singleDataSet as! DataSet
 				let thisArray = parseDataSet(dataSet: thisDataSet)
@@ -99,7 +96,7 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 			})
 		}
 		endTime = tempEndDate
-		print("End time:\(endTime)")
+		print("End time:\(endTime)")*/
 		return touchArray
 	}
 	
@@ -144,17 +141,7 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		processTouches(indexes: indexes)
 	}
 	
-	func fireEvent(){
-		let currentTime = startTime + timeElapsed
-		if currentTime < endTime{
-			prepareLinesToDraw()
-		}
-		else{
-			timer.invalidate()
-			playerDelegate!.updateViews(isPlaying:false)
-			//timeElapsed = 0
-		}
-	}
+	
 	
 	//MARK: DELEGATE STUFF
 	func updatePencilColor(color: UIColor) {
@@ -219,18 +206,30 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 	//MARK: TIMER
 	@objc func updateTimer(){
 		//Show time elapsed in timer
-		timeElapsed += 0.05
+		timeElapsed += TimeInterval(frameRate)
 		timeIntervalLabel!.text = String(format: "Timer: %.2f", timeElapsed)
 		
 		//Show in playback scrubber
 		
-		let totalTimeInterval = dataSet?.endDate!.timeIntervalSince((dataSet?.startDate!)!)
+		let totalTimeInterval = dataSet?.experiment?.totalDuration//dataSet?.endDate!.timeIntervalSince((dataSet?.startDate!)!)
 		let sliderPercentage = timeElapsed/totalTimeInterval!
 		playerDelegate?.updateSlider(valueAsPercentage: Float(sliderPercentage))
 		
 		//Do the thing to draw the line
 		fireEvent()
-		
+	}
+	
+	func fireEvent(){
+		let currentTime = startTime + timeElapsed
+		if currentTime < endTime{
+			prepareLinesToDraw()
+			playerDelegate!.updateViews(isPlaying:true)
+		}
+		else{
+			timer.invalidate()
+			playerDelegate!.updateViews(isPlaying:false)
+			//timeElapsed = 0
+		}
 	}
 	
 	func tapButton(isPlaying:Bool){
@@ -258,8 +257,7 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 			}
 	
 			//deal with when the scrubbers at the end
-			
-			let newTimer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+			let newTimer = Timer.scheduledTimer(timeInterval: TimeInterval(frameRate), target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
 			RunLoop.current.add(newTimer, forMode: .common)
 			timer.tolerance = 0.1
 			self.timer = newTimer

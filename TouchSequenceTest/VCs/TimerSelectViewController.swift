@@ -75,7 +75,7 @@ class TimerSelectViewController: UIViewController {
 				case 0:
 					rows = 2
 				case 1:
-					rows = 11
+					rows = 59
 				default:
 					rows = 0
 				}
@@ -94,7 +94,13 @@ class TimerSelectViewController: UIViewController {
 			case 0:
 				string =  "\(row) min"
 			case 1:
-				string =  "\(row * 5) sec"
+				if delegate is ExpDetailsTableViewController{
+					string =  "\(row) sec"
+				}
+				else{
+					string =  "\(row * 5) sec"
+				}
+				
 			default:
 				string =  ""
 			}
@@ -106,7 +112,13 @@ class TimerSelectViewController: UIViewController {
 			 case 0:
 				 minutes = row
 			 case 1:
-				 seconds = row * 5
+				if delegate is ExpDetailsTableViewController{
+					seconds = row
+				}
+				else{
+					seconds = row * 5
+				}
+				 
 			 default:
 				 break;
 			 }
