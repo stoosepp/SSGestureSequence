@@ -47,7 +47,7 @@ class StimulusTableViewCell: UITableViewCell {
 		case StimulusType.kBlank:
 			bgLayer.backgroundColor = UIColor.lightGray.cgColor
 		case StimulusType.kText:
-			bgLayer.backgroundColor = UIColor.white.cgColor
+			bgLayer.backgroundColor = UIColor.lightGray.cgColor
 		case StimulusType.kImage:
 			bgLayer.backgroundColor = UIColor.orange.cgColor
 		case StimulusType.kVideo:

@@ -12,10 +12,9 @@ class TouchCoreView: UIView {
 	
 	//Models
 	var dataSet:DataSet?
-	var currentStimulus:Stimulus?
 
 	//Drawing Params
-	var strokeWidth: CGFloat = 5.0
+	var strokeWidth: CGFloat = 2.0//5.0
 	var fingerLineColor = UIColor(named: "fingerLineColour")!
 	var pencilLineColor: UIColor = .blue
 	var showStartEnd = false
@@ -31,18 +30,23 @@ class TouchCoreView: UIView {
 	var mediumDistance = 0.0
 	var fastDistance = 0.0
 	
+	//UIBezierPathStuff
+	var oldControlPoint:CGPoint?
+	
 	//Timer Stuff
 	var timer = Timer()
 	var timeElapsed:TimeInterval = 0
 	var startTime:TimeInterval = 0
 	var endTime:TimeInterval = 0
 	var frameRate:CGFloat = 0.05
+	var currentStimulusStartTime:TimeInterval = 0
 	
 	//Arrays and Models
 	var savedTouches = [[Touch?]?]()
 	var fromPoint:CGPoint?
 	var toPoint:CGPoint?
 	var pointsToDraw = [(fromPoint:CGPoint,toPoint:CGPoint,isPencil:Bool,touchPhase:Int,number:Int)]()
+	
 
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
@@ -50,10 +54,31 @@ class TouchCoreView: UIView {
 		contentMode = UIView.ContentMode.redraw
 	}
 	override func draw(_ rect: CGRect) {
-		guard let context = UIGraphicsGetCurrentContext() else {
-			return
-		}
+//		guard let context = UIGraphicsGetCurrentContext() else {
+//			return
+//		}
 		//Draw Lines
+		for i in 0 ..< pointsToDraw.count{
+			
+			let path = quadCurvedPath(atIndex: i)
+			//Deal with Finger Stuff
+			
+			if pointsToDraw[i].isPencil == false{//If it's a finger
+				fingerLineColor.setStroke()
+				if showLineVelocity == true{
+					let distance = Helpers.shared.distance(a: pointsToDraw[i].fromPoint, b: pointsToDraw[i].toPoint)
+					let colorForDistance = getColorToDraw(withDistance: Double(distance))
+					colorForDistance.setStroke()
+				}
+			}
+			else{//if it's a pencil
+				pencilLineColor.setStroke()
+			}
+			path.lineWidth = strokeWidth
+			path.stroke()
+			
+			
+		}/*
 		pointsToDraw.forEach { (pointSet) in
 			context.move(to: pointSet.fromPoint)
 			context.addLine(to: pointSet.toPoint)
@@ -76,6 +101,7 @@ class TouchCoreView: UIView {
 			context.setLineCap(.round)
 			context.strokePath()
 		}
+*/
 		if showStartEnd == true{
 			pointsToDraw.forEach { (pointSet2) in
 				//Deal with Start / End stuff
@@ -87,7 +113,6 @@ class TouchCoreView: UIView {
 					let red = UIColor.init(red: 190/255, green: 75/255, blue: 85/255, alpha: 1.0)
 					addNumberToLine(touchNumber: pointSet2.number, atLocation: pointSet2.toPoint,circleColor:red, textColor: .white)
 
-		
 				}
 			}
 		}
@@ -180,8 +205,10 @@ class TouchCoreView: UIView {
 				previousTouch = thisFingersTouches![index.touch-1]
 			}
 	
-			fromPoint = TouchHandler.shared.location(fromTouch: thisTouch)
-			toPoint = TouchHandler.shared.location(fromTouch: previousTouch!)
+			toPoint = TouchHandler.shared.location(fromTouch: thisTouch)
+			fromPoint = TouchHandler.shared.location(fromTouch: previousTouch!)
+//			fromPoint = TouchHandler.shared.location(fromTouch: thisTouch)
+//			toPoint = TouchHandler.shared.location(fromTouch: previousTouch!)
 			
 			pointsforBoxes.append(fromPoint!)
 			pointsforBoxes.append(toPoint!)
@@ -192,9 +219,8 @@ class TouchCoreView: UIView {
 		}
 		let rect = getRect(fromPoints: pointsforBoxes)
 		if showStartEnd == true && rect.width < 20{
-			print("Inreasing size of rect for start end")
-			//rect.size = CGSize(width: 20, height: 20)
 			self.setNeedsDisplay()
+
 		}
 		else{
 			self.setNeedsDisplay(rect)
@@ -213,5 +239,133 @@ class TouchCoreView: UIView {
 		return finalRect
 		
 	}
+	
+	//MARK: - TESTING BEZIER PATH
+	
 
+	func quadCurvedPath(atIndex:Int) -> UIBezierPath {
+		var thisPoint = pointsToDraw[atIndex]
+		let path = UIBezierPath()
+		if atIndex > 0{
+			thisPoint = pointsToDraw[atIndex - 1]
+		}
+		let p1 = CGPoint(x: thisPoint.fromPoint.x, y: thisPoint.fromPoint.y)
+		let p2 = CGPoint(x: thisPoint.toPoint.x, y: thisPoint.toPoint.y)
+		path.move(to: p1)
+		//drawPoint(point: p1, color: UIColor.red, radius: 3)//Draws the circle at specific points
+		
+		//let upperP2 = CGPoint(x: p2.x, y:p2.y-5)
+		//drawPoint(point: p2, color: .orange, radius: 2)
+		if (pointsToDraw.count == 2) {
+			print("Only 2 Points")
+			path.addLine(to: p2)
+			return path
+		}
+
+		var p3: CGPoint?
+		if atIndex < (pointsToDraw.count) {
+			let nextPoint = pointsToDraw[atIndex]
+			p3 = CGPoint(x: nextPoint.toPoint.x, y: nextPoint.toPoint.y)
+			let upperP3 = CGPoint(x: p3!.x, y:p3!.y+5)
+			//drawPoint(point: upperP3, color: .green, radius: 2)
+		}
+		//print("P3 is \(p3)")
+		//let newControlP = controlPointForPoints(p1: p1, p2: p2, next: p3)
+		//let newControlP = p2.controlPointToPoint(p1)
+		//drawPoint(point: newControlP ?? p2, color: .gray, radius: 2)
+		//drawPoint(point: oldControlPoint ?? p1, color: .white, radius: 2)
+		//path.addCurve(to: p2, controlPoint1: oldControlPoint ?? p1, controlPoint2: newControlP/* ?? p2*/)
+		//path.addQuadCurve(to: p2, controlPoint: oldControlPoint ?? p1)
+		path.addLine(to: p2)
+		//p1 = p2
+		//oldControlPoint = antipodalFor(point: newControlP, center: p2)
+		return path;
+	}
+
+		/// located on the opposite side from the center point
+		func antipodalFor(point: CGPoint?, center: CGPoint?) -> CGPoint? {
+			guard let p1 = point, let center = center else {
+				return nil
+			}
+			let newX = 2 * center.x - p1.x
+			let diffY = abs(p1.y - center.y)
+			let newY = center.y + diffY * (p1.y < center.y ? 1 : -1)
+
+			return CGPoint(x: newX, y: newY)
+		}
+
+		/// halfway of two points
+		func midPointForPoints(p1: CGPoint, p2: CGPoint) -> CGPoint {
+			return CGPoint(x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2);
+		}
+
+		/// Find controlPoint2 for addCurve
+		/// - Parameters:
+		///   - p1: first point of curve
+		///   - p2: second point of curve whose control point we are looking for
+		///   - next: predicted next point which will use antipodal control point for finded
+		func controlPointForPoints(p1: CGPoint, p2: CGPoint, next p3: CGPoint?) -> CGPoint? {
+			guard let p3 = p3 else {
+				return nil
+			}
+
+			let leftMidPoint  = midPointForPoints(p1: p1, p2: p2)
+			let rightMidPoint = midPointForPoints(p1: p2, p2: p3)
+
+			var controlPoint = midPointForPoints(p1: leftMidPoint, p2: antipodalFor(point: rightMidPoint, center: p2)!)
+
+			if p1.y.between(a: p2.y, b: controlPoint.y) {
+				controlPoint.y = p1.y
+			} else if p2.y.between(a: p1.y, b: controlPoint.y) {
+				controlPoint.y = p2.y
+			}
+
+
+			let imaginContol = antipodalFor(point: controlPoint, center: p2)!
+			if p2.y.between(a: p3.y, b: imaginContol.y) {
+				controlPoint.y = p2.y
+			}
+			if p3.y.between(a: p2.y, b: imaginContol.y) {
+				let diffY = abs(p2.y - p3.y)
+				controlPoint.y = p2.y + diffY * (p3.y < p2.y ? 1 : -1)
+			}
+
+			// make lines easier
+			controlPoint.x += (p2.x - p1.x) * 0.1
+
+			return controlPoint
+		}
+
+		func drawPoint(point: CGPoint, color: UIColor, radius: CGFloat) {
+			let ovalPath = UIBezierPath(ovalIn: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
+			color.setFill()
+			ovalPath.fill()
+		}
+
+}
+private extension CGPoint {
+	
+	/// Get the mid point of the receiver with another passed point.
+	///
+	/// - Parameter p2: other point.
+	/// - Returns: mid point.
+	func midPointForPointsTo(_ p2: CGPoint) -> CGPoint {
+		CGPoint(x: (x + p2.x) / 2, y: (y + p2.y) / 2)
+	}
+	
+	/// Control point to another point from receiver.
+	///
+	/// - Parameter p2: other point.
+	/// - Returns: control point for quad curve.
+	func controlPointToPoint(_ p2:CGPoint) -> CGPoint {
+		var controlPoint = midPointForPointsTo(p2)
+		let  diffY = abs(p2.y - controlPoint.y)
+		if y < p2.y {
+			controlPoint.y = controlPoint.y + diffY
+		} else if y > p2.y {
+			controlPoint.y = controlPoint.y - diffY
+		}
+		return controlPoint
+	}
+	
 }

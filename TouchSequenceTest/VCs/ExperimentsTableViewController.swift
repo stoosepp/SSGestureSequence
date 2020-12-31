@@ -14,8 +14,6 @@ protocol ExperimentListDelegate{
 
 class ExperimentsTableViewController: UITableViewController {
 	
-	
-	
 	//CoreDataSet
 	var experimentTitles = [String]()
 	var experiments:[Experiment]?
@@ -38,9 +36,22 @@ class ExperimentsTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+		let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+
+		// 2. check the idiom
+		switch (deviceIdiom) {
+
+		case .pad:
+			print("iPad style UI")
+			dataSetsDelegate = (splitViewController?.viewControllers.last?.children.first as! DataSetsCollectionViewController)
+		case .phone:
+			print("iPhone and iPod touch style UI")
+		case .tv:
+			print("tvOS style UI")
+		default:
+			print("Unspecified UI idiom")
+		}
 		
-		//Set HeaderView
-		dataSetsDelegate = (splitViewController?.viewControllers.last?.children.first as! DataSetsCollectionViewController)
 		
     }
 	func updateExperimentList() {
@@ -103,10 +114,8 @@ class ExperimentsTableViewController: UITableViewController {
         // Configure the cell...
 		cell.titleLabel.text = thisExperiment.title
 		
-		var dataSetCount  = 0
-		for _ in thisExperiment.stimuli?.allObjects as! [Stimulus]{
-			dataSetCount += thisExperiment.dataSets!.count
-		}
+		let dataSetCount  = thisExperiment.dataSets!.count
+		
 		cell.detailsLabel.text = "DataSets: \(dataSetCount) | Orientation: \(thisExperiment.orientation!)\nDuration:\(thisExperiment.durationString)"
 		
 		if let expImage = thisExperiment.imageData{

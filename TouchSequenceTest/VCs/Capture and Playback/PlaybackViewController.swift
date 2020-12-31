@@ -8,14 +8,12 @@
 
 import UIKit
 import CoreData
+import JGProgressHUD
 
-class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
+class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDelegate  {
 	
 	//Views
 	@IBOutlet weak var playbackView: MultiTouchPlayerView!
-	
-	var instructionTextView:UITextView?
-	var imageView:UIImageView?
 	
 	//Buttons
 	@IBOutlet weak var toggleButton: UIButton!
@@ -24,21 +22,20 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 	@IBOutlet weak var playButton: UIButton!
 	@IBOutlet weak var slider: UISlider!
 	
-	//DataSet
-	var dataSet:DataSet?
-	var experiment:Experiment?
-	var stimuli:[Stimulus]?
 	var savedTouches = [[Touch?]?]()
-	var currentOrientation:String?
-	var currentIndex = 0
+	var touchesForAllDataSets = [Touch]()
+	var currentAlpha:CGFloat = 1.0
+	
+	//Stackviews
+	@IBOutlet weak var playbackStackView: UIStackView!
 
 	//MARK: - VIEW LIFECYCLE
 	override func viewWillAppear(_ animated: Bool) {
 		self.navigationController?.navigationBar.isHidden = true
 	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-		
 		//print("ImageViewFrame:\(chosenImageView.frame)")
 		playbackView.dataSet = dataSet!
 		playbackView.playerDelegate = self
@@ -48,18 +45,25 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 			photosButton.isHidden = false
 		}
 		experiment = dataSet?.experiment
-		
 		if experiment!.stimuli!.count != 0{
+			stimuliArray = fetchStimuli()
 			print("There are now \(self.view.subviews.count) subviews")
-			stimuli = fetchStimuli()
-			print("there are \(stimuli!.count) stimuli")
-			for index in 0..<stimuli!.count{
+			for index in 0..<stimuliArray!.count{
 				setupStimuli(atIndex: index)
 			}
 			print("There are now \(self.view.subviews.count) subviews")
 		}
 		playbackView.setupPlayerView()
+		updateViews(isPlaying: false)
 		
+		//parse all touches on load
+		let dataSets = experiment!.dataSets?.allObjects as! [DataSet]
+		for thisDataSet in dataSets{
+			DispatchQueue.global(qos: .background).async {
+				let thisTouchArray = thisDataSet.touches?.allObjects as! [Touch]
+				self.touchesForAllDataSets.append(contentsOf: thisTouchArray)
+			}
+		}
     }
 	
 	override var prefersStatusBarHidden: Bool {
@@ -67,130 +71,8 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 	}
 	//MARK: - SETUP STIMULI
 	
-	func fetchStimuli() -> [Stimulus]{
-		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-		var tempArray = [Stimulus]()
-		do {
-			var fetchRequest:NSFetchRequest<Stimulus>?
-			fetchRequest = Stimulus.fetchRequest()
-			if experiment != nil{
-				fetchRequest!.predicate = NSPredicate(format: "%K == %@",#keyPath(Stimulus.experiment), experiment!)
-			}
-			tempArray = try context.fetch(fetchRequest!)
-			tempArray.sort {
-				$0.order < $1.order
-			}
-		}
-		catch{
-			print("There was an error")
-		}
-		return tempArray
-	}
 	
-	func setupStimuli(atIndex:Int){
-		let thisStimulus = stimuli![atIndex]
-		let thisType = Int(thisStimulus.type)
-		if thisType == StimulusType.kText{
-			setupInstructionView(withText: thisStimulus.text)
-		}
-		else if thisType == StimulusType.kImage{
-			setupImageView(forStimulus:thisStimulus)
-		}
-			//ELSE VIDEO
-			//ELSE WEB VIEW
-	}
-	func setupInstructionView(withText:String?){
-		let textView = UITextView()
-		textView.translatesAutoresizingMaskIntoConstraints = false
-		textView.textColor = UIColor.label
-		textView.font = UIFont(name: "HelveticaNeue-Bold", size: 25)
-		if withText != nil{
-			textView.text = withText
-		}
-		self.view.addSubview(textView)
-		self.view.sendSubviewToBack(textView)
-		
-		//Constraints
-		let margins = self.view.layoutMarginsGuide
-		textView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-		textView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-		textView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 50).isActive = true
-		textView.trailingAnchor.constraint(equalTo: margins.trailingAnchor, constant: -50).isActive = true
-		textView.heightAnchor.constraint(equalToConstant: 300).isActive = true
-		textView.isScrollEnabled = false
-		textView.textAlignment = .center
-		textView.isUserInteractionEnabled = false
-		textView.isHidden = true
-		
-	}
-	func setupImageView(forStimulus:Stimulus){
-//		if imageView != nil{
-//			imageView!.removeFromSuperview()
-//			imageView!.image = nil
-//		}
-		let image = UIImage(data: forStimulus.imageData!)
-		let newImageView = UIImageView()
-		newImageView.image = image
-		newImageView.frame = self.view.frame
-		newImageView.contentMode = UIImageView.ContentMode.scaleAspectFit
-		newImageView.removeAllConstraints()
-		self.view.addSubview(newImageView)
-		self.view.sendSubviewToBack(newImageView)
-		
-		newImageView.center = CGPoint(x: CGFloat(forStimulus.xCenter), y: CGFloat(forStimulus.yCenter))
-		var transform = CGAffineTransform.identity
-		transform = transform.rotated(by:CGFloat(forStimulus.rotation))
-		transform = transform.scaledBy(x:CGFloat(forStimulus.scale),y:CGFloat(forStimulus.scale))
-		newImageView.transform = transform
-		newImageView.isHidden = true
-	
-	}
-	
-	func showStimuli(atIndex:Int){
-		let thisType = Int(stimuli![atIndex].type)
-		print("Showing Stimulus with type \(thisType)")
-		for view in self.view.subviews{
-			
-			if view.isKind(of: UIStackView.self) == false{//} || view.isKind(of: MultiTouchPlayerView.self) == false{
-				view.isHidden = true
-			}
-			if view.isKind(of: MultiTouchPlayerView.self) == true{
-				view.isHidden = false
-			}
-			if thisType == StimulusType.kText && view.isKind(of: UITextView.self) == true{
-				view.isHidden = false
-				print("Currently showing Text Instructions")
-			}
-			else if thisType == StimulusType.kImage && view.isKind(of: UIImageView.self) == true{
-				view.isHidden = false
-				print("Currently showing an Image")
 
-			}
-	
-		}
-	
-	}
-	/*
-	func setupStimuli(experiment: Experiment) {
-		//These two lines are key, otherwise the image doesn't show up correctly
-		chosenImageView.frame = self.view.frame
-		chosenImageView.removeAllConstraints()
-		//Keep above two lines
-		//Get Image and Load it
-		let stimuliArray = experiment.stimuli?.allObjects
-		let stimulus = stimuliArray![0] as! Stimulus
-		chosenImageView.image = UIImage(data: stimulus.imageData!)
-		
-		var transform2 = CGAffineTransform.identity
-	
-		transform2 = transform2.rotated(by:CGFloat(stimulus.rotation))
-		transform2 = transform2.scaledBy(x:CGFloat(stimulus.scale),y:CGFloat(stimulus.scale))
-		self.chosenImageView.transform = transform2//transformation.concatenating(scale)
-		self.chosenImageView.center = CGPoint(x: CGFloat(stimulus.xCenter), y: CGFloat(stimulus.yCenter))
-		print("Transform: \(chosenImageView.transform)")
-		print("Scale:\(stimulus.scale) Rotation:\(stimulus.rotation) Center:\(stimulus.xCenter),\(stimulus.yCenter)")
-	}
-*/
 	
 	//MARK: - PLAYING AND PAUSING
 	@IBAction func playPauseButtonPushed(_ sender:UIButton){
@@ -204,6 +86,52 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 			playbackView.tapButton(isPlaying:false)
 		}
 	}
+	@IBAction func nextButtonPushed(_ sender:UIButton){
+		if currentIndex != stimuliArray!.count-1{
+			
+			currentIndex += 1
+			let newTime = getDurationFrom(stimulusIndex: currentIndex)
+			let percentage = Float(newTime/experiment!.totalDuration)
+			updateSlider(valueAsPercentage: Float(percentage))
+			showStimuli(atIndex: currentIndex)
+			playbackView.timeElapsed = newTime
+			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+			playbackView.pointsToDraw.removeAll()
+			playbackView.prepareLinesToDraw()
+		}
+		else if currentIndex == stimuliArray!.count-1{
+			updateSlider(valueAsPercentage: Float(100.00))
+			showStimuli(atIndex: currentIndex)
+			playbackView.timeElapsed = playbackView.endTime
+			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+			playbackView.pointsToDraw.removeAll()
+			playbackView.prepareLinesToDraw()
+		}
+		
+		
+	}
+	@IBAction func previousButtonPushed(_ sender:UIButton){
+		if currentIndex != 0{
+			let newTime = getDurationFrom(stimulusIndex: currentIndex)
+			let percentage = Float(newTime/experiment!.totalDuration)
+			updateSlider(valueAsPercentage: Float(percentage))
+			showStimuli(atIndex: currentIndex)
+			playbackView.timeElapsed = newTime
+			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+			playbackView.pointsToDraw.removeAll()
+			playbackView.prepareLinesToDraw()
+			currentIndex -= 1
+		}
+		else if currentIndex == 0{
+			updateSlider(valueAsPercentage: Float(0.0))
+			showStimuli(atIndex: currentIndex)
+			playbackView.timeElapsed = 0.0
+			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+			playbackView.pointsToDraw.removeAll()
+			playbackView.prepareLinesToDraw()
+		}
+	}
+	
 	
 	@IBAction func sliderDragged(_ sender: UISlider) {
 		//Stop the timer and set the button to play again
@@ -216,7 +144,7 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		//setTime Elapsed
 		let totalTimeInterval = Float(playbackView.endTime)
 		playbackView.timeElapsed = TimeInterval(totalTimeInterval*sender.value)
-		playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+		playbackView.timeIntervalLabel!.text = String(format: "Timer: %.2f", playbackView.timeElapsed)
 		playbackView.isScrubbing = true
 		playbackView.prepareLinesToDraw()
 		updateViews(isPlaying: false)
@@ -228,43 +156,31 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 		if isPlaying == false{
 			playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
 		}
+		else{
+			playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+		}
 		//Show Appropriate Stimulus for duration
 		let thisIndex = getStimuliIndexFrom(duration: playbackView.timeElapsed)
 		if thisIndex != currentIndex{
 			currentIndex = thisIndex
+			
+			let tempTime = getDurationFrom(stimulusIndex: currentIndex)
+			playbackView.currentStimulusStartTime = tempTime
 			showStimuli(atIndex: currentIndex)
 		}
 		
 	}
-	func getStimuliIndexFrom(duration:TimeInterval) -> Int{
-		var finalIndex = 0
-		var thisDuration:Float = 0
-		var nextDuration:Float = 0
-		for index in 0..<stimuli!.count{
-			if index == 0{
-				thisDuration = 0
-				nextDuration = stimuli![index].duration
-			}
-			else{
-				thisDuration = nextDuration
-				nextDuration = stimuli![index].duration + thisDuration
-			}
-			if duration.isBetween(time1: Double(thisDuration), time2: Double(nextDuration)) == true{
-				finalIndex = index
-				break
-			}
-		}
-		return finalIndex
-	}
+
 	
 	func updateSlider(valueAsPercentage: Float) {
 		let sliderMax = slider.maximumValue
 		let currentValue = valueAsPercentage * sliderMax
 		slider.value = currentValue
 	}
-	func updateImageAlpha(withAlpha:CGFloat){
-		if imageView != nil{
-			imageView!.alpha = withAlpha
+	
+	func updateViewsAlpha(withAlpha:CGFloat){
+		for view in stimuliSubViews{
+			view.alpha = withAlpha
 		}
 	}
 	
@@ -280,32 +196,63 @@ class PlaybackViewController: UIViewController, MultiTouchPlayerViewDelegate  {
 	}
 	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		super.prepare(for: segue, sender: sender)
         // Get the new view controller using segue.destination.
-		if segue.identifier == "showPlaybackSettingsSegue"{
+		if segue.identifier == "showSettingsSegue"{
 			let settingsVC = segue.destination as! PlaybackSettingsViewController
 			settingsVC.delegate = playbackView
-			settingsVC.currentImageAlpha = Float(imageView!.alpha)
+			settingsVC.currentAlpha = Float(currentAlpha)
+			if sender is Bool{
+				settingsVC.view.isHidden = (sender != nil)
+			}
 		}
 		else if segue.identifier == "showScreenshotsSegue"{
 			let imageCollectionVC = segue.destination as! ImageCollectionViewController
 			imageCollectionVC.dataSet = dataSet
 		}
-		
-		
+//		else if segue.identifier == "showAnalysisSegue"{
+//			let analysisVC = segue.destination as! AnalysisSettingsViewController
+//		}
     }
    
 	
 	//MARK: - TOGGLE STUFF
-	@IBAction func toggleGestures(_ sender: UIButton) {
-		if sender.image(for: .normal) == UIImage(systemName: "eye"){
-			sender.setImage((UIImage(systemName: "eye.slash")), for: .normal)
-			playbackView.alpha = 0
-		}
-		else{
-			sender.setImage((UIImage(systemName: "eye")), for: .normal)
-			playbackView.alpha = 1
+	
+	@IBAction func testHeatMap(_ sender:UIButton){
+		let hud = JGProgressHUD()
+		hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
+		hud.textLabel.text = "Building HeatMaps"
+		hud.textLabel.font = UIFont(name:"HelveticaNeue" , size: 45)
+		hud.show(in: self.view)
+		
+		playbackStackView.isHidden = true
+		playbackView.isHidden = true
+		
+		let start = Date()
+		
+		let gridSize:Int = 20
+		
+		let newHeatMapView = HeatMapView(frame: playbackView.frame, gradientCount: 5)
+	
+		
+		newHeatMapView.setupMap(forView: self.playbackView, withSize: gridSize, withGradientCount: 5, withTouches: touchesForAllDataSets) { (completion) in
+			//Completed map set up
+			if completion == true{
+				self.view.insertSubview(newHeatMapView, aboveSubview: self.playbackView)
+				hud.dismiss()
+				print("Completed Map Setup")
+//				let blurEffectView = CustomBlurEffectView(radius: CGFloat(Double(gridSize)/4), color: nil, colorAlpha: 1.0)
+//				blurEffectView.frame = newHeatMapView.frame
+//				newHeatMapView.addSubview(blurEffectView)
+//				newHeatMapView.alpha = 0.7
+				let end = Date()
+				let difference = end.timeIntervalSince(start)
+				let string = String(format: "HeatMap built in %.2f s", difference)
+				print(string)
+			}
 		}
 	}
+	
 	
 	@IBAction func takePhoto(_ sender: Any) {
 		//let dateString = Helpers().getTodayString()

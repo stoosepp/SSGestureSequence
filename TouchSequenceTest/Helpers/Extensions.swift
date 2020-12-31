@@ -263,7 +263,6 @@ extension Date {
 extension TimeInterval{
 
 	func stringFromTimeInterval(withFrameRate:CGFloat) -> String {
-
 		var tempString = ""
 	
 		let time = NSInteger(self)
@@ -276,10 +275,12 @@ extension TimeInterval{
 			tempString = String(format: "%0.2d:%0.2d",minutes,seconds)
 		}
 		else{
-			tempString = String(format: "%0.2d:%0.2d.%0.2d",minutes,seconds,ms)
+			tempString = String(format: "%0.2d:%0.2d.%0.3d",minutes,seconds,ms)
 		}
 		return tempString
 	}
+	
+	
 	
 	func isBetween(time1:Double, time2:Double) -> Bool{
 		return time1...time2 ~= self
@@ -317,10 +318,32 @@ extension UIView {
 	}
 }
 
+extension CGFloat {
+	func between(a: CGFloat, b: CGFloat) -> Bool {
+		return self >= Swift.min(a, b) && self <= Swift.max(a, b)
+	}
+}
+
+extension DispatchQueue {
+
+	static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
+		DispatchQueue.global(qos: .background).async {
+			background?()
+			if let completion = completion {
+				DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+					completion()
+				})
+			}
+		}
+	}
+
+}
+
+//MARK: - COREDATA EXTENSIONS
 extension Experiment{
 	var durationString:String{
 		var tempString = ""
-		//MARK: - CALCULATED PROPERTIES
+		
 		let totalDuration:Double = self.totalDuration
 		if totalDuration > 60{
 			let minutes = Int(totalDuration/60)
@@ -340,5 +363,103 @@ extension Experiment{
 			tempDuration += Double(thisStimulus.duration)
 		}
 		return tempDuration
+	}
+}
+
+extension DataSet{
+	var duration:Double{
+		return endDate!.timeIntervalSince(startDate!)
+	}
+	var durationString:String{
+		return TimeInterval(duration).stringFromTimeInterval(withFrameRate: 1.0)
+	}
+}
+
+@IBDesignable
+class CentreButton:UIButton {
+	@IBInspectable var centerText: Bool = false{
+	   didSet {
+		guard
+			let imageViewSize = self.imageView?.frame.size,
+			let titleLabelSize = self.titleLabel?.frame.size else {
+			return
+		}
+		
+		let totalHeight = imageViewSize.height + titleLabelSize.height + 3
+		
+		self.imageEdgeInsets = UIEdgeInsets(
+			top: -(totalHeight - imageViewSize.height),
+			left: 0.0,
+			bottom: 0.0,
+			right: -titleLabelSize.width
+		)
+		
+		self.titleEdgeInsets = UIEdgeInsets(
+			top: 0.0,
+			left: -imageViewSize.width,
+			bottom: -(totalHeight - titleLabelSize.height),
+			right: 0.0
+		)
+		
+		self.contentEdgeInsets = UIEdgeInsets(
+			top: 0.0,
+			left: 0.0,
+			bottom: titleLabelSize.height,
+			right: 0.0
+		)
+	   }
+	}
+	
+	
+	
+}
+
+extension UIColor {
+	func toColor(_ color: UIColor, percentage: CGFloat) -> UIColor {
+		let percentage = max(min(percentage, 100), 0) / 100
+		switch percentage {
+		case 0: return self
+		case 1: return color
+		default:
+			var (r1, g1, b1, a1): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
+			var (r2, g2, b2, a2): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
+			guard self.getRed(&r1, green: &g1, blue: &b1, alpha: &a1) else { return self }
+			guard color.getRed(&r2, green: &g2, blue: &b2, alpha: &a2) else { return self }
+
+			return UIColor(red: CGFloat(r1 + (r2 - r1) * percentage),
+						   green: CGFloat(g1 + (g2 - g1) * percentage),
+						   blue: CGFloat(b1 + (b2 - b1) * percentage),
+						   alpha: CGFloat(a1 + (a2 - a1) * percentage))
+		}
+	}
+}
+
+extension Array where Element: UIColor {
+	func intermediate(percentage: CGFloat) -> UIColor {
+		let percentage = Swift.max(Swift.min(percentage, 100), 0) / 100
+		switch percentage {
+		case 0: return first ?? .clear
+		case 1: return last ?? .clear
+		default:
+			let approxIndex = percentage / (1 / CGFloat(count - 1))
+			let firstIndex = Int(approxIndex.rounded(.down))
+			let secondIndex = Int(approxIndex.rounded(.up))
+			let fallbackIndex = Int(approxIndex.rounded())
+
+			let firstColor = self[firstIndex]
+			let secondColor = self[secondIndex]
+			let fallbackColor = self[fallbackIndex]
+
+			var (r1, g1, b1, a1): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
+			var (r2, g2, b2, a2): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
+			guard firstColor.getRed(&r1, green: &g1, blue: &b1, alpha: &a1) else { return fallbackColor }
+			guard secondColor.getRed(&r2, green: &g2, blue: &b2, alpha: &a2) else { return fallbackColor }
+
+			let intermediatePercentage = approxIndex - CGFloat(firstIndex)
+			return UIColor(red: CGFloat(r1 + (r2 - r1) * intermediatePercentage),
+						   green: CGFloat(g1 + (g2 - g1) * intermediatePercentage),
+						   blue: CGFloat(b1 + (b2 - b1) * intermediatePercentage),
+						   alpha: CGFloat(a1 + (a2 - a1) * intermediatePercentage))
+		}
 	}
 }

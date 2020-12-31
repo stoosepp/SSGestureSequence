@@ -15,7 +15,7 @@ protocol PlaybackSettingsDelegate{
 	func toggleLineSpeed(withValue:Bool)
 	func updateLinesDrawn(withValue:Int)
 	func updateLineWidth(withValue:CGFloat)
-	func updateImageAlpha(withValue:CGFloat)
+	func updateViewsAlpha(withValue:CGFloat)
 	func toggleShowAll(withValue:Bool)
 }
 
@@ -29,45 +29,61 @@ class PlaybackSettingsViewController: UIViewController, UIColorPickerViewControl
 	//Color Buttons
 	@IBOutlet var fingerButton:RoundedButton!
 	@IBOutlet var pencilButton:RoundedButton!
+	
+	//Segmented Control
 	@IBOutlet var linesToDrawSegmentedControl:UISegmentedControl!
-	@IBOutlet var speedSwitch:UISwitch!
-	@IBOutlet var showAllSwitch:UISwitch!
+	
+	//Switches
+	@IBOutlet var showHideSwitch:UISwitch!
+	@IBOutlet var isolatedLinesSwitch:UISwitch!
 	@IBOutlet var startEndSwitch:UISwitch!
+	@IBOutlet var speedSwitch:UISwitch!
+	
+	//Change Line Width
 	@IBOutlet var lineWidthLabel:UILabel!
 	@IBOutlet var lineWidthStepper:UIStepper!
+	
+	//Change opacity of Stimuli
 	@IBOutlet var alphaSlider:UISlider!
 	
-	var currentImageAlpha:Float = 1.0
+	var currentAlpha:Float = 1.0
 	var delegate:MultiTouchPlayerView?
 	var colorUpdating:String?
 	
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		//FIXME: DYNAMIC CONTENT SIZE BASED ON WHAT IS VISIBLE
 		self.preferredContentSize.height = 600
 		
 		fingerButton.backgroundColor = delegate?.fingerLineColor
 		pencilButton.backgroundColor = delegate?.pencilLineColor
 		startEndSwitch.isOn = delegate!.showStartEnd
-		showAllSwitch.isOn = delegate!.isShowingAll
+		showHideSwitch.isOn = delegate!.linesVisible
+		isolatedLinesSwitch.isOn = delegate!.isolatedLines
 		
-		alphaSlider.value = currentImageAlpha
+		alphaSlider.value = currentAlpha
 		linesToDrawSegmentedControl.selectedSegmentIndex = delegate!.linesShown
-		lineWidthLabel.text = "Line Width: \(String(describing: delegate?.strokeWidth))"
+		lineWidthLabel.text = "Line Width: \(String(describing: delegate!.strokeWidth))"
 		lineWidthStepper.value = Double(delegate!.strokeWidth)
 		
 		fingerButton.strokeColor = UIColor.white.cgColor
 		pencilButton.strokeColor = UIColor.white.cgColor
 		
+		//print(self.preferredContentSize)
 		
+		var dynamicHeight:CGFloat = 0
+		for view in self.view.subviews{
+			dynamicHeight += view.frame.size.height
+		}
+		self.preferredContentSize.height = dynamicHeight
     }
 	
+	@IBAction func toggleLineVisibility(_ sender: UISwitch) {
+		delegate?.toggleLineVisbility(withValue: sender.isOn)
+	}
 
-	@IBAction func toggleLinesDisplayed(_ sender: UISegmentedControl) {
-		print("Drawing: \(sender.selectedSegmentIndex)")
-		delegate!.updateLinesDrawn(withValue:sender.selectedSegmentIndex)
-		//delegate!.setNeedsDisplay()
+	@IBAction func toggleLinesForStimuli(_ sender: UISwitch) {
+		delegate?.toggleIsloatedLines(withValue: sender.isOn)
 	}
 	
 	@IBAction func toggleLineSpeed(_ sender: UISwitch) {
@@ -83,14 +99,21 @@ class PlaybackSettingsViewController: UIViewController, UIColorPickerViewControl
 		delegate?.toggleStartEnd(withValue: sender.isOn)
 	}
 	
+	@IBAction func toggleLinesDisplayed(_ sender: UISegmentedControl) {
+		print("Drawing: \(sender.selectedSegmentIndex)")
+		delegate!.updateLinesDrawn(withValue:sender.selectedSegmentIndex)
+		//delegate!.setNeedsDisplay()
+	}
+	
 	@IBAction func updateLineWidth(_ sender: UIStepper) {
 		delegate?.updateLineWidth(withValue: CGFloat(sender.value))
 		lineWidthLabel.text = "Line Width: \(sender.value)"
 	}
 	
-	@IBAction func updateImageAlpha(_ sender: UISlider) {
-		delegate?.updateImageAlpha(withValue: CGFloat(sender.value))
+	@IBAction func updateViewsAlpha(_ sender: UISlider) {
+		delegate?.updateViewsAlpha(withValue: CGFloat(sender.value))
 	}
+	
 	//MARK: Color Picker Stuff
 	@IBAction func colorPressed(_ sender:UIButton){
 		if sender.tag == 1{
@@ -107,7 +130,7 @@ class PlaybackSettingsViewController: UIViewController, UIColorPickerViewControl
 	func pickColor(forColor:String, withSender:UIButton){
 		colorUpdating = forColor
 		let picker = UIColorPickerViewController()
-		picker.modalPresentationStyle = .currentContext
+		picker.modalPresentationStyle = .formSheet
 		picker.delegate = self
 		picker.selectedColor = withSender.backgroundColor!
 		present(picker, animated: true, completion: nil)

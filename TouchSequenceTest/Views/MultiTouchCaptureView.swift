@@ -10,6 +10,7 @@ import UIKit
 
 protocol MultiTouchCaptureViewDelegate {
 	func completeDataCollection()
+	func updateViews()
 }
 
 class MultiTouchCaptureView: TouchCoreView {
@@ -21,7 +22,7 @@ class MultiTouchCaptureView: TouchCoreView {
 	@IBOutlet var timeIntervalLabel:UILabel?
 	
 	var captureDelegate:CaptureViewController?
-	
+	var currentStimulus:Stimulus?
 	//MARK: Drawing Code
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
@@ -58,6 +59,7 @@ class MultiTouchCaptureView: TouchCoreView {
 		//Show time elapsed in timer
 		timeElapsed += TimeInterval(frameRate)
 		timeIntervalLabel!.text = timeElapsed.stringFromTimeInterval(withFrameRate: frameRate)
+		captureDelegate!.updateViews()
 		if timeElapsed > experimentDuration{
 			timer.invalidate()
 			captureDelegate!.completeDataCollection()

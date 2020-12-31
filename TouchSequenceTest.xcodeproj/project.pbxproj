@@ -11,6 +11,9 @@
 		DD05D8E32537792F002DECFA /* TimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD05D8E22537792F002DECFA /* TimePicker.swift */; };
 		DD0C0BC2255615E500D5E2AF /* StimulusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0C0BC1255615E400D5E2AF /* StimulusTableViewCell.swift */; };
 		DD13475B253CB8DE00208C60 /* ExperimentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD134759253CB8DE00208C60 /* ExperimentTableViewCell.swift */; };
+		DD22F35F2591072000012CE4 /* TouchCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD22F35E2591072000012CE4 /* TouchCoreViewController.swift */; };
+		DD3970F225950D33003F9D3B /* CustomBlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3970F125950D33003F9D3B /* CustomBlurEffectView.swift */; };
+		DD3970F625950DF9003F9D3B /* CustomBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3970F525950DF8003F9D3B /* CustomBlurEffect.swift */; };
 		DD3C7AA92569C5D200E6EF5C /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = DD3C7AA82569C5D200E6EF5C /* JGProgressHUD */; };
 		DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */; };
 		DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */; };
@@ -31,6 +34,12 @@
 		DDA216D1251921C9008F794B /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA216D0251921C9008F794B /* CoreDataHelper.swift */; };
 		DDACB8C6251BE97700E0C33C /* ImageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */; };
 		DDB5E196255CDB4A006A3CEB /* DataSetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */; };
+		DDB888E22592A61C0014EDDC /* AnalysisSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB888E12592A61C0014EDDC /* AnalysisSettingsViewController.swift */; };
+		DDB889022592B5BE0014EDDC /* HeatMapColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889012592B5BE0014EDDC /* HeatMapColour.swift */; };
+		DDB889082593A8370014EDDC /* TouchHeatmapExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889052593A8370014EDDC /* TouchHeatmapExtensions.swift */; };
+		DDB889092593A8370014EDDC /* TouchHeatmapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889062593A8370014EDDC /* TouchHeatmapRenderer.swift */; };
+		DDB8890A2593A8370014EDDC /* TouchHeatmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889072593A8370014EDDC /* TouchHeatmap.swift */; };
+		DDB8890D2593A8580014EDDC /* HeatMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB8890C2593A8580014EDDC /* HeatMapView.swift */; };
 		DDBA22BA258AAECF00C52149 /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */; };
 		DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDBD4159251982FC00F1103B /* TouchCaptureModel.xcdatamodeld */; };
 		DDD87303252A6886003E4645 /* PlaybackSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD87302252A6886003E4645 /* PlaybackSettingsViewController.swift */; };
@@ -49,6 +58,9 @@
 		DD05D8E22537792F002DECFA /* TimePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePicker.swift; sourceTree = "<group>"; };
 		DD0C0BC1255615E400D5E2AF /* StimulusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StimulusTableViewCell.swift; sourceTree = "<group>"; };
 		DD134759253CB8DE00208C60 /* ExperimentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentTableViewCell.swift; sourceTree = "<group>"; };
+		DD22F35E2591072000012CE4 /* TouchCoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchCoreViewController.swift; sourceTree = "<group>"; };
+		DD3970F125950D33003F9D3B /* CustomBlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBlurEffectView.swift; sourceTree = "<group>"; };
+		DD3970F525950DF8003F9D3B /* CustomBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBlurEffect.swift; sourceTree = "<group>"; };
 		DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchCaptureView.swift; sourceTree = "<group>"; };
 		DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchPlayerView.swift; sourceTree = "<group>"; };
 		DD4BF6FC2518F31F005DA322 /* Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
@@ -70,6 +82,12 @@
 		DDA216D0251921C9008F794B /* CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelper.swift; sourceTree = "<group>"; };
 		DDACB8C5251BE97700E0C33C /* ImageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageContainerViewController.swift; sourceTree = "<group>"; };
 		DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSetsCollectionViewController.swift; sourceTree = "<group>"; };
+		DDB888E12592A61C0014EDDC /* AnalysisSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSettingsViewController.swift; sourceTree = "<group>"; };
+		DDB889012592B5BE0014EDDC /* HeatMapColour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapColour.swift; sourceTree = "<group>"; };
+		DDB889052593A8370014EDDC /* TouchHeatmapExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchHeatmapExtensions.swift; sourceTree = "<group>"; };
+		DDB889062593A8370014EDDC /* TouchHeatmapRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchHeatmapRenderer.swift; sourceTree = "<group>"; };
+		DDB889072593A8370014EDDC /* TouchHeatmap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchHeatmap.swift; sourceTree = "<group>"; };
+		DDB8890C2593A8580014EDDC /* HeatMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapView.swift; sourceTree = "<group>"; };
 		DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		DDBD415A251982FC00F1103B /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
 		DDD87302252A6886003E4645 /* PlaybackSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackSettingsViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +131,10 @@
 				DDF7CD082515526F009FFBDE /* RoundedButton.swift */,
 				DD75C58425293C4A005B640E /* RecordButton.swift */,
 				DD05D8E22537792F002DECFA /* TimePicker.swift */,
+				DDB8890C2593A8580014EDDC /* HeatMapView.swift */,
+				DDB889012592B5BE0014EDDC /* HeatMapColour.swift */,
+				DD3970F125950D33003F9D3B /* CustomBlurEffectView.swift */,
+				DD3970F525950DF8003F9D3B /* CustomBlurEffect.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -120,13 +142,14 @@
 		DD343A4425153FDD0031BD88 /* VCs */ = {
 			isa = PBXGroup;
 			children = (
+				DDE22FAC252D187E00C635C9 /* ExperimentsTableViewController.swift */,
+				DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */,
+				DD637C19255C47CA00A33D59 /* TimerSelectViewController.swift */,
 				DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */,
 				DD05D8CD25362CF6002DECFA /* Details TVC */,
 				DDACB8C8251BE9AC00E0C33C /* View Images */,
 				DDE22F86252D030800C635C9 /* Capture and Playback */,
-				DDE22FAC252D187E00C635C9 /* ExperimentsTableViewController.swift */,
-				DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */,
-				DD637C19255C47CA00A33D59 /* TimerSelectViewController.swift */,
+				DDB888DF2592A5C90014EDDC /* Settings */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -167,6 +190,7 @@
 				DD343A4425153FDD0031BD88 /* VCs */,
 				DD343A4325153FC70031BD88 /* Views */,
 				DDE4A6E225165C1100931828 /* Helpers */,
+				DDB889042593A8130014EDDC /* TouchHeatMap */,
 				DDF7CCFB25154C7B009FFBDE /* ImageChooser.swift */,
 				DD89E0C81E27208200965CB7 /* AppDelegate.swift */,
 				DD89E0CC1E27208200965CB7 /* Main.storyboard */,
@@ -188,12 +212,31 @@
 			path = "View Images";
 			sourceTree = "<group>";
 		};
+		DDB888DF2592A5C90014EDDC /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				DDD87302252A6886003E4645 /* PlaybackSettingsViewController.swift */,
+				DDB888E12592A61C0014EDDC /* AnalysisSettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		DDB889042593A8130014EDDC /* TouchHeatMap */ = {
+			isa = PBXGroup;
+			children = (
+				DDB889072593A8370014EDDC /* TouchHeatmap.swift */,
+				DDB889052593A8370014EDDC /* TouchHeatmapExtensions.swift */,
+				DDB889062593A8370014EDDC /* TouchHeatmapRenderer.swift */,
+			);
+			path = TouchHeatMap;
+			sourceTree = "<group>";
+		};
 		DDE22F86252D030800C635C9 /* Capture and Playback */ = {
 			isa = PBXGroup;
 			children = (
+				DD22F35E2591072000012CE4 /* TouchCoreViewController.swift */,
 				DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */,
 				DDD87305252BAD99003E4645 /* PlaybackViewController.swift */,
-				DDD87302252A6886003E4645 /* PlaybackSettingsViewController.swift */,
 				DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */,
 			);
 			path = "Capture and Playback";
@@ -291,34 +334,43 @@
 				DDD87306252BAD99003E4645 /* PlaybackViewController.swift in Sources */,
 				DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */,
 				DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */,
+				DD22F35F2591072000012CE4 /* TouchCoreViewController.swift in Sources */,
 				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
+				DDB8890A2593A8370014EDDC /* TouchHeatmap.swift in Sources */,
 				DDD87303252A6886003E4645 /* PlaybackSettingsViewController.swift in Sources */,
 				DDBA22BA258AAECF00C52149 /* CustomSplitViewController.swift in Sources */,
 				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
 				DD05D8E32537792F002DECFA /* TimePicker.swift in Sources */,
 				DD5A26CB2555A99600EA227C /* DataSetCollectionViewCell.swift in Sources */,
 				DDB5E196255CDB4A006A3CEB /* DataSetsCollectionViewController.swift in Sources */,
+				DDB888E22592A61C0014EDDC /* AnalysisSettingsViewController.swift in Sources */,
 				DD8D34AC23FE521D0035EABA /* ImageCollectionViewController.swift in Sources */,
 				DDA216D1251921C9008F794B /* CoreDataHelper.swift in Sources */,
 				DD13475B253CB8DE00208C60 /* ExperimentTableViewCell.swift in Sources */,
+				DDB889092593A8370014EDDC /* TouchHeatmapRenderer.swift in Sources */,
 				DDACB8C6251BE97700E0C33C /* ImageContainerViewController.swift in Sources */,
 				DDE22FAD252D187E00C635C9 /* ExperimentsTableViewController.swift in Sources */,
+				DD3970F225950D33003F9D3B /* CustomBlurEffectView.swift in Sources */,
 				DD75C58525293C4A005B640E /* RecordButton.swift in Sources */,
 				DD05D8D025362D12002DECFA /* ExpDetailsTableViewController.swift in Sources */,
 				DD78B970251B97F500D01C6D /* ImagePageViewController.swift in Sources */,
+				DDB889022592B5BE0014EDDC /* HeatMapColour.swift in Sources */,
 				DD75C58A25297588005B640E /* TouchCoreView.swift in Sources */,
 				DD637C1A255C47CA00A33D59 /* TimerSelectViewController.swift in Sources */,
 				DD0C0BC2255615E500D5E2AF /* StimulusTableViewCell.swift in Sources */,
 				DD4BF6FD2518F31F005DA322 /* Core.swift in Sources */,
 				DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */,
 				DDF7CD092515526F009FFBDE /* RoundedButton.swift in Sources */,
+				DD3970F625950DF9003F9D3B /* CustomBlurEffect.swift in Sources */,
 				DD8D34AA23FE51F70035EABA /* ImageCollectionViewCell.swift in Sources */,
 				DDF7CCFF25154C7C009FFBDE /* ImageChooser.swift in Sources */,
 				DD89E0CB1E27208200965CB7 /* CaptureViewController.swift in Sources */,
 				DDFA821325197854009762FA /* TouchHandler.swift in Sources */,
 				DD89E0C91E27208200965CB7 /* AppDelegate.swift in Sources */,
 				DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */,
+				DDB889082593A8370014EDDC /* TouchHeatmapExtensions.swift in Sources */,
 				DD4BF7002518F6CE005DA322 /* UpgradeViewController.swift in Sources */,
+				DDB8890D2593A8580014EDDC /* HeatMapView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -46,6 +46,14 @@ open class Helpers:NSObject{
         return today_string
     }
 	
+	func calculateMedian(array: [Int]) -> Float {
+		let sorted = array.sorted()
+		if sorted.count % 2 == 0 {
+			return Float((sorted[(sorted.count / 2)] + sorted[(sorted.count / 2) - 1])) / 2
+		} else {
+			return Float(sorted[(sorted.count - 1) / 2])
+		}
+	}
 	
 	
 

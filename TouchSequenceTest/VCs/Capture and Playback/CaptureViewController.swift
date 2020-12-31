@@ -30,13 +30,11 @@ struct CaptureStatus{
 	static let kCollecting = "collectData"
 }
 
-class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectDelegate, MultiTouchCaptureViewDelegate, UIPopoverPresentationControllerDelegate, UITextViewDelegate {
+class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, TimerSelectDelegate, MultiTouchCaptureViewDelegate, UIPopoverPresentationControllerDelegate, UITextViewDelegate {
 
 	var status = ""
 	
 	//Models
-	var stimuliArray = [Stimulus]()
-	var experiment:Experiment?
 	var imageOrientation = 0
 	
 	//Stimuli Views
@@ -76,21 +74,13 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 			self.view.showBlankView(image: "rectangle.dashed", title: "Nothing Added yet", message: "Select an item above.")
 			self.imagePicker = ImagePicker(presentationController: self, delegate: self)
 		}
-		else{
-
-			captureView.frameRate = 1.0
+		else{//Is collecting data or previewing.
+			captureView.frameRate = 0.05
 			adminStackView.isHidden = true
 			importStackView.isHidden = true
 			editingStackView.isHidden = true
 			captureView.timeIntervalLabel!.text = ""
-			//Setup Stimuli and Start Playing
 			setupExperiment()
-			if status == CaptureStatus.kPreview{
-				
-			}
-			else if status == CaptureStatus.kCollecting{
-				
-			}
 		}
     }
 	override var prefersStatusBarHidden: Bool {
@@ -120,7 +110,7 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 				print("Adding text instructions")
 				saveTextTo(thisExperiment: experiment!)
 			case StimulusType.kImage:
-				saveImageTo(thisExperiment: experiment!)//Saved here
+				saveImageTo(thisExperiment: experiment!)
 			case StimulusType.kVideo:
 				print("Adding videos")
 			case StimulusType.kWebView:
@@ -145,10 +135,7 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 	
 	//MARK: - SETUP EXPERIMENT
 	func setupExperiment() {
-		let hud = JGProgressHUD()
-		hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
-		hud.textLabel.text = "Setting up..."
-		hud.show(in: self.view)
+	
 		//Show touches
 		if experiment!.showTouches == true{
 			captureView.alpha = 1.0
@@ -156,9 +143,9 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 		else{
 			captureView.alpha = 0.0
 		}
-		
 		captureView.experimentDuration = experiment!.totalDuration
 		captureView.captureDelegate = self
+		
 		//Record Audio
 		
 		//Show Timer
@@ -167,27 +154,28 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 		}
 		
 		//Set all and Add them to the Screen
-		stimuliArray = fetchStimuli()
-		print("There are \(stimuliArray.count) Stimuli to show")
-		hud.dismiss()
+		if experiment!.stimuli!.count != 0{
+			stimuliArray = fetchStimuli()
+			for index in 0..<stimuliArray!.count{
+				setupStimuli(atIndex: index)
+			}
+		}
+		updateViews()
 		startExperiment()
 	}
 	
 	func startExperiment(){
 		//Add Countdown
 		if experiment!.countDown != 0{
-			
 			setupCountDown { (completion) in
 				if completion == true{
-					self.captureView.startTimer()
-					self.showStimuli()
 					self.createDataSet()
+					self.captureView.startTimer()
 				}
 			}
 		}
 		else{
 			self.captureView.startTimer()
-			self.showStimuli()
 			createDataSet()
 		}
 		
@@ -200,6 +188,16 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 		experiment!.addToDataSets(newDataSet)
 		CoreDataHelper.shared.saveContext()
 		captureView.dataSet = newDataSet
+		captureView.currentStimulus = stimuliArray!.first
+	}
+	
+	func updateViews() {
+		let thisIndex = getStimuliIndexFrom(duration: captureView.timeElapsed)
+		if thisIndex != currentIndex{
+			currentIndex = thisIndex
+		}
+		showStimuli(atIndex: currentIndex)
+		captureView.currentStimulus = stimuliArray![currentIndex]
 	}
 	
 	func setupCountDown(withCompletion:@escaping (Bool)->()){
@@ -212,7 +210,7 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 		}
 		Helpers.shared.countdown(fromSeconds: countdownSeconds, forView: self.view) { (completion) in
 			var didComplete = false
-			//setupStimuli()
+			
 			if completion == true{
 				print("end reached")
 				didComplete = true
@@ -224,134 +222,47 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 			withCompletion(didComplete)
 		}
 	}
-	
-	func fetchStimuli() -> [Stimulus]{
-		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-		var tempArray = [Stimulus]()
-		do {
-			var fetchRequest:NSFetchRequest<Stimulus>?
-			fetchRequest = Stimulus.fetchRequest()
-			if experiment != nil{
-				fetchRequest!.predicate = NSPredicate(format: "%K == %@",#keyPath(Stimulus.experiment), experiment!)
-			}
-			tempArray = try context.fetch(fetchRequest!)
-			tempArray.sort {
-				$0.order < $1.order
-			}
-		}
-		catch{
-			print("There was an error")
-		}
-		return tempArray
-	}
-	
-	
-	func showStimuli(){
-		print("Setting up Stimuli")
-		var delay:TimeInterval = 0
-		for index in 0..<stimuliArray.count{
-			let thisStimulus = stimuliArray[index]
-			if delay == 0{
-				//Present First Stimuli
-				show(thisStimulus: thisStimulus)
-				captureView.currentStimulus = thisStimulus
-				delay += TimeInterval(thisStimulus.duration)
-			}
-			else{
-				//Prsesent Other Stimulis
-				DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-					self.show(thisStimulus: thisStimulus)
-					
-				}
-				delay += TimeInterval(thisStimulus.duration)
-			}
-		}
-	}
-	
-	
-	func show(thisStimulus:Stimulus){
-		//Set Capture view Stimulus
-		captureView.currentStimulus = thisStimulus
-		
-		//Remove StackView
-		for view in self.view.subviews{
-			if view.isKind(of: UIStackView.self){
-				view.removeFromSuperview()
-			}
-			if view.isKind(of: UITextView.self){
-				view.removeFromSuperview()
-			}
-			if view.isKind(of: UIImageView.self){
-				view.removeFromSuperview()
-			}
-		}
-		
-		//Show different Types
-		switch Int(thisStimulus.type) {
-		case StimulusType.kBlank://Image
-			print("Showing Blank")
-			//setupImageView()
-		case StimulusType.kText://Image
-			print("Showing Text: \(thisStimulus.text!)")
-			//setupText
-			addInstructionView(withText: thisStimulus.text)
-			instructionTextView?.isUserInteractionEnabled = false
-		case StimulusType.kImage://Image
-			if instructionTextView != nil{
-				instructionTextView?.removeFromSuperview()
-			}
-			print("Showing Image")
-			setupImageView()
-			imageView!.removeAllConstraints()
-			imageView!.image = UIImage(data: thisStimulus.imageData!)
-			imageView!.center = CGPoint(x: CGFloat(thisStimulus.xCenter), y: CGFloat(thisStimulus.yCenter))
-			var transform = CGAffineTransform.identity
-			transform = transform.rotated(by:CGFloat(thisStimulus.rotation))
-			transform = transform.scaledBy(x:CGFloat(thisStimulus.scale),y:CGFloat(thisStimulus.scale))
-			self.imageView!.transform = transform
-		case StimulusType.kVideo://Video
-			print("Showing Video")
-			if instructionTextView != nil{
-				instructionTextView?.removeFromSuperview()
-			}
-		case StimulusType.kWebView://WebPage
-			print("Showing WebPage")
-			if instructionTextView != nil{
-				instructionTextView?.removeFromSuperview()
-			}
-		default:
-			print("No Stimulus Type Defined")
-		}
-	
-	}
+
 	//MARK: - FINISH DATA COLLECTION
 	func completeDataCollection() {
-		print("Data Collection Completed. Dismissing")
+		captureView.isUserInteractionEnabled = false
+		for view in stimuliSubViews{
+			view.isHidden = true
+		}
 		//Set end time for Data Collection
+		let currentDataSet = self.captureView.dataSet
+		currentDataSet!.endDate = Date()
+		let timeInterval = currentDataSet?.endDate?.timeIntervalSince((currentDataSet?.startDate)!)
+		print("Data Collection Completed.\n Calculated Duration: \(experiment!.totalDuration)\nActual Duration:\(String(describing: timeInterval))")
+		if experiment!.totalDuration != Double(timeInterval!){
+			let newEndTime = currentDataSet?.startDate?.addingTimeInterval(TimeInterval(experiment!.totalDuration))
+			currentDataSet?.endDate = newEndTime
+			let newTimeInterval = currentDataSet?.endDate?.timeIntervalSince((currentDataSet?.startDate)!)
+			print("FIXED: Data Collection Completed.\n Calculated Duration: \(experiment!.totalDuration)\nActual Duration:\(String(describing: newTimeInterval))")
+
+		}
+		
+		if self.status == CaptureStatus.kPreview{
+			print("Deleting DataSet")
+			CoreDataHelper.shared.delete(currentDataSet!)
+		}
+		CoreDataHelper.shared.saveContext()
+		
+		
+		
 		//Take ScreenShot
 		captureView.alpha = 1.0
 		let image = self.view.takeScreenshot()
 		DispatchQueue.global(qos: .background).async {
-			
 			let screenShot = CoreDataHelper.shared.createScreenShot(image)
 			self.captureView.dataSet!.addToScreenShots(screenShot)
-			//Dismiss
-			//self.captureView.removeFromSuperview()
-			let currentDataSet = self.captureView.dataSet
-			if self.status == CaptureStatus.kPreview{
-				print("Deleting DataSet")
-				CoreDataHelper.shared.delete(currentDataSet!)
-			}
-			else if self.status == CaptureStatus.kCollecting{
-				currentDataSet!.endDate = Date()
-			}
+			
 			CoreDataHelper.shared.saveContext()
 		}
-		
-		
 		showCompletionAlert()
-		//Update Data Collectionview
+
 	}
+	
 	func showCompletionAlert(){
 		let alert = UIAlertController(title: "You're Done.", message: "Give the device back to the researcher or facilitator.", preferredStyle: .alert)
 
@@ -360,7 +271,6 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 		alert.addAction(UIAlertAction(title: "OK", style: .default, handler:{ [self] (UIAlertAction)in
 			self.dismiss(animated: true, completion: nil)
 			dataSetListDelegate?.updateDataSetListWith(thisExperiment: self.experiment!)
-			//print(self.textField.text)
 		}))
 
 		self.present(alert, animated: true, completion: {
@@ -371,9 +281,6 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 	func configurationTextField(textField: UITextField!){
 		textField.text = "Filename"
 	}
-	
-	//MARK: RECORD
-
 	
 
 	//MARK:- STIMULI IMPORT
@@ -476,7 +383,6 @@ class CaptureViewController: UIViewController, ImagePickerDelegate, TimerSelectD
 			imageView!.removeFromSuperview()
 			imageView!.image = nil
 		}
-	
 		let newImageView = MovableImageView()
 		newImageView.frame = self.view.frame
 		newImageView.contentMode = UIImageView.ContentMode.scaleAspectFit

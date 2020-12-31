@@ -124,6 +124,7 @@ class DataSetsCollectionViewController: UICollectionViewController, ExperimentLi
 			let captureVC = segue.destination as! CaptureViewController
 			captureVC.status = sender as! String
 			captureVC.experiment = experiment
+		
 		}
 		else if segue.identifier == "showPlaybackSegue"{
 			let nav = segue.destination as! UINavigationController
@@ -168,12 +169,13 @@ class DataSetsCollectionViewController: UICollectionViewController, ExperimentLi
 		// Configure the cell
 		let thisDataSet = dataSets[indexPath.item]
 		cell.dateTimeLabel.text = thisDataSet.startDate!.formattedString(withFormat: "NA")
-		cell.participantLabel.text = "No Participant Yet"
-		
+		//cell.participantLabel.text = "No Participant Yet"
+		cell.participantLabel.text = "Duration: " + thisDataSet.durationString
 		let dataSetScreens = thisDataSet.screenShots?.allObjects as! [ScreenShot]
-		let firstScreen = dataSetScreens.first
-		cell.dataImageView.image = UIImage(data: firstScreen!.imageData!)
-	
+		if let firstScreen = dataSetScreens.first{
+			cell.dataImageView.image = UIImage(data: firstScreen.imageData!)
+		}
+		
         return cell
     }
 
@@ -181,7 +183,6 @@ class DataSetsCollectionViewController: UICollectionViewController, ExperimentLi
 	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		
 		if (experiment!.orientation == "Landscape" && Helpers.shared.deviceOrientationIsLandscape() == true) || (experiment!.orientation == "Portrait" && Helpers.shared.deviceOrientationIsLandscape() == false){
-			
 			let thisDataSet = dataSets[indexPath.row]
 			performSegue(withIdentifier: "showPlaybackSegue", sender: thisDataSet)
 			

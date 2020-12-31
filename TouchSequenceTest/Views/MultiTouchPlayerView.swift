@@ -11,7 +11,7 @@ import UIKit
 protocol MultiTouchPlayerViewDelegate {
 	func updateSlider(valueAsPercentage:Float)
 	func updateViews(isPlaying:Bool)
-	func updateImageAlpha(withAlpha:CGFloat)
+	func updateViewsAlpha(withAlpha:CGFloat)
 }
 
 class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
@@ -28,6 +28,8 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 	//Viewing Options
 	var isScrubbing:Bool = false
 	var isShowingAll:Bool = false
+	var isolatedLines:Bool = false
+	var linesVisible:Bool = true
 	
 	//CoreData Stuff
 	var dataSets:[DataSet]?
@@ -118,12 +120,18 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		var indexes = [(Int,Int)]()
 		for (fingerIndex,touchArray) in thisArray.enumerated(){
 			for (touchIndex,thisTouch) in touchArray!.enumerated(){
-				//print("\(startTime)-\(timeElapsed)")
-				if isScrubbing == false && (timeElapsed...(timeElapsed + 0.05) ~= thisTouch!.timeInterval){
-					indexes.append((fingerIndex, touchIndex))
+				if isolatedLines == true{
+					if currentStimulusStartTime...timeElapsed ~= thisTouch!.timeInterval{
+						indexes.append((fingerIndex, touchIndex))
+					}
 				}
-				else if isScrubbing == true && startTime...timeElapsed ~= thisTouch!.timeInterval{
-					indexes.append((fingerIndex, touchIndex))
+				else{
+					if isScrubbing == false && (timeElapsed...(timeElapsed + 0.05) ~= thisTouch!.timeInterval){
+						indexes.append((fingerIndex, touchIndex))
+					}
+					else if isScrubbing == true && startTime...timeElapsed ~= thisTouch!.timeInterval{
+						indexes.append((fingerIndex, touchIndex))
+					}
 				}
 				if linesShown == 2 && thisTouch!.isPencil == false && indexes.count > 0{
 					indexes.removeLast()
@@ -131,9 +139,10 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 				else if linesShown == 1 && thisTouch!.isPencil == true && indexes.count > 0{
 					indexes.removeLast()
 				}
+			
 			}
 		}
-		if isScrubbing == true {
+		if isScrubbing == true || isolatedLines == true {
 			fingerLineCounts = [0,0,0,0,0,0]
 			timeElapsed -= 0.05
 			setNeedsDisplay()//Need to do this to erase previous lines
@@ -144,6 +153,24 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 	
 	
 	//MARK: DELEGATE STUFF
+	
+	func toggleLineVisbility(withValue:Bool){
+		linesVisible = withValue
+		if withValue == true{
+			self.alpha = 1.0
+		}
+		else{
+			self.alpha = 0.0
+		}
+	}
+	
+	func toggleIsloatedLines(withValue:Bool){
+		isolatedLines = withValue
+		print("Isolating Lines:\(withValue)")
+		pointsToDraw.removeAll()
+		//self.setNeedsDisplay()
+		prepareLinesToDraw()
+	}
 	func updatePencilColor(color: UIColor) {
 		pencilLineColor = color
 		setNeedsDisplay()
@@ -161,6 +188,7 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		//self.setNeedsDisplay()
 		prepareLinesToDraw()
 	}
+	
 	func toggleStartEnd(withValue:Bool) {
 		showStartEnd = withValue
 		self.setNeedsDisplay()
@@ -174,6 +202,22 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		//prepareLinesToDraw()
 	}
 	
+	
+	
+	func updateLineWidth(withValue: CGFloat) {
+		strokeWidth = withValue
+		//pointsToDraw.removeAll()
+		self.setNeedsDisplay()
+		prepareLinesToDraw()
+	}
+	
+	func updateViewsAlpha(withValue: CGFloat) {
+		playerDelegate?.updateViewsAlpha(withAlpha: withValue)
+	}
+	
+	
+	
+	//MARK: EXPERIMENTAL
 	func toggleShowAll(withValue:Bool) {
 		isShowingAll = withValue
 		if withValue == true{
@@ -190,19 +234,6 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		}
 	}
 	
-	func updateLineWidth(withValue: CGFloat) {
-		strokeWidth = withValue
-		//pointsToDraw.removeAll()
-		self.setNeedsDisplay()
-		prepareLinesToDraw()
-	}
-	
-	
-	
-	func updateImageAlpha(withValue: CGFloat) {
-		playerDelegate?.updateImageAlpha(withAlpha: withValue)
-	}
-	
 	//MARK: TIMER
 	@objc func updateTimer(){
 		//Show time elapsed in timer
@@ -216,10 +247,6 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 		playerDelegate?.updateSlider(valueAsPercentage: Float(sliderPercentage))
 		
 		//Do the thing to draw the line
-		fireEvent()
-	}
-	
-	func fireEvent(){
 		let currentTime = startTime + timeElapsed
 		if currentTime < endTime{
 			prepareLinesToDraw()
@@ -231,6 +258,8 @@ class MultiTouchPlayerView: TouchCoreView, PlaybackSettingsDelegate {
 			//timeElapsed = 0
 		}
 	}
+	
+	
 	
 	func tapButton(isPlaying:Bool){
 		if isPlaying == true{
