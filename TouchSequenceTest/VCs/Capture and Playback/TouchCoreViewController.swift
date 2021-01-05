@@ -13,7 +13,7 @@ class TouchCoreViewController: UIViewController {
 
 	var experiment:Experiment?
 	var dataSet:DataSet?
-	var stimuliArray:[Stimulus]?
+	var stimuliArray = [Stimulus]()
 	
 	var stimuliSubViews = [UIView]()
 	var currentIndex:Int = 0
@@ -47,7 +47,7 @@ class TouchCoreViewController: UIViewController {
 	}
 	
 	func setupStimuli(atIndex:Int){
-		let thisStimulus = stimuliArray![atIndex]
+		let thisStimulus = stimuliArray[atIndex]
 		let thisType = Int(thisStimulus.type)
 		if thisType == StimulusType.kText{
 			setupInstructionView(withText: thisStimulus.text)
@@ -88,7 +88,6 @@ class TouchCoreViewController: UIViewController {
 		let image = UIImage(data: forStimulus.imageData!)
 		let newImageView = UIImageView()
 		newImageView.image = image
-		print("Adding \(image) to imageview")
 		newImageView.frame = super.view.frame
 		newImageView.contentMode = UIImageView.ContentMode.scaleAspectFit
 		newImageView.removeAllConstraints()
@@ -105,7 +104,7 @@ class TouchCoreViewController: UIViewController {
 	}
 	
 	func showStimuli(atIndex:Int){
-		let thisType = Int(stimuliArray![atIndex].type)
+		let thisType = Int(stimuliArray[atIndex].type)
 		print("Showing Stimulus with type \(thisType)")
 		for view in stimuliSubViews{
 			view.isHidden = true
@@ -119,18 +118,18 @@ class TouchCoreViewController: UIViewController {
 			}
 		}
 	}
-	func getStimuliIndexFrom(duration:TimeInterval) -> Int{
+	func getStimuliIndexFrom(duration:TimeInterval, forStimuli:[Stimulus]) -> Int{
 		var finalIndex = 0
 		var thisDuration:Float = 0
 		var nextDuration:Float = 0
-		for index in 0..<stimuliArray!.count{
+		for index in 0..<forStimuli.count{
 			if index == 0{
 				thisDuration = 0
-				nextDuration = stimuliArray![index].duration
+				nextDuration = forStimuli[index].duration
 			}
 			else{
 				thisDuration = nextDuration
-				nextDuration = stimuliArray![index].duration + thisDuration
+				nextDuration = forStimuli[index].duration + thisDuration
 			}
 			if duration.isBetween(time1: Double(thisDuration), time2: Double(nextDuration)) == true{
 				finalIndex = index
@@ -139,18 +138,18 @@ class TouchCoreViewController: UIViewController {
 		}
 		return finalIndex
 	}
-	func getDurationFrom(stimulusIndex:Int) ->TimeInterval{
+	func getDurationFrom(stimulusIndex:Int, inStimulusArray:[Stimulus]) ->TimeInterval{
 		var duration:Float = 0.0
 		var thisDuration:Float = 0
 		var nextDuration:Float = 0
-		for index in 0..<stimuliArray!.count{
+		for index in 0..<inStimulusArray.count{
 			if index == 0{
 				thisDuration = 0
-				nextDuration = stimuliArray![index].duration
+				nextDuration = inStimulusArray[index].duration
 			}
 			else{
 				thisDuration = nextDuration
-				nextDuration = stimuliArray![index].duration + thisDuration
+				nextDuration = inStimulusArray[index].duration + thisDuration
 			}
 			if index == stimulusIndex{
 				duration = thisDuration

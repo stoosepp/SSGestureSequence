@@ -12,8 +12,14 @@ import JGProgressHUD
 
 class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDelegate  {
 	
+	
+	
 	//Views
 	@IBOutlet weak var playbackView: MultiTouchPlayerView!
+	var heatmapSubviews = [UIImageView]()
+	
+	//Stackviews
+	@IBOutlet weak var playbackStackView: UIStackView!
 	
 	//Buttons
 	@IBOutlet weak var toggleButton: UIButton!
@@ -22,13 +28,16 @@ class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDeleg
 	@IBOutlet weak var playButton: UIButton!
 	@IBOutlet weak var slider: UISlider!
 	
-	var savedTouches = [[Touch?]?]()
-	var touchesForAllDataSets = [Touch]()
+	//Touch Arrays
+	var thisDataSetsTouches = [Touch]()
+	var allTouchesForExperiment = [Touch]()
+	var allTouchesSeparatedByStimulus = [[Touch]]()
+	
+	
+	//Status
+	var isShowingAnalysis = false
 	var currentAlpha:CGFloat = 1.0
 	
-	//Stackviews
-	@IBOutlet weak var playbackStackView: UIStackView!
-
 	//MARK: - VIEW LIFECYCLE
 	override func viewWillAppear(_ animated: Bool) {
 		self.navigationController?.navigationBar.isHidden = true
@@ -47,91 +56,99 @@ class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDeleg
 		experiment = dataSet?.experiment
 		if experiment!.stimuli!.count != 0{
 			stimuliArray = fetchStimuli()
-			print("There are now \(self.view.subviews.count) subviews")
-			for index in 0..<stimuliArray!.count{
+			for index in 0..<stimuliArray.count{
 				setupStimuli(atIndex: index)
 			}
-			print("There are now \(self.view.subviews.count) subviews")
 		}
 		playbackView.setupPlayerView()
-		updateViews(isPlaying: false)
+		checkIndex()
 		
-		//parse all touches on load
-		let dataSets = experiment!.dataSets?.allObjects as! [DataSet]
-		for thisDataSet in dataSets{
-			DispatchQueue.global(qos: .background).async {
-				let thisTouchArray = thisDataSet.touches?.allObjects as! [Touch]
-				self.touchesForAllDataSets.append(contentsOf: thisTouchArray)
-			}
+		//Parse Touches on the outset.
+		thisDataSetsTouches = dataSet?.touches?.allObjects as! [Touch]
+		print("This dataSet has \(thisDataSetsTouches.count) touches")
+		//checkIndex()
+		
+		TouchManager.sharedInstance.fetchAllTouches(forExperiment: experiment!) { (returnedTouches) in
+			self.allTouchesForExperiment = returnedTouches
+			print("Fetched \(self.allTouchesForExperiment.count) Touches in total for This Experiment")
+			
 		}
+		TouchManager.sharedInstance.fetchAllTouchesSeparatedbyStimuli(forExperiment: experiment!) { (returnedTouches) in
+			self.allTouchesSeparatedByStimulus = returnedTouches
+			print("Fetched touches for \(self.allTouchesSeparatedByStimulus.count) stimuli")
+		}
+
     }
 	
 	override var prefersStatusBarHidden: Bool {
 		return true
 	}
-	//MARK: - SETUP STIMULI
-	
-	
-
 	
 	//MARK: - PLAYING AND PAUSING
 	@IBAction func playPauseButtonPushed(_ sender:UIButton){
 		if sender.image(for: .normal) == UIImage(systemName: "play.fill"){
+			print("Pressing The Play Button")
 			sender.setImage((UIImage(systemName: "pause.fill")), for: .normal)
-			playbackView.isScrubbing = false
 			playbackView.tapButton(isPlaying:true)
 		}
 		else{
 			sender.setImage((UIImage(systemName: "play.fill")), for: .normal)
+			print("Pressing The Pause Button")
 			playbackView.tapButton(isPlaying:false)
 		}
 	}
+	
 	@IBAction func nextButtonPushed(_ sender:UIButton){
-		if currentIndex != stimuliArray!.count-1{
-			
-			currentIndex += 1
-			let newTime = getDurationFrom(stimulusIndex: currentIndex)
-			let percentage = Float(newTime/experiment!.totalDuration)
-			updateSlider(valueAsPercentage: Float(percentage))
-			showStimuli(atIndex: currentIndex)
-			playbackView.timeElapsed = newTime
-			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
-			playbackView.pointsToDraw.removeAll()
-			playbackView.prepareLinesToDraw()
-		}
-		else if currentIndex == stimuliArray!.count-1{
-			updateSlider(valueAsPercentage: Float(100.00))
-			showStimuli(atIndex: currentIndex)
-			playbackView.timeElapsed = playbackView.endTime
-			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
-			playbackView.pointsToDraw.removeAll()
-			playbackView.prepareLinesToDraw()
-		}
-		
-		
-	}
-	@IBAction func previousButtonPushed(_ sender:UIButton){
-		if currentIndex != 0{
-			let newTime = getDurationFrom(stimulusIndex: currentIndex)
-			let percentage = Float(newTime/experiment!.totalDuration)
-			updateSlider(valueAsPercentage: Float(percentage))
-			showStimuli(atIndex: currentIndex)
-			playbackView.timeElapsed = newTime
-			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
-			playbackView.pointsToDraw.removeAll()
-			playbackView.prepareLinesToDraw()
+		currentIndex += 1
+		let newTime = getDurationFrom(stimulusIndex: currentIndex, inStimulusArray:stimuliArray)
+		if playbackView.timeElapsed < newTime || currentIndex > stimuliArray.count - 1 {
 			currentIndex -= 1
 		}
-		else if currentIndex == 0{
-			updateSlider(valueAsPercentage: Float(0.0))
-			showStimuli(atIndex: currentIndex)
-			playbackView.timeElapsed = 0.0
-			playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+		let rounded = roundNumber(number: Float(newTime), toFrameRate: playbackView.frameRate)
+		let percentage = Float(rounded/Float(experiment!.totalDuration))
+		updateSlider(valueAsPercentage: percentage)
+		playbackView.timeElapsed = TimeInterval(rounded)
+		if currentIndex >= stimuliArray.count-1{
+			updateSlider(valueAsPercentage: Float(100.00))
+			playbackView.timeElapsed = playbackView.endTime
+		}
+		jumpToNextPrevious()
+	}
+	
+	@IBAction func previousButtonPushed(_ sender:UIButton){
+		checkIndex()
+		currentIndex -= 1
+		let newTime = getDurationFrom(stimulusIndex: currentIndex, inStimulusArray:stimuliArray)
+		if playbackView.timeElapsed > newTime || currentIndex < stimuliArray.count - 1 {
+			currentIndex += 1
+		}
+		let adjustedTime = getDurationFrom(stimulusIndex: currentIndex, inStimulusArray:stimuliArray)
+		let rounded = roundNumber(number: Float(adjustedTime), toFrameRate: playbackView.frameRate)
+		let percentage = Float(rounded/Float(experiment!.totalDuration))
+		updateSlider(valueAsPercentage: percentage)
+		playbackView.timeElapsed = TimeInterval(rounded)
+		if currentIndex == 0{
+			updateSlider(valueAsPercentage: Float(0))
+			playbackView.timeElapsed = playbackView.startTime
+		}
+		jumpToNextPrevious()
+		
+	
+	}
+	func jumpToNextPrevious(){
+		checkIndex()
+		playbackView.timeIntervalLabel!.text = playbackView.timeElapsed.stringFromTimeInterval(withFrameRate: 0.05)
+		showStimuli(atIndex: currentIndex)
+
+		if isShowingAnalysis == true{
+			showHeatmap(atIndex: currentIndex)
+		}
+		if playbackView.linesVisible == true{
 			playbackView.pointsToDraw.removeAll()
 			playbackView.prepareLinesToDraw()
 		}
 	}
-	
+
 	
 	@IBAction func sliderDragged(_ sender: UISlider) {
 		//Stop the timer and set the button to play again
@@ -143,35 +160,37 @@ class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDeleg
 		
 		//setTime Elapsed
 		let totalTimeInterval = Float(playbackView.endTime)
-		playbackView.timeElapsed = TimeInterval(totalTimeInterval*sender.value)
+		let interval = Float(totalTimeInterval) * sender.value
+		let rounded = roundNumber(number: interval, toFrameRate: playbackView.frameRate)
+		playbackView.timeElapsed = TimeInterval(rounded)
 		playbackView.timeIntervalLabel!.text = String(format: "Timer: %.2f", playbackView.timeElapsed)
 		playbackView.isScrubbing = true
+		checkIndex()
+		playbackView.pointsToDraw.removeAll()
 		playbackView.prepareLinesToDraw()
-		updateViews(isPlaying: false)
+	}
+	
+	func roundNumber(number: Float, toFrameRate:CGFloat) -> Float {
+		return Float(toFrameRate) * Float(round(number / Float(toFrameRate)))
 	}
 	
 	//MARK: - DELEGATE STUFF
 	//TouchPlayerDelegate Funcs
-	func updateViews(isPlaying: Bool) {
-		if isPlaying == false{
-			playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-		}
-		else{
-			playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-		}
-		//Show Appropriate Stimulus for duration
-		let thisIndex = getStimuliIndexFrom(duration: playbackView.timeElapsed)
+	func checkIndex() {
+		let thisIndex = getStimuliIndexFrom(duration: playbackView.timeElapsed, forStimuli: stimuliArray)
 		if thisIndex != currentIndex{
 			currentIndex = thisIndex
-			
-			let tempTime = getDurationFrom(stimulusIndex: currentIndex)
+			print("Updating INdex to:\(currentIndex)")
+			let tempTime = getDurationFrom(stimulusIndex: currentIndex, inStimulusArray: stimuliArray)
 			playbackView.currentStimulusStartTime = tempTime
 			showStimuli(atIndex: currentIndex)
+			if isShowingAnalysis == true{
+				showHeatmap(atIndex: currentIndex)
+			}
 		}
 		
 	}
 
-	
 	func updateSlider(valueAsPercentage: Float) {
 		let sliderMax = slider.maximumValue
 		let currentValue = valueAsPercentage * sliderMax
@@ -187,12 +206,9 @@ class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDeleg
    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-	
 	
 	@IBAction func doneButtonPressed(_ sender: UIButton) {
 		self.dismiss(animated: true, completion: nil)
-		
 	}
 	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -210,49 +226,65 @@ class PlaybackViewController: TouchCoreViewController, MultiTouchPlayerViewDeleg
 			let imageCollectionVC = segue.destination as! ImageCollectionViewController
 			imageCollectionVC.dataSet = dataSet
 		}
-//		else if segue.identifier == "showAnalysisSegue"{
-//			let analysisVC = segue.destination as! AnalysisSettingsViewController
-//		}
     }
    
 	
 	//MARK: - TOGGLE STUFF
 	
 	@IBAction func testHeatMap(_ sender:UIButton){
-		let hud = JGProgressHUD()
-		hud.indicatorView = JGProgressHUDIndeterminateIndicatorView()
-		hud.textLabel.text = "Building HeatMaps"
-		hud.textLabel.font = UIFont(name:"HelveticaNeue" , size: 45)
-		hud.show(in: self.view)
-		
-		playbackStackView.isHidden = true
-		playbackView.isHidden = true
-		
-		let start = Date()
-		
-		let gridSize:Int = 20
-		
-		let newHeatMapView = HeatMapView(frame: playbackView.frame, gradientCount: 5)
-	
-		
-		newHeatMapView.setupMap(forView: self.playbackView, withSize: gridSize, withGradientCount: 5, withTouches: touchesForAllDataSets) { (completion) in
-			//Completed map set up
-			if completion == true{
-				self.view.insertSubview(newHeatMapView, aboveSubview: self.playbackView)
-				hud.dismiss()
-				print("Completed Map Setup")
-//				let blurEffectView = CustomBlurEffectView(radius: CGFloat(Double(gridSize)/4), color: nil, colorAlpha: 1.0)
-//				blurEffectView.frame = newHeatMapView.frame
-//				newHeatMapView.addSubview(blurEffectView)
-//				newHeatMapView.alpha = 0.7
-				let end = Date()
-				let difference = end.timeIntervalSince(start)
-				let string = String(format: "HeatMap built in %.2f s", difference)
-				print(string)
-			}
+		if isShowingAnalysis == false{
+			setupHeatMaps()
+			isShowingAnalysis = true
+		}
+		else{
+			resetHeatmaps()
+			isShowingAnalysis = false
 		}
 	}
 	
+	func resetHeatmaps(){
+		for heatmap in heatmapSubviews{
+			heatmap.removeFromSuperview()
+		}
+		heatmapSubviews.removeAll()
+	}
+	
+	func prepareHeatMapFor(touchArray:[Touch]){
+		let image  = TouchHeatmapRenderer.renderTouches(view: self.view, touches: touchArray)
+		let newImageView = UIImageView(frame: self.playbackView.frame)
+		newImageView.image = image.0
+		self.view.insertSubview(newImageView, aboveSubview: self.playbackView)
+		heatmapSubviews.append(newImageView)
+	}
+	
+	func setupHeatMaps() {
+		resetHeatmaps()
+		if playbackView.touchesSeparatedbyStimuli == true{
+			
+			for touchArray in allTouchesSeparatedByStimulus{
+				prepareHeatMapFor(touchArray: touchArray)
+			}
+			showHeatmap(atIndex: currentIndex)
+			print("There are now \(heatmapSubviews.count) Heatmaps. Showing at \(currentIndex)")
+		}
+		else{
+			prepareHeatMapFor(touchArray: allTouchesForExperiment)
+			showHeatmap(atIndex: 0)
+		}
+	}
+	
+	func showHeatmap(atIndex:Int){
+		print("Showing heat map at \(atIndex)")
+		if heatmapSubviews.count > 1 {
+			for view in heatmapSubviews{
+				view.isHidden = true
+			}
+			heatmapSubviews[atIndex].isHidden = false
+		}
+		else{
+			heatmapSubviews[0].isHidden = false
+		}
+	}
 	
 	@IBAction func takePhoto(_ sender: Any) {
 		//let dateString = Helpers().getTodayString()

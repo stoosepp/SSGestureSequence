@@ -39,49 +39,49 @@ extension CGImage {
 }
 
 class TouchHeatmapRenderer {
-    
-    class func renderTouches(image: UIImage, touches: [TouchHeatmap.Touch]) -> (UIImage,Bool) {
-        
-        // Size variables
-        let size = image.size
-        let width = size.width
-        let height = size.height
-        let touchradius : CGFloat = 70.0
+	
+	class func renderTouches(view: UIView, touches: [Touch]) -> (UIImage,Bool) {
+		
+		// Size variables
+		let size = view.frame.size
+		let width = size.width
+		let height = size.height
+		let touchradius : CGFloat = 70.0
 
-        // Create the Density Matrix
-        let count = Int(width*height)
-        var density = [Float](repeating: 0.0, count: count)
-        var touchDensity = self.createTouchSquare(radius: touchradius)
-        
-        // Iterate through all touches
-        for touch in touches {
-            
-            // Add the touch square at the touch location
-            self.addTouchSquareToDensity(density: &density, width: Int(width), height: Int(height), touchDensity: &touchDensity, radius: Int(touchradius), center: touch.point)
-        }
-        
-        // Normalize between zero and one
-        let maxDensity = max(x: density)
-        
-        // Density Check if we have no touches
-        if maxDensity == 0.0 {
-            return (image,false)
-        }
-        
-        // Create the RGBA matrix
-        var rgba = [UInt8](repeating: 0, count: count*4)
-        
-        // Render Density Info into raw RGBA pixels
-        self.renderDensityMatrix(density: &density, rgba: &rgba, width: Int(width), height: Int(height), max: maxDensity)
-        
-        // Clear matrices
-        density.removeAll()
-        touchDensity.removeAll()
-        
-        // Generate UIImage from RGB data
-        let touchImage = self.generateImageFromRGBAMatrix(rgba: &rgba, width: Int(width), height: Int(height))
-        return (touchImage,true)
-    }
+		// Create the Density Matrix
+		let count = Int(width*height)
+		var density = [Float](repeating: 0.0, count: count)
+		var touchDensity = self.createTouchSquare(radius: touchradius)
+		
+		// Iterate through all touches
+		for touch in touches {
+			// Add the touch square at the touch location
+			self.addTouchSquareToDensity(density: &density, width: Int(width), height: Int(height), touchDensity: &touchDensity, radius: Int(touchradius), center: touch.point)
+		}
+		
+		// Normalize between zero and one
+		let maxDensity = max(x: density)
+		
+		// Density Check if we have no touches
+		if maxDensity == 0.0 {
+			//return (nil,false)
+			print("No touches")
+		}
+		
+		// Create the RGBA matrix
+		var rgba = [UInt8](repeating: 0, count: count*4)
+		
+		// Render Density Info into raw RGBA pixels
+		self.renderDensityMatrix(density: &density, rgba: &rgba, width: Int(width), height: Int(height), max: maxDensity)
+		
+		// Clear matrices
+		density.removeAll()
+		touchDensity.removeAll()
+		
+		// Generate UIImage from RGB data
+		let touchImage = self.generateImageFromRGBAMatrix(rgba: &rgba, width: Int(width), height: Int(height))
+		return (touchImage,true)
+	}
     
     private class func generateImageFromRGBAMatrix( rgba: inout [UInt8], width: Int, height: Int) -> UIImage {
         
@@ -221,7 +221,6 @@ class TouchHeatmapRenderer {
         for x in stride(from: 0, to: radiusInt, by: 1) {
             for y in stride(from: 0, to: radiusInt, by: 1) {
 
-                
                 // Get the Pixel Info in the Red Channel
                 let pixelInfo: Int = ((radiusInt * y) + x) * 4
                 let r = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)

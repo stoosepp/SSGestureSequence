@@ -32,6 +32,7 @@ class DataSetsCollectionViewController: UICollectionViewController, ExperimentLi
     }
 	
 	func updateDataSetListWith(thisExperiment:Experiment?) {
+		fetchDataSetsFor(experiment: thisExperiment)
 		print("Updating DataSet List")
 		if thisExperiment == nil{
 			collectionView.setEmptyView(image:"doc.on.clipboard", title: "No Experiment Here.", message: "Add an Experiment with some Stimuli before recording data")

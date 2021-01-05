@@ -15,6 +15,7 @@
 		DD3970F225950D33003F9D3B /* CustomBlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3970F125950D33003F9D3B /* CustomBlurEffectView.swift */; };
 		DD3970F625950DF9003F9D3B /* CustomBlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3970F525950DF8003F9D3B /* CustomBlurEffect.swift */; };
 		DD3C7AA92569C5D200E6EF5C /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = DD3C7AA82569C5D200E6EF5C /* JGProgressHUD */; };
+		DD3F9578259F811600E26A5D /* TouchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3F9577259F811600E26A5D /* TouchManager.swift */; };
 		DD4BB17B2520283D00B8A5FD /* MultiTouchCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */; };
 		DD4BB1802521230900B8A5FD /* MultiTouchPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */; };
 		DD4BF6FD2518F31F005DA322 /* Core.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4BF6FC2518F31F005DA322 /* Core.swift */; };
@@ -36,9 +37,7 @@
 		DDB5E196255CDB4A006A3CEB /* DataSetsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */; };
 		DDB888E22592A61C0014EDDC /* AnalysisSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB888E12592A61C0014EDDC /* AnalysisSettingsViewController.swift */; };
 		DDB889022592B5BE0014EDDC /* HeatMapColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889012592B5BE0014EDDC /* HeatMapColour.swift */; };
-		DDB889082593A8370014EDDC /* TouchHeatmapExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889052593A8370014EDDC /* TouchHeatmapExtensions.swift */; };
 		DDB889092593A8370014EDDC /* TouchHeatmapRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889062593A8370014EDDC /* TouchHeatmapRenderer.swift */; };
-		DDB8890A2593A8370014EDDC /* TouchHeatmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB889072593A8370014EDDC /* TouchHeatmap.swift */; };
 		DDB8890D2593A8580014EDDC /* HeatMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB8890C2593A8580014EDDC /* HeatMapView.swift */; };
 		DDBA22BA258AAECF00C52149 /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */; };
 		DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDBD4159251982FC00F1103B /* TouchCaptureModel.xcdatamodeld */; };
@@ -61,6 +60,7 @@
 		DD22F35E2591072000012CE4 /* TouchCoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchCoreViewController.swift; sourceTree = "<group>"; };
 		DD3970F125950D33003F9D3B /* CustomBlurEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBlurEffectView.swift; sourceTree = "<group>"; };
 		DD3970F525950DF8003F9D3B /* CustomBlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBlurEffect.swift; sourceTree = "<group>"; };
+		DD3F9577259F811600E26A5D /* TouchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchManager.swift; sourceTree = "<group>"; };
 		DD4BB17A2520283D00B8A5FD /* MultiTouchCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchCaptureView.swift; sourceTree = "<group>"; };
 		DD4BB17F2521230900B8A5FD /* MultiTouchPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiTouchPlayerView.swift; sourceTree = "<group>"; };
 		DD4BF6FC2518F31F005DA322 /* Core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Core.swift; sourceTree = "<group>"; };
@@ -84,9 +84,7 @@
 		DDB5E195255CDB4A006A3CEB /* DataSetsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSetsCollectionViewController.swift; sourceTree = "<group>"; };
 		DDB888E12592A61C0014EDDC /* AnalysisSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSettingsViewController.swift; sourceTree = "<group>"; };
 		DDB889012592B5BE0014EDDC /* HeatMapColour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapColour.swift; sourceTree = "<group>"; };
-		DDB889052593A8370014EDDC /* TouchHeatmapExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchHeatmapExtensions.swift; sourceTree = "<group>"; };
 		DDB889062593A8370014EDDC /* TouchHeatmapRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchHeatmapRenderer.swift; sourceTree = "<group>"; };
-		DDB889072593A8370014EDDC /* TouchHeatmap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchHeatmap.swift; sourceTree = "<group>"; };
 		DDB8890C2593A8580014EDDC /* HeatMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeatMapView.swift; sourceTree = "<group>"; };
 		DDBA22B9258AAECE00C52149 /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		DDBD415A251982FC00F1103B /* TouchCaptureModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TouchCaptureModel.xcdatamodel; sourceTree = "<group>"; };
@@ -224,8 +222,6 @@
 		DDB889042593A8130014EDDC /* TouchHeatMap */ = {
 			isa = PBXGroup;
 			children = (
-				DDB889072593A8370014EDDC /* TouchHeatmap.swift */,
-				DDB889052593A8370014EDDC /* TouchHeatmapExtensions.swift */,
 				DDB889062593A8370014EDDC /* TouchHeatmapRenderer.swift */,
 			);
 			path = TouchHeatMap;
@@ -238,6 +234,7 @@
 				DD89E0CA1E27208200965CB7 /* CaptureViewController.swift */,
 				DDD87305252BAD99003E4645 /* PlaybackViewController.swift */,
 				DD4BF6FF2518F6CE005DA322 /* UpgradeViewController.swift */,
+				DD3F9577259F811600E26A5D /* TouchManager.swift */,
 			);
 			path = "Capture and Playback";
 			sourceTree = "<group>";
@@ -336,10 +333,10 @@
 				DDBD415E251983D900F1103B /* TouchCaptureModel.xcdatamodeld in Sources */,
 				DD22F35F2591072000012CE4 /* TouchCoreViewController.swift in Sources */,
 				DDF7CD0025154C7C009FFBDE /* Extensions.swift in Sources */,
-				DDB8890A2593A8370014EDDC /* TouchHeatmap.swift in Sources */,
 				DDD87303252A6886003E4645 /* PlaybackSettingsViewController.swift in Sources */,
 				DDBA22BA258AAECF00C52149 /* CustomSplitViewController.swift in Sources */,
 				DDF7CD0225154C7C009FFBDE /* MovableImageView.swift in Sources */,
+				DD3F9578259F811600E26A5D /* TouchManager.swift in Sources */,
 				DD05D8E32537792F002DECFA /* TimePicker.swift in Sources */,
 				DD5A26CB2555A99600EA227C /* DataSetCollectionViewCell.swift in Sources */,
 				DDB5E196255CDB4A006A3CEB /* DataSetsCollectionViewController.swift in Sources */,
@@ -368,7 +365,6 @@
 				DDFA821325197854009762FA /* TouchHandler.swift in Sources */,
 				DD89E0C91E27208200965CB7 /* AppDelegate.swift in Sources */,
 				DDF7CD0125154C7C009FFBDE /* Helpers.swift in Sources */,
-				DDB889082593A8370014EDDC /* TouchHeatmapExtensions.swift in Sources */,
 				DD4BF7002518F6CE005DA322 /* UpgradeViewController.swift in Sources */,
 				DDB8890D2593A8580014EDDC /* HeatMapView.swift in Sources */,
 			);

@@ -375,6 +375,15 @@ extension DataSet{
 	}
 }
 
+extension Touch {
+	var point:CGPoint{
+		return CGPoint(x:CGFloat(xLocation) , y: CGFloat(yLocation))
+	}
+	var majorRadiusTolerance: CGFloat{
+		return 0.0
+	}
+}
+
 @IBDesignable
 class CentreButton:UIButton {
 	@IBInspectable var centerText: Bool = false{

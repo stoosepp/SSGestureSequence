@@ -11,6 +11,7 @@ import CoreData
 import WebKit
 import AVKit
 import JGProgressHUD
+import UniformTypeIdentifiers
 
 public protocol ImagePickerDelegate: class {
 	func didSelect(image: UIImage?)
@@ -20,9 +21,6 @@ protocol ExperimentDetailsDelegate {
 	func updateStimuliTable()
 }
 
-//protocol DataSetListDelegate {
-//	func updateDataSetList()
-//}
 struct CaptureStatus{
 	//Static Vars
 	static let kAddingStimuli = "addStimuli"
@@ -31,6 +29,8 @@ struct CaptureStatus{
 }
 
 class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, TimerSelectDelegate, MultiTouchCaptureViewDelegate, UIPopoverPresentationControllerDelegate, UITextViewDelegate {
+
+	
 
 	var status = ""
 	
@@ -106,6 +106,8 @@ class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, Timer
 	@IBAction func donePressed(_ sender:UIButton){
 		if totalDuration != 0 && expDetailsDelegate != nil{
 			switch stimulusBeingAdded {
+			case StimulusType.kBlank:
+				print("Showing Blank View")
 			case StimulusType.kText:
 				print("Adding text instructions")
 				saveTextTo(thisExperiment: experiment!)
@@ -156,11 +158,11 @@ class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, Timer
 		//Set all and Add them to the Screen
 		if experiment!.stimuli!.count != 0{
 			stimuliArray = fetchStimuli()
-			for index in 0..<stimuliArray!.count{
+			for index in 0..<stimuliArray.count{
 				setupStimuli(atIndex: index)
 			}
 		}
-		updateViews()
+		setupStimuli()
 		startExperiment()
 	}
 	
@@ -188,16 +190,16 @@ class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, Timer
 		experiment!.addToDataSets(newDataSet)
 		CoreDataHelper.shared.saveContext()
 		captureView.dataSet = newDataSet
-		captureView.currentStimulus = stimuliArray!.first
+		captureView.currentStimulus = stimuliArray.first
 	}
 	
-	func updateViews() {
-		let thisIndex = getStimuliIndexFrom(duration: captureView.timeElapsed)
+	func setupStimuli() {
+		let thisIndex = getStimuliIndexFrom(duration: captureView.timeElapsed, forStimuli: stimuliArray)
 		if thisIndex != currentIndex{
 			currentIndex = thisIndex
 		}
 		showStimuli(atIndex: currentIndex)
-		captureView.currentStimulus = stimuliArray![currentIndex]
+		captureView.currentStimulus = stimuliArray[currentIndex]
 	}
 	
 	func setupCountDown(withCompletion:@escaping (Bool)->()){
@@ -349,8 +351,39 @@ class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, Timer
 	//MARK: Image Import
 	@IBAction func addImage(_ sender: UIButton) {
 		stimulusBeingAdded = StimulusType.kImage
-		self.imagePicker.present(from: sender)
+		
+		
+		
+		let alertController = UIAlertController(title: "Image Source", message: "Where would you like to get your image from?", preferredStyle: .alert)
+
+		let startDCAction = UIAlertAction(title: "Camera / Camera Roll", style: .default) {
+			UIAlertAction in
+			self.imagePicker.present(from: sender)
+		}
+		let startPreviewAction = UIAlertAction(title: "Files App", style: .default) {
+			UIAlertAction in
+			
+			
+			let supportedTypes: [UTType] = [UTType.image,UTType.png,UTType.jpeg,UTType.bmp]
+			let documentsPicker = UIDocumentPickerViewController(forOpeningContentTypes: supportedTypes, asCopy: true)
+						documentsPicker.delegate = self
+						documentsPicker.allowsMultipleSelection = false
+						documentsPicker.modalPresentationStyle = .fullScreen
+						self.present(documentsPicker, animated: true, completion: nil)
+		}
+	   let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {
+		   UIAlertAction in
+		   NSLog("Cancel Pressed")
+		
 	  }
+		alertController.addAction(startDCAction)
+		alertController.addAction(startPreviewAction)
+		alertController.addAction(cancelAction)
+		
+
+
+		  self.present(alertController, animated: true, completion: nil)
+	}
 	
 	func didSelect(image: UIImage?) {
 		//ImageView Exists
@@ -518,7 +551,26 @@ class CaptureViewController: TouchCoreViewController, ImagePickerDelegate, Timer
 	
 }
 
+extension CaptureViewController: UIDocumentPickerDelegate {
+	public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+//		guard controller.documentPickerMode == .open, let url = urls.first, url.startAccessingSecurityScopedResource() else { return }
+//		defer {
+//			DispatchQueue.main.async {
+//				url.stopAccessingSecurityScopedResource()
+//			}
+//			 }
+		guard let myURL = urls.first else {
+			   return
+		   }
+		guard let image = UIImage(contentsOfFile: myURL.path) else { return }
+		self.didSelect(image: image)
+		controller.dismiss(animated: true)
+	}
 
+	public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+		controller.dismiss(animated: true)
+	}
+}
 
 
 

@@ -42,7 +42,7 @@ class TouchCoreView: UIView {
 	var currentStimulusStartTime:TimeInterval = 0
 	
 	//Arrays and Models
-	var savedTouches = [[Touch?]?]()
+	var savedTouches = [[Touch]]()
 	var fromPoint:CGPoint?
 	var toPoint:CGPoint?
 	var pointsToDraw = [(fromPoint:CGPoint,toPoint:CGPoint,isPencil:Bool,touchPhase:Int,number:Int)]()
@@ -194,7 +194,7 @@ class TouchCoreView: UIView {
 		var pointsforBoxes = [CGPoint]()
 		indexes.forEach { (index) in
 			let thisFingersTouches = savedTouches[index.finger]
-			let thisTouch = thisFingersTouches![index.touch]!
+			let thisTouch = thisFingersTouches[index.touch]
 			
 			var previousTouch:Touch?
 			if thisTouch.touchPhase == UITouch.Phase.began.rawValue{
@@ -202,13 +202,12 @@ class TouchCoreView: UIView {
 				fingerLineCounts[index.finger] += 1
 			}
 			else{
-				previousTouch = thisFingersTouches![index.touch-1]
+				previousTouch = thisFingersTouches[index.touch-1]
 			}
 	
 			toPoint = TouchHandler.shared.location(fromTouch: thisTouch)
 			fromPoint = TouchHandler.shared.location(fromTouch: previousTouch!)
-//			fromPoint = TouchHandler.shared.location(fromTouch: thisTouch)
-//			toPoint = TouchHandler.shared.location(fromTouch: previousTouch!)
+
 			
 			pointsforBoxes.append(fromPoint!)
 			pointsforBoxes.append(toPoint!)
@@ -262,13 +261,13 @@ class TouchCoreView: UIView {
 			return path
 		}
 
-		var p3: CGPoint?
-		if atIndex < (pointsToDraw.count) {
-			let nextPoint = pointsToDraw[atIndex]
-			p3 = CGPoint(x: nextPoint.toPoint.x, y: nextPoint.toPoint.y)
-			let upperP3 = CGPoint(x: p3!.x, y:p3!.y+5)
-			//drawPoint(point: upperP3, color: .green, radius: 2)
-		}
+//		var p3: CGPoint?
+//		if atIndex < (pointsToDraw.count) {
+//			let nextPoint = pointsToDraw[atIndex]
+//			p3 = CGPoint(x: nextPoint.toPoint.x, y: nextPoint.toPoint.y)
+//			//let upperP3 = CGPoint(x: p3!.x, y:p3!.y+5)
+//			//drawPoint(point: upperP3, color: .green, radius: 2)
+//		}
 		//print("P3 is \(p3)")
 		//let newControlP = controlPointForPoints(p1: p1, p2: p2, next: p3)
 		//let newControlP = p2.controlPointToPoint(p1)

@@ -10,7 +10,7 @@ import UIKit
 
 protocol MultiTouchCaptureViewDelegate {
 	func completeDataCollection()
-	func updateViews()
+	func setupStimuli()
 }
 
 class MultiTouchCaptureView: TouchCoreView {
@@ -59,7 +59,7 @@ class MultiTouchCaptureView: TouchCoreView {
 		//Show time elapsed in timer
 		timeElapsed += TimeInterval(frameRate)
 		timeIntervalLabel!.text = timeElapsed.stringFromTimeInterval(withFrameRate: frameRate)
-		captureDelegate!.updateViews()
+		captureDelegate!.setupStimuli()
 		if timeElapsed > experimentDuration{
 			timer.invalidate()
 			captureDelegate!.completeDataCollection()
@@ -81,11 +81,11 @@ class MultiTouchCaptureView: TouchCoreView {
 					fingers[index] = touch
 					let pencilBool = getPencil(inTouch: touch)
 					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWith(dataSet:dataSet!, stimulus:currentStimulus!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
-					savedTouches[index]!.append(convertedTouch)
+					savedTouches[index].append(convertedTouch)
 					dataSet!.addToTouches(convertedTouch)
 					CoreDataHelper.shared.saveContext()
 					
-					let indexOfLastTouch = savedTouches[index]!.count - 1
+					let indexOfLastTouch = savedTouches[index].count - 1
 					indexes.append((index,indexOfLastTouch))
 					break
 				}
@@ -108,8 +108,8 @@ class MultiTouchCaptureView: TouchCoreView {
 					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWith(dataSet:dataSet!, stimulus:currentStimulus!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					dataSet!.addToTouches(convertedTouch)
 					CoreDataHelper.shared.saveContext()
-					savedTouches[index]!.append(convertedTouch)
-					let indexOfLastTouch = savedTouches[index]!.count - 1
+					savedTouches[index].append(convertedTouch)
+					let indexOfLastTouch = savedTouches[index].count - 1
 		
 					indexes.append((index,indexOfLastTouch))
 					break
@@ -132,9 +132,9 @@ class MultiTouchCaptureView: TouchCoreView {
 					let convertedTouch = CoreDataHelper.shared.createTouchfromUITouchWith(dataSet:dataSet!, stimulus:currentStimulus!, touch:touch, finger: Int64(index), isPencil: pencilBool, inView: self)
 					dataSet!.addToTouches(convertedTouch)
 					CoreDataHelper.shared.saveContext()
-					savedTouches[index]!.append(convertedTouch)
+					savedTouches[index].append(convertedTouch)
 					
-					let indexOfLastTouch = savedTouches[index]!.count - 1
+					let indexOfLastTouch = savedTouches[index].count - 1
 					indexes.append((index,indexOfLastTouch))
 					break
 				}

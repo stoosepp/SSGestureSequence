@@ -68,7 +68,10 @@ class ExperimentsTableViewController: UITableViewController {
 			DispatchQueue.main.async {
 				self.tableView.reloadData()
 				//Select First Row when loaded
-				self.tryToSelectFirst()
+				if self.experiments!.count == 1{
+					self.tryToSelectFirst()
+				}
+				
 			}
 	}
 		catch{

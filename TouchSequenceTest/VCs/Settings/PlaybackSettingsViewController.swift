@@ -35,7 +35,7 @@ class PlaybackSettingsViewController: UIViewController, UIColorPickerViewControl
 	
 	//Switches
 	@IBOutlet var showHideSwitch:UISwitch!
-	@IBOutlet var isolatedLinesSwitch:UISwitch!
+	@IBOutlet var touchesSeparatedbyStimuliSwitch:UISwitch!
 	@IBOutlet var startEndSwitch:UISwitch!
 	@IBOutlet var speedSwitch:UISwitch!
 	
@@ -59,7 +59,7 @@ class PlaybackSettingsViewController: UIViewController, UIColorPickerViewControl
 		pencilButton.backgroundColor = delegate?.pencilLineColor
 		startEndSwitch.isOn = delegate!.showStartEnd
 		showHideSwitch.isOn = delegate!.linesVisible
-		isolatedLinesSwitch.isOn = delegate!.isolatedLines
+		touchesSeparatedbyStimuliSwitch.isOn = delegate!.touchesSeparatedbyStimuli
 		
 		alphaSlider.value = currentAlpha
 		linesToDrawSegmentedControl.selectedSegmentIndex = delegate!.linesShown
